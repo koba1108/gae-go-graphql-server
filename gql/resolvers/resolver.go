@@ -119,7 +119,7 @@ func (r *queryResolver) Favorites(ctx context.Context, id *string) (*models.User
 	panic("not implemented")
 }
 func (r *queryResolver) Inquiries(ctx context.Context, option *models.InquirySearchInput) ([]*models.Inquiry, error) {
-	return []*models.Inquiry, nil
+	return []*models.Inquiry{}, nil
 }
 func (r *queryResolver) Liked(ctx context.Context, id *string) ([]*models.Liked, error) {
 	panic("not implemented")
