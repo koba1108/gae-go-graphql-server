@@ -3,6 +3,13 @@ extend type Query {
     likes(id: String): [Likes]
 }
 
+extend type Mutation {
+    like(receiverId: String): NacodoResponse
+    skip(receiverId: String): NacodoResponse
+    cancelLike(receiverId: String): NacodoResponse
+    decline(receiverId: String): NacodoResponse
+}
+
 type Liked {
     canceled_date: String
     declined_date: String

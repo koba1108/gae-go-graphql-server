@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 )
 
 type DeletedPhotosInput struct {
@@ -23,10 +24,10 @@ type Document struct {
 
 type Inquiry struct {
 	AdminID      *string      `json:"adminId"`
-	DeletedDate  *string      `json:"deletedDate"`
+	DeletedDate  *time.Time   `json:"deletedDate"`
 	Email        *string      `json:"email"`
 	ID           *string      `json:"id"`
-	InquiredDate *string      `json:"inquiredDate"`
+	InquiredDate *time.Time   `json:"inquiredDate"`
 	IsDeleted    *bool        `json:"isDeleted"`
 	Name         *string      `json:"name"`
 	Reply        *Reply       `json:"reply"`
@@ -36,6 +37,11 @@ type Inquiry struct {
 	Text         *string      `json:"text"`
 	Type         *InquiryType `json:"type"`
 	UserID       *string      `json:"userId"`
+}
+
+type InquiryInput struct {
+	Text *string      `json:"text"`
+	Type *InquiryType `json:"type"`
 }
 
 type InquirySearchInput struct {
@@ -86,18 +92,18 @@ type NacodoResponse struct {
 }
 
 type Notification struct {
-	BatchID        *string   `json:"batchId"`
-	Body           *string   `json:"body"`
-	ForAllUser     *bool     `json:"forAllUser"`
-	ID             *string   `json:"id"`
-	IsDeleted      *bool     `json:"isDeleted"`
-	IsPublished    *bool     `json:"isPublished"`
-	IsRead         *bool     `json:"isRead"`
-	PublishedDate  *string   `json:"publishedDate"`
-	RegisteredDate *string   `json:"registeredDate"`
-	Title          *string   `json:"title"`
-	UpdatedDate    *string   `json:"updatedDate"`
-	UserIds        []*string `json:"userIds"`
+	BatchID        *string    `json:"batchId"`
+	Body           *string    `json:"body"`
+	ForAllUser     *bool      `json:"forAllUser"`
+	ID             *string    `json:"id"`
+	IsDeleted      *bool      `json:"isDeleted"`
+	IsPublished    *bool      `json:"isPublished"`
+	IsRead         *bool      `json:"isRead"`
+	PublishedDate  *time.Time `json:"publishedDate"`
+	RegisteredDate *time.Time `json:"registeredDate"`
+	Title          *string    `json:"title"`
+	UpdatedDate    *time.Time `json:"updatedDate"`
+	UserIds        []*string  `json:"userIds"`
 }
 
 type NotificationInput struct {
@@ -117,6 +123,11 @@ type NotificationSearchInput struct {
 	To              *string `json:"to"`
 	OnlyEmailUnsent *bool   `json:"onlyEmailUnsent"`
 	IncludeDeleted  *bool   `json:"includeDeleted"`
+}
+
+type PermissionsInput struct {
+	Notification *bool `json:"notification"`
+	Column       *bool `json:"column"`
 }
 
 type PhotosInput struct {
@@ -144,12 +155,27 @@ type Qualification struct {
 	WorkingForms           []*WorkingForm           `json:"workingForms"`
 }
 
+type QualificationInput struct {
+	Siblings               []*Sibling               `json:"siblings"`
+	UpperAge               *int                     `json:"upperAge"`
+	UpperHeight            *int                     `json:"upperHeight"`
+	FigureTypes            []*FigureType            `json:"figureTypes"`
+	WorkingForms           []*WorkingForm           `json:"workingForms"`
+	RegularHolidays        []*RegularHoliday        `json:"regularHolidays"`
+	LowerAge               *int                     `json:"lowerAge"`
+	Prefectures            []*Prefecture            `json:"prefectures"`
+	LowerHeight            *int                     `json:"lowerHeight"`
+	LowerIncomeRange       *IncomeRange             `json:"lowerIncomeRange"`
+	UpperIncomeRange       *IncomeRange             `json:"upperIncomeRange"`
+	EducationalBackgrounds []*EducationalBackground `json:"educationalBackgrounds"`
+}
+
 type Reply struct {
 	AdminID      *string      `json:"adminId"`
-	DeletedDate  *string      `json:"deletedDate"`
+	DeletedDate  *time.Time   `json:"deletedDate"`
 	Email        *string      `json:"email"`
 	ID           *string      `json:"id"`
-	InquiredDate *string      `json:"inquiredDate"`
+	InquiredDate *time.Time   `json:"inquiredDate"`
 	IsDeleted    *bool        `json:"isDeleted"`
 	Name         *string      `json:"name"`
 	ReplyFromID  *string      `json:"replyFromId"`
@@ -168,6 +194,12 @@ type Report struct {
 	ReportedDate *string     `json:"reportedDate"`
 	TargetUserID *string     `json:"targetUserId"`
 	IsClosed     *bool       `json:"isClosed"`
+}
+
+type ReportInput struct {
+	TargetUserID *string     `json:"target_user_id"`
+	Type         *ReportType `json:"type"`
+	Reason       *string     `json:"reason"`
 }
 
 type ReportSearchInput struct {
@@ -215,6 +247,14 @@ type SearchOption struct {
 	Sibling               []*Sibling               `json:"sibling"`
 }
 
+type Session struct {
+	Error       *string    `json:"error"`
+	LastLoginAt *time.Time `json:"lastLoginAt"`
+	Liked       []*string  `json:"liked"`
+	Matches     []*string  `json:"matches"`
+	Recommends  []*string  `json:"recommends"`
+}
+
 type Tag struct {
 	Type  *TagType `json:"type"`
 	Name  *string  `json:"name"`
@@ -239,7 +279,7 @@ type User struct {
 	IsReceiveColumn        *bool                  `json:"isReceiveColumn"`
 	IsRecessed             *bool                  `json:"isRecessed"`
 	IsWithdrawn            *bool                  `json:"isWithdrawn"`
-	LastLoginAt            *string                `json:"lastLoginAt"`
+	LastLoginAt            *time.Time             `json:"lastLoginAt"`
 	Liked                  []*string              `json:"liked"`
 	Likes                  []*string              `json:"likes"`
 	Matches                []*string              `json:"matches"`
@@ -250,7 +290,7 @@ type User struct {
 	Photos                 *UserPhotos            `json:"photos"`
 	Prefecture             *Prefecture            `json:"prefecture"`
 	Qualification          *Qualification         `json:"qualification"`
-	RegisteredAt           *string                `json:"registeredAt"`
+	RegisteredAt           *time.Time             `json:"registeredAt"`
 	RegistrationStatus     *RegistrationStatus    `json:"registrationStatus"`
 	RegularHoliday         *RegularHoliday        `json:"regularHoliday"`
 	SchoolName             *string                `json:"schoolName"`
@@ -314,7 +354,7 @@ type UserInput struct {
 	IncomeRange            *IncomeRange           `json:"incomeRange"`
 	WorkingForm            *WorkingForm           `json:"workingForm"`
 	RegistrationStatus     *RegistrationStatus    `json:"registrationStatus"`
-	DateOfBirth            *string                `json:"dateOfBirth"`
+	DateOfBirth            *time.Time             `json:"dateOfBirth"`
 	Gender                 *Gender                `json:"gender"`
 	Email                  *string                `json:"email"`
 	NotificationPermission *bool                  `json:"notificationPermission"`
@@ -1876,6 +1916,47 @@ func (e *ResidenceType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e ResidenceType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Role string
+
+const (
+	RoleAdmin Role = "ADMIN"
+	RoleUser  Role = "USER"
+)
+
+var AllRole = []Role{
+	RoleAdmin,
+	RoleUser,
+}
+
+func (e Role) IsValid() bool {
+	switch e {
+	case RoleAdmin, RoleUser:
+		return true
+	}
+	return false
+}
+
+func (e Role) String() string {
+	return string(e)
+}
+
+func (e *Role) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Role(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Role", str)
+	}
+	return nil
+}
+
+func (e Role) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

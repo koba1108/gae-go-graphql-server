@@ -1,3 +1,8 @@
 extend type Query {
     favorites(id: String): UsersResponse
 }
+
+extend type Mutation {
+    favorite(favoriteUserId: String): NacodoResponse
+    deleteFavorite(favoriteUserId: String): NacodoResponse
+}

@@ -3,14 +3,13 @@ extend type Query {
 }
 
 extend type Mutation {
-    # uploadDocument に名前変えたい
+    # todo: uploadDocument に名前変えたい
     uploadRegistrationDocument(documentType: DocumentType document: String): NacodoResponse
-    # admin only
     updateDocument(
         documentId: String
         reviewStatus: DocumentReviewStatus
         rejectReason: String
-    ): NacodoResponse
+    ): NacodoResponse @hasRole(role: ADMIN)
 }
 
 type Document {

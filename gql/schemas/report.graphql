@@ -1,5 +1,15 @@
 extend type Query {
-    reports(option: ReportSearchInput): [Report]
+    reports(option: ReportSearchInput): [Report] @hasRole(role: ADMIN)
+}
+
+extend type Mutation {
+    report(detail: ReportInput): NacodoResponse
+}
+
+input ReportInput {
+    target_user_id: String
+    type: ReportType
+    reason: String
 }
 
 input ReportSearchInput {

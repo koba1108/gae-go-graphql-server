@@ -12,12 +12,33 @@ extend type Query {
 }
 
 extend type Mutation {
+    comeback: NacodoResponse
+    recess: NacodoResponse
+    withdraw: NacodoResponse
+    UpdatePermissions(permissions: PermissionsInput): NacodoResponse # todo: 頭を小文字にする
+    session: Session # todo: subscription出来たら不要になるはず
+    registerUser(
+        user: UserInput
+        photos: PhotosInput
+        details: UserDetailedProfileInput
+        tags: [TagInput]
+    ): NacodoResponse
+    registerUserAndBuyPlan(
+        planId: String
+        user: UserInput
+        photos: PhotosInput
+        details: UserDetailedProfileInput
+        tags: [TagInput]
+        card: String
+    ): NacodoResponse
+    registerQualification(qualification: QualificationInput): NacodoResponse
     updateUser(
         user: UserInput
         photos: PhotosInput
         details: UserDetailedProfileInput
         tags: [TagInput]
     ): NacodoResponse
+
 }
 
 input SearchOption {
@@ -61,7 +82,7 @@ input UserInput {
     incomeRange: IncomeRange
     workingForm: WorkingForm
     registrationStatus: RegistrationStatus
-    dateOfBirth: String
+    dateOfBirth: Time
     gender: Gender
     email: String
     notificationPermission: Boolean
@@ -99,6 +120,26 @@ input TagInput {
     type: TagType
 }
 
+input PermissionsInput {
+    notification: Boolean
+    column: Boolean
+}
+
+input QualificationInput {
+    siblings: [Sibling]
+    upperAge: Int
+    upperHeight: Int
+    figureTypes: [FigureType]
+    workingForms: [WorkingForm]
+    regularHolidays: [RegularHoliday]
+    lowerAge: Int
+    prefectures: [Prefecture]
+    lowerHeight: Int
+    lowerIncomeRange: IncomeRange
+    upperIncomeRange: IncomeRange
+    educationalBackgrounds: [EducationalBackground]
+}
+
 type UsersResponse {
     total: Int
     userList: [User]
@@ -117,7 +158,7 @@ type User {
     isReceiveColumn: Boolean
     isRecessed: Boolean
     isWithdrawn: Boolean
-    lastLoginAt: String
+    lastLoginAt: Time
     liked: [String]
     likes: [String]
     matches: [String]
@@ -128,7 +169,7 @@ type User {
     photos: UserPhotos
     prefecture: Prefecture
     qualification: Qualification
-    registeredAt: String
+    registeredAt: Time
     registrationStatus: RegistrationStatus
     regularHoliday: RegularHoliday
     schoolName: String
@@ -203,6 +244,14 @@ type Tag {
     type: TagType
     name: String
     value: String
+}
+
+type Session {
+    error: String
+    lastLoginAt: Time
+    liked: [String]
+    matches: [String]
+    recommends: [String]
 }
 
 enum TagType {

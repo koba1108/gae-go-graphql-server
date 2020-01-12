@@ -1,9 +1,12 @@
 extend type Query {
     notifications(option: NotificationSearchInput): [Notification]
-    # admin only
-    registerNotification(userIds: [String]notification: NotificationInput): NacodoResponse
-    updateNotification(userIds: [String]notification: NotificationInput): NacodoResponse
-    deleteNotification(notificationId: String): NacodoResponse
+}
+
+extend type Mutation {
+    readNotification(notificationId: String): NacodoResponse
+    registerNotification(userIds: [String]notification: NotificationInput): NacodoResponse @hasRole(role: ADMIN)
+    updateNotification(userIds: [String]notification: NotificationInput): NacodoResponse @hasRole(role: ADMIN)
+    deleteNotification(notificationId: String): NacodoResponse @hasRole(role: ADMIN)
 }
 
 type Notification {
@@ -14,10 +17,10 @@ type Notification {
     isDeleted: Boolean
     isPublished: Boolean
     isRead: Boolean
-    publishedDate: String
-    registeredDate: String
+    publishedDate: Time
+    registeredDate: Time
     title: String
-    updatedDate: String
+    updatedDate: Time
     userIds: [String]
 }
 

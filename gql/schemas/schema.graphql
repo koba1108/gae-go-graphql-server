@@ -3,9 +3,17 @@ schema {
     mutation: Mutation
 }
 
+directive @hasRole(role: Role!) on FIELD_DEFINITION
+
+scalar Time
+scalar Map
+scalar Upload
+scalar Any
+
 type Query {
     test: String
 }
+
 type Mutation {
     test: String
 }
@@ -23,4 +31,9 @@ enum NacodoResponseCode {
 enum OrderBy {
     ASC # 昇順
     DESC # 降順
+}
+
+enum Role {
+    ADMIN
+    USER
 }

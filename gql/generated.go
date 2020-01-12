@@ -6,8 +6,10 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"sync"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -39,6 +41,7 @@ type ResolverRoot interface {
 }
 
 type DirectiveRoot struct {
+	HasRole func(ctx context.Context, obj interface{}, next graphql.Resolver, role models.Role) (res interface{}, err error)
 }
 
 type ComplexityRoot struct {
@@ -89,13 +92,33 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
+		CancelLike                 func(childComplexity int, receiverID *string) int
+		Comeback                   func(childComplexity int) int
+		Decline                    func(childComplexity int, receiverID *string) int
+		DeleteFavorite             func(childComplexity int, favoriteUserID *string) int
 		DeleteInquiry              func(childComplexity int, inquiryID *string) int
+		DeleteNotification         func(childComplexity int, notificationID *string) int
+		Favorite                   func(childComplexity int, favoriteUserID *string) int
+		Inquire                    func(childComplexity int, detail *models.InquiryInput) int
+		Like                       func(childComplexity int, receiverID *string) int
+		ReadNotification           func(childComplexity int, notificationID *string) int
+		Recess                     func(childComplexity int) int
+		RegisterNotification       func(childComplexity int, userIds []*string, notification *models.NotificationInput) int
+		RegisterQualification      func(childComplexity int, qualification *models.QualificationInput) int
+		RegisterUser               func(childComplexity int, user *models.UserInput, photos *models.PhotosInput, details *models.UserDetailedProfileInput, tags []*models.TagInput) int
+		RegisterUserAndBuyPlan     func(childComplexity int, planID *string, user *models.UserInput, photos *models.PhotosInput, details *models.UserDetailedProfileInput, tags []*models.TagInput, card *string) int
 		ReplyToInquiry             func(childComplexity int, inquiryID *string, text *string) int
+		Report                     func(childComplexity int, detail *models.ReportInput) int
+		Session                    func(childComplexity int) int
+		Skip                       func(childComplexity int, receiverID *string) int
 		Test                       func(childComplexity int) int
 		UpdateDocument             func(childComplexity int, documentID *string, reviewStatus *models.DocumentReviewStatus, rejectReason *string) int
+		UpdateNotification         func(childComplexity int, userIds []*string, notification *models.NotificationInput) int
+		UpdatePermissions          func(childComplexity int, permissions *models.PermissionsInput) int
 		UpdatePhoto                func(childComplexity int, photoID *string, reviewStatus *models.PhotoReviewStatus, rejectReason *string) int
 		UpdateUser                 func(childComplexity int, user *models.UserInput, photos *models.PhotosInput, details *models.UserDetailedProfileInput, tags []*models.TagInput) int
 		UploadRegistrationDocument func(childComplexity int, documentType *models.DocumentType, document *string) int
+		Withdraw                   func(childComplexity int) int
 	}
 
 	NacodoResponse struct {
@@ -134,21 +157,18 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		DeleteNotification   func(childComplexity int, notificationID *string) int
-		Documents            func(childComplexity int, userID *string, typeArg *models.DocumentReviewStatus) int
-		Favorites            func(childComplexity int, id *string) int
-		Inquiries            func(childComplexity int, option *models.InquirySearchInput) int
-		Liked                func(childComplexity int, id *string) int
-		Likes                func(childComplexity int, id *string) int
-		Notifications        func(childComplexity int, option *models.NotificationSearchInput) int
-		Photos               func(childComplexity int, userID *string, typeArg *models.PhotoReviewStatus) int
-		Recommends           func(childComplexity int, userID *string) int
-		RegisterNotification func(childComplexity int, userIds []*string, notification *models.NotificationInput) int
-		Reports              func(childComplexity int, option *models.ReportSearchInput) int
-		Test                 func(childComplexity int) int
-		UpdateNotification   func(childComplexity int, userIds []*string, notification *models.NotificationInput) int
-		User                 func(childComplexity int, id *string) int
-		Users                func(childComplexity int, option *models.SearchOption, includes []*string, excludes []*string, sortKey *models.UserSortKey, numOfResults *int, offset *int, orderBy *models.OrderBy) int
+		Documents     func(childComplexity int, userID *string, typeArg *models.DocumentReviewStatus) int
+		Favorites     func(childComplexity int, id *string) int
+		Inquiries     func(childComplexity int, option *models.InquirySearchInput) int
+		Liked         func(childComplexity int, id *string) int
+		Likes         func(childComplexity int, id *string) int
+		Notifications func(childComplexity int, option *models.NotificationSearchInput) int
+		Photos        func(childComplexity int, userID *string, typeArg *models.PhotoReviewStatus) int
+		Recommends    func(childComplexity int, userID *string) int
+		Reports       func(childComplexity int, option *models.ReportSearchInput) int
+		Test          func(childComplexity int) int
+		User          func(childComplexity int, id *string) int
+		Users         func(childComplexity int, option *models.SearchOption, includes []*string, excludes []*string, sortKey *models.UserSortKey, numOfResults *int, offset *int, orderBy *models.OrderBy) int
 	}
 
 	Reply struct {
@@ -175,6 +195,14 @@ type ComplexityRoot struct {
 		ReportedDate func(childComplexity int) int
 		TargetUserID func(childComplexity int) int
 		Type         func(childComplexity int) int
+	}
+
+	Session struct {
+		Error       func(childComplexity int) int
+		LastLoginAt func(childComplexity int) int
+		Liked       func(childComplexity int) int
+		Matches     func(childComplexity int) int
+		Recommends  func(childComplexity int) int
 	}
 
 	Tag struct {
@@ -271,9 +299,29 @@ type MutationResolver interface {
 	Test(ctx context.Context) (*string, error)
 	UploadRegistrationDocument(ctx context.Context, documentType *models.DocumentType, document *string) (*models.NacodoResponse, error)
 	UpdateDocument(ctx context.Context, documentID *string, reviewStatus *models.DocumentReviewStatus, rejectReason *string) (*models.NacodoResponse, error)
+	Favorite(ctx context.Context, favoriteUserID *string) (*models.NacodoResponse, error)
+	DeleteFavorite(ctx context.Context, favoriteUserID *string) (*models.NacodoResponse, error)
+	Inquire(ctx context.Context, detail *models.InquiryInput) (*models.NacodoResponse, error)
 	ReplyToInquiry(ctx context.Context, inquiryID *string, text *string) (*models.NacodoResponse, error)
 	DeleteInquiry(ctx context.Context, inquiryID *string) (*models.NacodoResponse, error)
+	Like(ctx context.Context, receiverID *string) (*models.NacodoResponse, error)
+	Skip(ctx context.Context, receiverID *string) (*models.NacodoResponse, error)
+	CancelLike(ctx context.Context, receiverID *string) (*models.NacodoResponse, error)
+	Decline(ctx context.Context, receiverID *string) (*models.NacodoResponse, error)
+	ReadNotification(ctx context.Context, notificationID *string) (*models.NacodoResponse, error)
+	RegisterNotification(ctx context.Context, userIds []*string, notification *models.NotificationInput) (*models.NacodoResponse, error)
+	UpdateNotification(ctx context.Context, userIds []*string, notification *models.NotificationInput) (*models.NacodoResponse, error)
+	DeleteNotification(ctx context.Context, notificationID *string) (*models.NacodoResponse, error)
 	UpdatePhoto(ctx context.Context, photoID *string, reviewStatus *models.PhotoReviewStatus, rejectReason *string) (*models.NacodoResponse, error)
+	Report(ctx context.Context, detail *models.ReportInput) (*models.NacodoResponse, error)
+	Comeback(ctx context.Context) (*models.NacodoResponse, error)
+	Recess(ctx context.Context) (*models.NacodoResponse, error)
+	Withdraw(ctx context.Context) (*models.NacodoResponse, error)
+	UpdatePermissions(ctx context.Context, permissions *models.PermissionsInput) (*models.NacodoResponse, error)
+	Session(ctx context.Context) (*models.Session, error)
+	RegisterUser(ctx context.Context, user *models.UserInput, photos *models.PhotosInput, details *models.UserDetailedProfileInput, tags []*models.TagInput) (*models.NacodoResponse, error)
+	RegisterUserAndBuyPlan(ctx context.Context, planID *string, user *models.UserInput, photos *models.PhotosInput, details *models.UserDetailedProfileInput, tags []*models.TagInput, card *string) (*models.NacodoResponse, error)
+	RegisterQualification(ctx context.Context, qualification *models.QualificationInput) (*models.NacodoResponse, error)
 	UpdateUser(ctx context.Context, user *models.UserInput, photos *models.PhotosInput, details *models.UserDetailedProfileInput, tags []*models.TagInput) (*models.NacodoResponse, error)
 }
 type QueryResolver interface {
@@ -284,9 +332,6 @@ type QueryResolver interface {
 	Liked(ctx context.Context, id *string) ([]*models.Liked, error)
 	Likes(ctx context.Context, id *string) ([]*models.Likes, error)
 	Notifications(ctx context.Context, option *models.NotificationSearchInput) ([]*models.Notification, error)
-	RegisterNotification(ctx context.Context, userIds []*string, notification *models.NotificationInput) (*models.NacodoResponse, error)
-	UpdateNotification(ctx context.Context, userIds []*string, notification *models.NotificationInput) (*models.NacodoResponse, error)
-	DeleteNotification(ctx context.Context, notificationID *string) (*models.NacodoResponse, error)
 	Photos(ctx context.Context, userID *string, typeArg *models.PhotoReviewStatus) ([]*models.UserPhotos, error)
 	Recommends(ctx context.Context, userID *string) (*models.UsersResponse, error)
 	Reports(ctx context.Context, option *models.ReportSearchInput) ([]*models.Report, error)
@@ -547,6 +592,49 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Likes.Receiver(childComplexity), true
 
+	case "Mutation.cancelLike":
+		if e.complexity.Mutation.CancelLike == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_cancelLike_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CancelLike(childComplexity, args["receiverId"].(*string)), true
+
+	case "Mutation.comeback":
+		if e.complexity.Mutation.Comeback == nil {
+			break
+		}
+
+		return e.complexity.Mutation.Comeback(childComplexity), true
+
+	case "Mutation.decline":
+		if e.complexity.Mutation.Decline == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_decline_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Decline(childComplexity, args["receiverId"].(*string)), true
+
+	case "Mutation.deleteFavorite":
+		if e.complexity.Mutation.DeleteFavorite == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteFavorite_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteFavorite(childComplexity, args["favoriteUserId"].(*string)), true
+
 	case "Mutation.deleteInquiry":
 		if e.complexity.Mutation.DeleteInquiry == nil {
 			break
@@ -559,6 +647,121 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.DeleteInquiry(childComplexity, args["inquiryId"].(*string)), true
 
+	case "Mutation.deleteNotification":
+		if e.complexity.Mutation.DeleteNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteNotification_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteNotification(childComplexity, args["notificationId"].(*string)), true
+
+	case "Mutation.favorite":
+		if e.complexity.Mutation.Favorite == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_favorite_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Favorite(childComplexity, args["favoriteUserId"].(*string)), true
+
+	case "Mutation.inquire":
+		if e.complexity.Mutation.Inquire == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_inquire_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Inquire(childComplexity, args["detail"].(*models.InquiryInput)), true
+
+	case "Mutation.like":
+		if e.complexity.Mutation.Like == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_like_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Like(childComplexity, args["receiverId"].(*string)), true
+
+	case "Mutation.readNotification":
+		if e.complexity.Mutation.ReadNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_readNotification_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.ReadNotification(childComplexity, args["notificationId"].(*string)), true
+
+	case "Mutation.recess":
+		if e.complexity.Mutation.Recess == nil {
+			break
+		}
+
+		return e.complexity.Mutation.Recess(childComplexity), true
+
+	case "Mutation.registerNotification":
+		if e.complexity.Mutation.RegisterNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_registerNotification_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RegisterNotification(childComplexity, args["userIds"].([]*string), args["notification"].(*models.NotificationInput)), true
+
+	case "Mutation.registerQualification":
+		if e.complexity.Mutation.RegisterQualification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_registerQualification_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RegisterQualification(childComplexity, args["qualification"].(*models.QualificationInput)), true
+
+	case "Mutation.registerUser":
+		if e.complexity.Mutation.RegisterUser == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_registerUser_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RegisterUser(childComplexity, args["user"].(*models.UserInput), args["photos"].(*models.PhotosInput), args["details"].(*models.UserDetailedProfileInput), args["tags"].([]*models.TagInput)), true
+
+	case "Mutation.registerUserAndBuyPlan":
+		if e.complexity.Mutation.RegisterUserAndBuyPlan == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_registerUserAndBuyPlan_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.RegisterUserAndBuyPlan(childComplexity, args["planId"].(*string), args["user"].(*models.UserInput), args["photos"].(*models.PhotosInput), args["details"].(*models.UserDetailedProfileInput), args["tags"].([]*models.TagInput), args["card"].(*string)), true
+
 	case "Mutation.replyToInquiry":
 		if e.complexity.Mutation.ReplyToInquiry == nil {
 			break
@@ -570,6 +773,37 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.ReplyToInquiry(childComplexity, args["inquiryId"].(*string), args["text"].(*string)), true
+
+	case "Mutation.report":
+		if e.complexity.Mutation.Report == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_report_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Report(childComplexity, args["detail"].(*models.ReportInput)), true
+
+	case "Mutation.session":
+		if e.complexity.Mutation.Session == nil {
+			break
+		}
+
+		return e.complexity.Mutation.Session(childComplexity), true
+
+	case "Mutation.skip":
+		if e.complexity.Mutation.Skip == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_skip_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Skip(childComplexity, args["receiverId"].(*string)), true
 
 	case "Mutation.test":
 		if e.complexity.Mutation.Test == nil {
@@ -589,6 +823,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateDocument(childComplexity, args["documentId"].(*string), args["reviewStatus"].(*models.DocumentReviewStatus), args["rejectReason"].(*string)), true
+
+	case "Mutation.updateNotification":
+		if e.complexity.Mutation.UpdateNotification == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateNotification_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateNotification(childComplexity, args["userIds"].([]*string), args["notification"].(*models.NotificationInput)), true
+
+	case "Mutation.UpdatePermissions":
+		if e.complexity.Mutation.UpdatePermissions == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_UpdatePermissions_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdatePermissions(childComplexity, args["permissions"].(*models.PermissionsInput)), true
 
 	case "Mutation.updatePhoto":
 		if e.complexity.Mutation.UpdatePhoto == nil {
@@ -625,6 +883,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UploadRegistrationDocument(childComplexity, args["documentType"].(*models.DocumentType), args["document"].(*string)), true
+
+	case "Mutation.withdraw":
+		if e.complexity.Mutation.Withdraw == nil {
+			break
+		}
+
+		return e.complexity.Mutation.Withdraw(childComplexity), true
 
 	case "NacodoResponse.code":
 		if e.complexity.NacodoResponse.Code == nil {
@@ -808,18 +1073,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Qualification.WorkingForms(childComplexity), true
 
-	case "Query.deleteNotification":
-		if e.complexity.Query.DeleteNotification == nil {
-			break
-		}
-
-		args, err := ec.field_Query_deleteNotification_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.DeleteNotification(childComplexity, args["notificationId"].(*string)), true
-
 	case "Query.documents":
 		if e.complexity.Query.Documents == nil {
 			break
@@ -916,18 +1169,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Recommends(childComplexity, args["userId"].(*string)), true
 
-	case "Query.registerNotification":
-		if e.complexity.Query.RegisterNotification == nil {
-			break
-		}
-
-		args, err := ec.field_Query_registerNotification_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.RegisterNotification(childComplexity, args["userIds"].([]*string), args["notification"].(*models.NotificationInput)), true
-
 	case "Query.reports":
 		if e.complexity.Query.Reports == nil {
 			break
@@ -946,18 +1187,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Test(childComplexity), true
-
-	case "Query.updateNotification":
-		if e.complexity.Query.UpdateNotification == nil {
-			break
-		}
-
-		args, err := ec.field_Query_updateNotification_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.UpdateNotification(childComplexity, args["userIds"].([]*string), args["notification"].(*models.NotificationInput)), true
 
 	case "Query.user":
 		if e.complexity.Query.User == nil {
@@ -1122,6 +1351,41 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Report.Type(childComplexity), true
+
+	case "Session.error":
+		if e.complexity.Session.Error == nil {
+			break
+		}
+
+		return e.complexity.Session.Error(childComplexity), true
+
+	case "Session.lastLoginAt":
+		if e.complexity.Session.LastLoginAt == nil {
+			break
+		}
+
+		return e.complexity.Session.LastLoginAt(childComplexity), true
+
+	case "Session.liked":
+		if e.complexity.Session.Liked == nil {
+			break
+		}
+
+		return e.complexity.Session.Liked(childComplexity), true
+
+	case "Session.matches":
+		if e.complexity.Session.Matches == nil {
+			break
+		}
+
+		return e.complexity.Session.Matches(childComplexity), true
+
+	case "Session.recommends":
+		if e.complexity.Session.Recommends == nil {
+			break
+		}
+
+		return e.complexity.Session.Recommends(childComplexity), true
 
 	case "Tag.name":
 		if e.complexity.Tag.Name == nil {
@@ -1687,14 +1951,13 @@ var parsedSchema = gqlparser.MustLoadSchema(
 }
 
 extend type Mutation {
-    # uploadDocument に名前変えたい
+    # todo: uploadDocument に名前変えたい
     uploadRegistrationDocument(documentType: DocumentType document: String): NacodoResponse
-    # admin only
     updateDocument(
         documentId: String
         reviewStatus: DocumentReviewStatus
         rejectReason: String
-    ): NacodoResponse
+    ): NacodoResponse @hasRole(role: ADMIN)
 }
 
 type Document {
@@ -1719,26 +1982,31 @@ enum DocumentReviewStatus {
 	&ast.Source{Name: "gql/schemas/favorite.graphql", Input: `extend type Query {
     favorites(id: String): UsersResponse
 }
+
+extend type Mutation {
+    favorite(favoriteUserId: String): NacodoResponse
+    deleteFavorite(favoriteUserId: String): NacodoResponse
+}
 `},
-	&ast.Source{Name: "gql/schemas/inquiry.graphql", Input: `# admin only
-extend type Query {
-    inquiries(option: InquirySearchInput): [Inquiry]
+	&ast.Source{Name: "gql/schemas/inquiry.graphql", Input: `extend type Query {
+    inquiries(option: InquirySearchInput): [Inquiry] @hasRole(role: ADMIN)
 }
 
 extend type Mutation {
-    replyToInquiry(inquiryId: String text: String): NacodoResponse
-    deleteInquiry(inquiryId: String): NacodoResponse
+    inquire(detail: InquiryInput): NacodoResponse
+    replyToInquiry(inquiryId: String text: String): NacodoResponse @hasRole(role: ADMIN)
+    deleteInquiry(inquiryId: String): NacodoResponse @hasRole(role: ADMIN)
 }
 
 type Inquiry {
     adminId: String
-    deletedDate: String
+    deletedDate: Time
     email: String
     id: String
-    inquiredDate: String
+    inquiredDate: Time
     isDeleted: Boolean
     name: String
-    reply: Reply # prefix に Inquiry って付けたい
+    reply: Reply # todo: prefix に Inquiry って付けたい
     replyFromId: String
     sendBy: UserType
     tel: String
@@ -1749,10 +2017,10 @@ type Inquiry {
 
 type Reply {
     adminId: String
-    deletedDate: String
+    deletedDate: Time
     email: String
     id: String
-    inquiredDate: String
+    inquiredDate: Time
     isDeleted: Boolean
     name: String
     replyFromId: String
@@ -1761,6 +2029,11 @@ type Reply {
     text: String
     type: InquiryType
     userId: String
+}
+
+input InquiryInput {
+    text: String
+    type: InquiryType
 }
 
 input InquirySearchInput {
@@ -1799,6 +2072,13 @@ enum UserType {
     likes(id: String): [Likes]
 }
 
+extend type Mutation {
+    like(receiverId: String): NacodoResponse
+    skip(receiverId: String): NacodoResponse
+    cancelLike(receiverId: String): NacodoResponse
+    decline(receiverId: String): NacodoResponse
+}
+
 type Liked {
     canceled_date: String
     declined_date: String
@@ -1825,10 +2105,13 @@ type Likes {
 `},
 	&ast.Source{Name: "gql/schemas/notification.graphql", Input: `extend type Query {
     notifications(option: NotificationSearchInput): [Notification]
-    # admin only
-    registerNotification(userIds: [String]notification: NotificationInput): NacodoResponse
-    updateNotification(userIds: [String]notification: NotificationInput): NacodoResponse
-    deleteNotification(notificationId: String): NacodoResponse
+}
+
+extend type Mutation {
+    readNotification(notificationId: String): NacodoResponse
+    registerNotification(userIds: [String]notification: NotificationInput): NacodoResponse @hasRole(role: ADMIN)
+    updateNotification(userIds: [String]notification: NotificationInput): NacodoResponse @hasRole(role: ADMIN)
+    deleteNotification(notificationId: String): NacodoResponse @hasRole(role: ADMIN)
 }
 
 type Notification {
@@ -1839,10 +2122,10 @@ type Notification {
     isDeleted: Boolean
     isPublished: Boolean
     isRead: Boolean
-    publishedDate: String
-    registeredDate: String
+    publishedDate: Time
+    registeredDate: Time
     title: String
-    updatedDate: String
+    updatedDate: Time
     userIds: [String]
 }
 
@@ -1908,7 +2191,17 @@ enum PhotoReviewStatus {
 }
 `},
 	&ast.Source{Name: "gql/schemas/report.graphql", Input: `extend type Query {
-    reports(option: ReportSearchInput): [Report]
+    reports(option: ReportSearchInput): [Report] @hasRole(role: ADMIN)
+}
+
+extend type Mutation {
+    report(detail: ReportInput): NacodoResponse
+}
+
+input ReportInput {
+    target_user_id: String
+    type: ReportType
+    reason: String
 }
 
 input ReportSearchInput {
@@ -1953,9 +2246,17 @@ enum ReportType {
     mutation: Mutation
 }
 
+directive @hasRole(role: Role!) on FIELD_DEFINITION
+
+scalar Time
+scalar Map
+scalar Upload
+scalar Any
+
 type Query {
     test: String
 }
+
 type Mutation {
     test: String
 }
@@ -1974,6 +2275,11 @@ enum OrderBy {
     ASC # 昇順
     DESC # 降順
 }
+
+enum Role {
+    ADMIN
+    USER
+}
 `},
 	&ast.Source{Name: "gql/schemas/user.graphql", Input: `extend type Query {
     user(id: String): User
@@ -1989,12 +2295,33 @@ enum OrderBy {
 }
 
 extend type Mutation {
+    comeback: NacodoResponse
+    recess: NacodoResponse
+    withdraw: NacodoResponse
+    UpdatePermissions(permissions: PermissionsInput): NacodoResponse # todo: 頭を小文字にする
+    session: Session # todo: subscription出来たら不要になるはず
+    registerUser(
+        user: UserInput
+        photos: PhotosInput
+        details: UserDetailedProfileInput
+        tags: [TagInput]
+    ): NacodoResponse
+    registerUserAndBuyPlan(
+        planId: String
+        user: UserInput
+        photos: PhotosInput
+        details: UserDetailedProfileInput
+        tags: [TagInput]
+        card: String
+    ): NacodoResponse
+    registerQualification(qualification: QualificationInput): NacodoResponse
     updateUser(
         user: UserInput
         photos: PhotosInput
         details: UserDetailedProfileInput
         tags: [TagInput]
     ): NacodoResponse
+
 }
 
 input SearchOption {
@@ -2038,7 +2365,7 @@ input UserInput {
     incomeRange: IncomeRange
     workingForm: WorkingForm
     registrationStatus: RegistrationStatus
-    dateOfBirth: String
+    dateOfBirth: Time
     gender: Gender
     email: String
     notificationPermission: Boolean
@@ -2076,6 +2403,26 @@ input TagInput {
     type: TagType
 }
 
+input PermissionsInput {
+    notification: Boolean
+    column: Boolean
+}
+
+input QualificationInput {
+    siblings: [Sibling]
+    upperAge: Int
+    upperHeight: Int
+    figureTypes: [FigureType]
+    workingForms: [WorkingForm]
+    regularHolidays: [RegularHoliday]
+    lowerAge: Int
+    prefectures: [Prefecture]
+    lowerHeight: Int
+    lowerIncomeRange: IncomeRange
+    upperIncomeRange: IncomeRange
+    educationalBackgrounds: [EducationalBackground]
+}
+
 type UsersResponse {
     total: Int
     userList: [User]
@@ -2094,7 +2441,7 @@ type User {
     isReceiveColumn: Boolean
     isRecessed: Boolean
     isWithdrawn: Boolean
-    lastLoginAt: String
+    lastLoginAt: Time
     liked: [String]
     likes: [String]
     matches: [String]
@@ -2105,7 +2452,7 @@ type User {
     photos: UserPhotos
     prefecture: Prefecture
     qualification: Qualification
-    registeredAt: String
+    registeredAt: Time
     registrationStatus: RegistrationStatus
     regularHoliday: RegularHoliday
     schoolName: String
@@ -2180,6 +2527,14 @@ type Tag {
     type: TagType
     name: String
     value: String
+}
+
+type Session {
+    error: String
+    lastLoginAt: Time
+    liked: [String]
+    matches: [String]
+    recommends: [String]
 }
 
 enum TagType {
@@ -2562,6 +2917,76 @@ enum TagValue {
 
 // region    ***************************** args.gotpl *****************************
 
+func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 models.Role
+	if tmp, ok := rawArgs["role"]; ok {
+		arg0, err = ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["role"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_UpdatePermissions_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.PermissionsInput
+	if tmp, ok := rawArgs["permissions"]; ok {
+		arg0, err = ec.unmarshalOPermissionsInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["permissions"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_cancelLike_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["receiverId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["receiverId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_decline_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["receiverId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["receiverId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteFavorite_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["favoriteUserId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["favoriteUserId"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_deleteInquiry_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2573,6 +2998,204 @@ func (ec *executionContext) field_Mutation_deleteInquiry_args(ctx context.Contex
 		}
 	}
 	args["inquiryId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["notificationId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["notificationId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_favorite_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["favoriteUserId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["favoriteUserId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_inquire_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.InquiryInput
+	if tmp, ok := rawArgs["detail"]; ok {
+		arg0, err = ec.unmarshalOInquiryInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["detail"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_like_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["receiverId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["receiverId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_readNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["notificationId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["notificationId"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_registerNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []*string
+	if tmp, ok := rawArgs["userIds"]; ok {
+		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["userIds"] = arg0
+	var arg1 *models.NotificationInput
+	if tmp, ok := rawArgs["notification"]; ok {
+		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["notification"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_registerQualification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.QualificationInput
+	if tmp, ok := rawArgs["qualification"]; ok {
+		arg0, err = ec.unmarshalOQualificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["qualification"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_registerUserAndBuyPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["planId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["planId"] = arg0
+	var arg1 *models.UserInput
+	if tmp, ok := rawArgs["user"]; ok {
+		arg1, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["user"] = arg1
+	var arg2 *models.PhotosInput
+	if tmp, ok := rawArgs["photos"]; ok {
+		arg2, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["photos"] = arg2
+	var arg3 *models.UserDetailedProfileInput
+	if tmp, ok := rawArgs["details"]; ok {
+		arg3, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["details"] = arg3
+	var arg4 []*models.TagInput
+	if tmp, ok := rawArgs["tags"]; ok {
+		arg4, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["tags"] = arg4
+	var arg5 *string
+	if tmp, ok := rawArgs["card"]; ok {
+		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["card"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_registerUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.UserInput
+	if tmp, ok := rawArgs["user"]; ok {
+		arg0, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["user"] = arg0
+	var arg1 *models.PhotosInput
+	if tmp, ok := rawArgs["photos"]; ok {
+		arg1, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["photos"] = arg1
+	var arg2 *models.UserDetailedProfileInput
+	if tmp, ok := rawArgs["details"]; ok {
+		arg2, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["details"] = arg2
+	var arg3 []*models.TagInput
+	if tmp, ok := rawArgs["tags"]; ok {
+		arg3, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["tags"] = arg3
 	return args, nil
 }
 
@@ -2595,6 +3218,34 @@ func (ec *executionContext) field_Mutation_replyToInquiry_args(ctx context.Conte
 		}
 	}
 	args["text"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_report_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *models.ReportInput
+	if tmp, ok := rawArgs["detail"]; ok {
+		arg0, err = ec.unmarshalOReportInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["detail"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_skip_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["receiverId"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["receiverId"] = arg0
 	return args, nil
 }
 
@@ -2625,6 +3276,28 @@ func (ec *executionContext) field_Mutation_updateDocument_args(ctx context.Conte
 		}
 	}
 	args["rejectReason"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 []*string
+	if tmp, ok := rawArgs["userIds"]; ok {
+		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["userIds"] = arg0
+	var arg1 *models.NotificationInput
+	if tmp, ok := rawArgs["notification"]; ok {
+		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["notification"] = arg1
 	return args, nil
 }
 
@@ -2729,20 +3402,6 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 		}
 	}
 	args["name"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_deleteNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *string
-	if tmp, ok := rawArgs["notificationId"]; ok {
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["notificationId"] = arg0
 	return args, nil
 }
 
@@ -2874,28 +3533,6 @@ func (ec *executionContext) field_Query_recommends_args(ctx context.Context, raw
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_registerNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 []*string
-	if tmp, ok := rawArgs["userIds"]; ok {
-		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["userIds"] = arg0
-	var arg1 *models.NotificationInput
-	if tmp, ok := rawArgs["notification"]; ok {
-		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["notification"] = arg1
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_reports_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2907,28 +3544,6 @@ func (ec *executionContext) field_Query_reports_args(ctx context.Context, rawArg
 		}
 	}
 	args["option"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Query_updateNotification_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 []*string
-	if tmp, ok := rawArgs["userIds"]; ok {
-		arg0, err = ec.unmarshalOString2ᚕᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["userIds"] = arg0
-	var arg1 *models.NotificationInput
-	if tmp, ok := rawArgs["notification"]; ok {
-		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["notification"] = arg1
 	return args, nil
 }
 
@@ -3180,10 +3795,10 @@ func (ec *executionContext) _Inquiry_deletedDate(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Inquiry_email(ctx context.Context, field graphql.CollectedField, obj *models.Inquiry) (ret graphql.Marshaler) {
@@ -3282,10 +3897,10 @@ func (ec *executionContext) _Inquiry_inquiredDate(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Inquiry_isDeleted(ctx context.Context, field graphql.CollectedField, obj *models.Inquiry) (ret graphql.Marshaler) {
@@ -4306,8 +4921,155 @@ func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field 
 	rctx.Args = args
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().UpdateDocument(rctx, args["documentId"].(*string), args["reviewStatus"].(*models.DocumentReviewStatus), args["rejectReason"].(*string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.NacodoResponse); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_favorite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_favorite_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateDocument(rctx, args["documentId"].(*string), args["reviewStatus"].(*models.DocumentReviewStatus), args["rejectReason"].(*string))
+		return ec.resolvers.Mutation().Favorite(rctx, args["favoriteUserId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_deleteFavorite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_deleteFavorite_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DeleteFavorite(rctx, args["favoriteUserId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_inquire(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_inquire_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Inquire(rctx, args["detail"].(*models.InquiryInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4347,8 +5109,32 @@ func (ec *executionContext) _Mutation_replyToInquiry(ctx context.Context, field 
 	rctx.Args = args
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ReplyToInquiry(rctx, args["inquiryId"].(*string), args["text"].(*string))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().ReplyToInquiry(rctx, args["inquiryId"].(*string), args["text"].(*string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.NacodoResponse); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4388,8 +5174,432 @@ func (ec *executionContext) _Mutation_deleteInquiry(ctx context.Context, field g
 	rctx.Args = args
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().DeleteInquiry(rctx, args["inquiryId"].(*string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.NacodoResponse); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_like(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_like_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeleteInquiry(rctx, args["inquiryId"].(*string))
+		return ec.resolvers.Mutation().Like(rctx, args["receiverId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_skip(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_skip_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Skip(rctx, args["receiverId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_cancelLike(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_cancelLike_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CancelLike(rctx, args["receiverId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_decline(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_decline_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Decline(rctx, args["receiverId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_readNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_readNotification_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().ReadNotification(rctx, args["notificationId"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_registerNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_registerNotification_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().RegisterNotification(rctx, args["userIds"].([]*string), args["notification"].(*models.NotificationInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.NacodoResponse); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_updateNotification_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().UpdateNotification(rctx, args["userIds"].([]*string), args["notification"].(*models.NotificationInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.NacodoResponse); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_deleteNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_deleteNotification_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Mutation().DeleteNotification(rctx, args["notificationId"].(*string))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.(*models.NacodoResponse); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4431,6 +5641,347 @@ func (ec *executionContext) _Mutation_updatePhoto(ctx context.Context, field gra
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return ec.resolvers.Mutation().UpdatePhoto(rctx, args["photoId"].(*string), args["reviewStatus"].(*models.PhotoReviewStatus), args["rejectReason"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_report(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_report_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Report(rctx, args["detail"].(*models.ReportInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_comeback(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Comeback(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_recess(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Recess(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_withdraw(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Withdraw(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_UpdatePermissions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_UpdatePermissions_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdatePermissions(rctx, args["permissions"].(*models.PermissionsInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_session(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().Session(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.Session)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSession(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_registerUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_registerUser_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RegisterUser(rctx, args["user"].(*models.UserInput), args["photos"].(*models.PhotosInput), args["details"].(*models.UserDetailedProfileInput), args["tags"].([]*models.TagInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_registerUserAndBuyPlan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_registerUserAndBuyPlan_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RegisterUserAndBuyPlan(rctx, args["planId"].(*string), args["user"].(*models.UserInput), args["photos"].(*models.PhotosInput), args["details"].(*models.UserDetailedProfileInput), args["tags"].([]*models.TagInput), args["card"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*models.NacodoResponse)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_registerQualification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_registerQualification_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	rctx.Args = args
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().RegisterQualification(rctx, args["qualification"].(*models.QualificationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4820,10 +6371,10 @@ func (ec *executionContext) _Notification_publishedDate(ctx context.Context, fie
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Notification_registeredDate(ctx context.Context, field graphql.CollectedField, obj *models.Notification) (ret graphql.Marshaler) {
@@ -4854,10 +6405,10 @@ func (ec *executionContext) _Notification_registeredDate(ctx context.Context, fi
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Notification_title(ctx context.Context, field graphql.CollectedField, obj *models.Notification) (ret graphql.Marshaler) {
@@ -4922,10 +6473,10 @@ func (ec *executionContext) _Notification_updatedDate(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Notification_userIds(ctx context.Context, field graphql.CollectedField, obj *models.Notification) (ret graphql.Marshaler) {
@@ -5511,8 +7062,32 @@ func (ec *executionContext) _Query_inquiries(ctx context.Context, field graphql.
 	rctx.Args = args
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Inquiries(rctx, args["option"].(*models.InquirySearchInput))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().Inquiries(rctx, args["option"].(*models.InquirySearchInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.([]*models.Inquiry); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/koba1108/gae-go-graphql-server/gql/models.Inquiry`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5650,129 +7225,6 @@ func (ec *executionContext) _Query_notifications(ctx context.Context, field grap
 	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotification(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_registerNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	ctx = ec.Tracer.StartFieldExecution(ctx, field)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-		ec.Tracer.EndFieldExecution(ctx)
-	}()
-	rctx := &graphql.ResolverContext{
-		Object:   "Query",
-		Field:    field,
-		Args:     nil,
-		IsMethod: true,
-	}
-	ctx = graphql.WithResolverContext(ctx, rctx)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_registerNotification_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	rctx.Args = args
-	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().RegisterNotification(rctx, args["userIds"].([]*string), args["notification"].(*models.NotificationInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*models.NacodoResponse)
-	rctx.Result = res
-	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_updateNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	ctx = ec.Tracer.StartFieldExecution(ctx, field)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-		ec.Tracer.EndFieldExecution(ctx)
-	}()
-	rctx := &graphql.ResolverContext{
-		Object:   "Query",
-		Field:    field,
-		Args:     nil,
-		IsMethod: true,
-	}
-	ctx = graphql.WithResolverContext(ctx, rctx)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_updateNotification_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	rctx.Args = args
-	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().UpdateNotification(rctx, args["userIds"].([]*string), args["notification"].(*models.NotificationInput))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*models.NacodoResponse)
-	rctx.Result = res
-	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Query_deleteNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	ctx = ec.Tracer.StartFieldExecution(ctx, field)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-		ec.Tracer.EndFieldExecution(ctx)
-	}()
-	rctx := &graphql.ResolverContext{
-		Object:   "Query",
-		Field:    field,
-		Args:     nil,
-		IsMethod: true,
-	}
-	ctx = graphql.WithResolverContext(ctx, rctx)
-	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_deleteNotification_args(ctx, rawArgs)
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	rctx.Args = args
-	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().DeleteNotification(rctx, args["notificationId"].(*string))
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*models.NacodoResponse)
-	rctx.Result = res
-	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Query_photos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() {
@@ -5880,8 +7332,32 @@ func (ec *executionContext) _Query_reports(ctx context.Context, field graphql.Co
 	rctx.Args = args
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Reports(rctx, args["option"].(*models.ReportSearchInput))
+		directive0 := func(rctx context.Context) (interface{}, error) {
+			ctx = rctx // use context from middleware stack in children
+			return ec.resolvers.Query().Reports(rctx, args["option"].(*models.ReportSearchInput))
+		}
+		directive1 := func(ctx context.Context) (interface{}, error) {
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			if err != nil {
+				return nil, err
+			}
+			if ec.directives.HasRole == nil {
+				return nil, errors.New("directive hasRole is not implemented")
+			}
+			return ec.directives.HasRole(ctx, nil, directive0, role)
+		}
+
+		tmp, err := directive1(rctx)
+		if err != nil {
+			return nil, err
+		}
+		if tmp == nil {
+			return nil, nil
+		}
+		if data, ok := tmp.([]*models.Report); ok {
+			return data, nil
+		}
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/koba1108/gae-go-graphql-server/gql/models.Report`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6115,10 +7591,10 @@ func (ec *executionContext) _Reply_deletedDate(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Reply_email(ctx context.Context, field graphql.CollectedField, obj *models.Reply) (ret graphql.Marshaler) {
@@ -6217,10 +7693,10 @@ func (ec *executionContext) _Reply_inquiredDate(ctx context.Context, field graph
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Reply_isDeleted(ctx context.Context, field graphql.CollectedField, obj *models.Reply) (ret graphql.Marshaler) {
@@ -6731,6 +8207,176 @@ func (ec *executionContext) _Report_isClosed(ctx context.Context, field graphql.
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
 	return ec.marshalOBoolean2ᚖbool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Session_error(ctx context.Context, field graphql.CollectedField, obj *models.Session) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Session",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Error, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Session_lastLoginAt(ctx context.Context, field graphql.CollectedField, obj *models.Session) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Session",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.LastLoginAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*time.Time)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Session_liked(ctx context.Context, field graphql.CollectedField, obj *models.Session) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Session",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Liked, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Session_matches(ctx context.Context, field graphql.CollectedField, obj *models.Session) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Session",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Matches, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Session_recommends(ctx context.Context, field graphql.CollectedField, obj *models.Session) (ret graphql.Marshaler) {
+	ctx = ec.Tracer.StartFieldExecution(ctx, field)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+		ec.Tracer.EndFieldExecution(ctx)
+	}()
+	rctx := &graphql.ResolverContext{
+		Object:   "Session",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+	ctx = graphql.WithResolverContext(ctx, rctx)
+	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Recommends, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*string)
+	rctx.Result = res
+	ctx = ec.Tracer.StartFieldChildExecution(ctx)
+	return ec.marshalOString2ᚕᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Tag_type(ctx context.Context, field graphql.CollectedField, obj *models.Tag) (ret graphql.Marshaler) {
@@ -7271,10 +8917,10 @@ func (ec *executionContext) _User_lastLoginAt(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_liked(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -7645,10 +9291,10 @@ func (ec *executionContext) _User_registeredAt(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(*time.Time)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_registrationStatus(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -10340,6 +11986,30 @@ func (ec *executionContext) unmarshalInputDeletedPhotosInput(ctx context.Context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputInquiryInput(ctx context.Context, obj interface{}) (models.InquiryInput, error) {
+	var it models.InquiryInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "text":
+			var err error
+			it.Text, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "type":
+			var err error
+			it.Type, err = ec.unmarshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputInquirySearchInput(ctx context.Context, obj interface{}) (models.InquirySearchInput, error) {
 	var it models.InquirySearchInput
 	var asMap = obj.(map[string]interface{})
@@ -10544,6 +12214,30 @@ func (ec *executionContext) unmarshalInputNotificationSearchInput(ctx context.Co
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputPermissionsInput(ctx context.Context, obj interface{}) (models.PermissionsInput, error) {
+	var it models.PermissionsInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "notification":
+			var err error
+			it.Notification, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "column":
+			var err error
+			it.Column, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputPhotosInput(ctx context.Context, obj interface{}) (models.PhotosInput, error) {
 	var it models.PhotosInput
 	var asMap = obj.(map[string]interface{})
@@ -10589,6 +12283,120 @@ func (ec *executionContext) unmarshalInputPhotosInput(ctx context.Context, obj i
 		case "deleted":
 			var err error
 			it.Deleted, err = ec.unmarshalODeletedPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDeletedPhotosInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputQualificationInput(ctx context.Context, obj interface{}) (models.QualificationInput, error) {
+	var it models.QualificationInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "siblings":
+			var err error
+			it.Siblings, err = ec.unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "upperAge":
+			var err error
+			it.UpperAge, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "upperHeight":
+			var err error
+			it.UpperHeight, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "figureTypes":
+			var err error
+			it.FigureTypes, err = ec.unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "workingForms":
+			var err error
+			it.WorkingForms, err = ec.unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "regularHolidays":
+			var err error
+			it.RegularHolidays, err = ec.unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "lowerAge":
+			var err error
+			it.LowerAge, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "prefectures":
+			var err error
+			it.Prefectures, err = ec.unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "lowerHeight":
+			var err error
+			it.LowerHeight, err = ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "lowerIncomeRange":
+			var err error
+			it.LowerIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "upperIncomeRange":
+			var err error
+			it.UpperIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "educationalBackgrounds":
+			var err error
+			it.EducationalBackgrounds, err = ec.unmarshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputReportInput(ctx context.Context, obj interface{}) (models.ReportInput, error) {
+	var it models.ReportInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "target_user_id":
+			var err error
+			it.TargetUserID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "type":
+			var err error
+			it.Type, err = ec.unmarshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "reason":
+			var err error
+			it.Reason, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11068,7 +12876,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			}
 		case "dateOfBirth":
 			var err error
-			it.DateOfBirth, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.DateOfBirth, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11317,12 +13125,52 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			out.Values[i] = ec._Mutation_uploadRegistrationDocument(ctx, field)
 		case "updateDocument":
 			out.Values[i] = ec._Mutation_updateDocument(ctx, field)
+		case "favorite":
+			out.Values[i] = ec._Mutation_favorite(ctx, field)
+		case "deleteFavorite":
+			out.Values[i] = ec._Mutation_deleteFavorite(ctx, field)
+		case "inquire":
+			out.Values[i] = ec._Mutation_inquire(ctx, field)
 		case "replyToInquiry":
 			out.Values[i] = ec._Mutation_replyToInquiry(ctx, field)
 		case "deleteInquiry":
 			out.Values[i] = ec._Mutation_deleteInquiry(ctx, field)
+		case "like":
+			out.Values[i] = ec._Mutation_like(ctx, field)
+		case "skip":
+			out.Values[i] = ec._Mutation_skip(ctx, field)
+		case "cancelLike":
+			out.Values[i] = ec._Mutation_cancelLike(ctx, field)
+		case "decline":
+			out.Values[i] = ec._Mutation_decline(ctx, field)
+		case "readNotification":
+			out.Values[i] = ec._Mutation_readNotification(ctx, field)
+		case "registerNotification":
+			out.Values[i] = ec._Mutation_registerNotification(ctx, field)
+		case "updateNotification":
+			out.Values[i] = ec._Mutation_updateNotification(ctx, field)
+		case "deleteNotification":
+			out.Values[i] = ec._Mutation_deleteNotification(ctx, field)
 		case "updatePhoto":
 			out.Values[i] = ec._Mutation_updatePhoto(ctx, field)
+		case "report":
+			out.Values[i] = ec._Mutation_report(ctx, field)
+		case "comeback":
+			out.Values[i] = ec._Mutation_comeback(ctx, field)
+		case "recess":
+			out.Values[i] = ec._Mutation_recess(ctx, field)
+		case "withdraw":
+			out.Values[i] = ec._Mutation_withdraw(ctx, field)
+		case "UpdatePermissions":
+			out.Values[i] = ec._Mutation_UpdatePermissions(ctx, field)
+		case "session":
+			out.Values[i] = ec._Mutation_session(ctx, field)
+		case "registerUser":
+			out.Values[i] = ec._Mutation_registerUser(ctx, field)
+		case "registerUserAndBuyPlan":
+			out.Values[i] = ec._Mutation_registerUserAndBuyPlan(ctx, field)
+		case "registerQualification":
+			out.Values[i] = ec._Mutation_registerQualification(ctx, field)
 		case "updateUser":
 			out.Values[i] = ec._Mutation_updateUser(ctx, field)
 		default:
@@ -11546,39 +13394,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				res = ec._Query_notifications(ctx, field)
 				return res
 			})
-		case "registerNotification":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_registerNotification(ctx, field)
-				return res
-			})
-		case "updateNotification":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_updateNotification(ctx, field)
-				return res
-			})
-		case "deleteNotification":
-			field := field
-			out.Concurrently(i, func() (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_deleteNotification(ctx, field)
-				return res
-			})
 		case "photos":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
@@ -11722,6 +13537,38 @@ func (ec *executionContext) _Report(ctx context.Context, sel ast.SelectionSet, o
 			out.Values[i] = ec._Report_targetUserId(ctx, field, obj)
 		case "isClosed":
 			out.Values[i] = ec._Report_isClosed(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var sessionImplementors = []string{"Session"}
+
+func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, obj *models.Session) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.RequestContext, sel, sessionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Session")
+		case "error":
+			out.Values[i] = ec._Session_error(ctx, field, obj)
+		case "lastLoginAt":
+			out.Values[i] = ec._Session_lastLoginAt(ctx, field, obj)
+		case "liked":
+			out.Values[i] = ec._Session_liked(ctx, field, obj)
+		case "matches":
+			out.Values[i] = ec._Session_matches(ctx, field, obj)
+		case "recommends":
+			out.Values[i] = ec._Session_recommends(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -12278,6 +14125,15 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
+	var res models.Role
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNString2string(ctx context.Context, v interface{}) (string, error) {
@@ -13389,6 +15245,18 @@ func (ec *executionContext) marshalOInquiry2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑg
 	return ec._Inquiry(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOInquiryInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx context.Context, v interface{}) (models.InquiryInput, error) {
+	return ec.unmarshalInputInquiryInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOInquiryInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx context.Context, v interface{}) (*models.InquiryInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOInquiryInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx, v)
+	return &res, err
+}
+
 func (ec *executionContext) unmarshalOInquirySearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquirySearchInput(ctx context.Context, v interface{}) (models.InquirySearchInput, error) {
 	return ec.unmarshalInputInquirySearchInput(ctx, v)
 }
@@ -14188,6 +16056,18 @@ func (ec *executionContext) marshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgae�
 	return v
 }
 
+func (ec *executionContext) unmarshalOPermissionsInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx context.Context, v interface{}) (models.PermissionsInput, error) {
+	return ec.unmarshalInputPermissionsInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOPermissionsInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx context.Context, v interface{}) (*models.PermissionsInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOPermissionsInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx, v)
+	return &res, err
+}
+
 func (ec *executionContext) unmarshalOPhotoReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx context.Context, v interface{}) (models.PhotoReviewStatus, error) {
 	var res models.PhotoReviewStatus
 	return res, res.UnmarshalGQL(v)
@@ -14317,6 +16197,18 @@ func (ec *executionContext) marshalOQualification2ᚖgithubᚗcomᚋkoba1108ᚋg
 		return graphql.Null
 	}
 	return ec._Qualification(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOQualificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx context.Context, v interface{}) (models.QualificationInput, error) {
+	return ec.unmarshalInputQualificationInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOQualificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx context.Context, v interface{}) (*models.QualificationInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOQualificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx, v)
+	return &res, err
 }
 
 func (ec *executionContext) unmarshalORegistrationStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx context.Context, v interface{}) (models.RegistrationStatus, error) {
@@ -14573,6 +16465,18 @@ func (ec *executionContext) marshalOReport2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgo
 	return ec._Report(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOReportInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx context.Context, v interface{}) (models.ReportInput, error) {
+	return ec.unmarshalInputReportInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalOReportInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx context.Context, v interface{}) (*models.ReportInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOReportInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx, v)
+	return &res, err
+}
+
 func (ec *executionContext) unmarshalOReportSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportSearchInput(ctx context.Context, v interface{}) (models.ReportSearchInput, error) {
 	return ec.unmarshalInputReportSearchInput(ctx, v)
 }
@@ -14703,6 +16607,17 @@ func (ec *executionContext) unmarshalOSearchOption2ᚖgithubᚗcomᚋkoba1108ᚋ
 	}
 	res, err := ec.unmarshalOSearchOption2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSearchOption(ctx, v)
 	return &res, err
+}
+
+func (ec *executionContext) marshalOSession2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSession(ctx context.Context, sel ast.SelectionSet, v models.Session) graphql.Marshaler {
+	return ec._Session(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSession(ctx context.Context, sel ast.SelectionSet, v *models.Session) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Session(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOSibling2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx context.Context, v interface{}) (models.Sibling, error) {
@@ -15057,6 +16972,29 @@ func (ec *executionContext) marshalOTagValue2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑ
 		return graphql.Null
 	}
 	return v
+}
+
+func (ec *executionContext) unmarshalOTime2timeᚐTime(ctx context.Context, v interface{}) (time.Time, error) {
+	return graphql.UnmarshalTime(v)
+}
+
+func (ec *executionContext) marshalOTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
+	return graphql.MarshalTime(v)
+}
+
+func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v interface{}) (*time.Time, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOTime2timeᚐTime(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel ast.SelectionSet, v *time.Time) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec.marshalOTime2timeᚐTime(ctx, sel, *v)
 }
 
 func (ec *executionContext) marshalOUser2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v models.User) graphql.Marshaler {

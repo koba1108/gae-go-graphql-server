@@ -1,36 +1,36 @@
 package main
 
 import (
-	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
-	"github.com/koba1108/gae-go-graphql-server/gql"
-	"github.com/koba1108/gae-go-graphql-server/gql/resolvers"
+	"github.com/koba1108/gae-go-graphql-server/external"
+	"github.com/koba1108/gae-go-graphql-server/handlers"
+	"github.com/koba1108/gae-go-graphql-server/middlewares"
+	"os"
 )
 
-// Defining the Graphql handler
-func graphqlHandler() gin.HandlerFunc {
-	// NewExecutableSchema and Config are in the generated.go file
-	// Resolver is in the resolver.go file
-	h := handler.GraphQL(gql.NewExecutableSchema(gql.Config{Resolvers: &resolvers.Resolver{}}))
-
-	return func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	}
-}
-
-// Defining the Playground handler
-func playgroundHandler() gin.HandlerFunc {
-	h := handler.Playground("GraphQL", "/query")
-
-	return func(c *gin.Context) {
-		h.ServeHTTP(c.Writer, c.Request)
-	}
+func init() {
+	external.InitExternal()
 }
 
 func main() {
-	// Setting up Gin
 	r := gin.Default()
-	r.POST("/query", graphqlHandler())
-	r.GET("/", playgroundHandler())
+	setUserGql(r)
+	setAdminGql(r)
+	if os.Getenv("ENV") != "production" {
+		setPlayground(r)
+	}
 	_ = r.Run()
+}
+
+func setUserGql(r *gin.Engine) {
+	r.POST("/graphql", handlers.UserGraphqlHandler())
+}
+
+func setAdminGql(r *gin.Engine) {
+	r.Use(middlewares.Auth())
+	r.POST("/admin/graphql", handlers.AdminGraphqlHandler())
+}
+
+func setPlayground(r *gin.Engine) {
+	r.GET("/", handlers.PlaygroundHandler())
 }

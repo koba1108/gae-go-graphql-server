@@ -1,22 +1,22 @@
-# admin only
 extend type Query {
-    inquiries(option: InquirySearchInput): [Inquiry]
+    inquiries(option: InquirySearchInput): [Inquiry] @hasRole(role: ADMIN)
 }
 
 extend type Mutation {
-    replyToInquiry(inquiryId: String text: String): NacodoResponse
-    deleteInquiry(inquiryId: String): NacodoResponse
+    inquire(detail: InquiryInput): NacodoResponse
+    replyToInquiry(inquiryId: String text: String): NacodoResponse @hasRole(role: ADMIN)
+    deleteInquiry(inquiryId: String): NacodoResponse @hasRole(role: ADMIN)
 }
 
 type Inquiry {
     adminId: String
-    deletedDate: String
+    deletedDate: Time
     email: String
     id: String
-    inquiredDate: String
+    inquiredDate: Time
     isDeleted: Boolean
     name: String
-    reply: Reply # prefix に Inquiry って付けたい
+    reply: Reply # todo: prefix に Inquiry って付けたい
     replyFromId: String
     sendBy: UserType
     tel: String
@@ -27,10 +27,10 @@ type Inquiry {
 
 type Reply {
     adminId: String
-    deletedDate: String
+    deletedDate: Time
     email: String
     id: String
-    inquiredDate: String
+    inquiredDate: Time
     isDeleted: Boolean
     name: String
     replyFromId: String
@@ -39,6 +39,11 @@ type Reply {
     text: String
     type: InquiryType
     userId: String
+}
+
+input InquiryInput {
+    text: String
+    type: InquiryType
 }
 
 input InquirySearchInput {
