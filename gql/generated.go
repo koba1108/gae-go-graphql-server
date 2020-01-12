@@ -2149,7 +2149,7 @@ input NotificationInput {
 }
 `},
 	&ast.Source{Name: "gql/schemas/photo.graphql", Input: `extend type Query {
-    photos(userId: String type: PhotoReviewStatus): [UserPhotos] # preifx で user 付けたい
+    photos(userId: String type: PhotoReviewStatus): [UserPhotos]
 }
 
 extend type Mutation {

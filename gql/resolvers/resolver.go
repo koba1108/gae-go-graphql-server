@@ -2,6 +2,7 @@ package resolvers
 
 import (
 	"context"
+	"log"
 
 	"github.com/koba1108/gae-go-graphql-server/gql"
 	"github.com/koba1108/gae-go-graphql-server/gql/models"
@@ -21,7 +22,9 @@ func (r *Resolver) Query() gql.QueryResolver {
 type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) Test(ctx context.Context) (*string, error) {
-	panic("not implemented")
+	log.Printf("mutationResolver")
+	test := "test"
+	return &test, nil
 }
 func (r *mutationResolver) UploadRegistrationDocument(ctx context.Context, documentType *models.DocumentType, document *string) (*models.NacodoResponse, error) {
 	panic("not implemented")
@@ -105,7 +108,9 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, user *models.UserInpu
 type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Test(ctx context.Context) (*string, error) {
-	panic("not implemented")
+	log.Printf("queryResolver")
+	test := "test"
+	return &test, nil
 }
 func (r *queryResolver) Documents(ctx context.Context, userID *string, typeArg *models.DocumentReviewStatus) ([]*models.Document, error) {
 	panic("not implemented")
@@ -114,7 +119,7 @@ func (r *queryResolver) Favorites(ctx context.Context, id *string) (*models.User
 	panic("not implemented")
 }
 func (r *queryResolver) Inquiries(ctx context.Context, option *models.InquirySearchInput) ([]*models.Inquiry, error) {
-	panic("not implemented")
+	return []*models.Inquiry, nil
 }
 func (r *queryResolver) Liked(ctx context.Context, id *string) ([]*models.Liked, error) {
 	panic("not implemented")
