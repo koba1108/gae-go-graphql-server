@@ -1,0 +1,580 @@
+extend type Query {
+    user(id: String): User
+    users(
+        option: SearchOption
+        includes: [String]
+        excludes: [String]
+        sortKey: UserSortKey
+        numOfResults: Int
+        offset: Int
+        orderBy: OrderBy
+    ): UsersResponse
+}
+
+extend type Mutation {
+    updateUser(
+        user: UserInput
+        photos: PhotosInput
+        details: UserDetailedProfileInput
+        tags: [TagInput]
+    ): NacodoResponse
+}
+
+input SearchOption {
+    prefectureOfBirth: [Prefecture]
+    car: [Car]
+    educationalBackground: [EducationalBackground]
+    livingWithFamily: [LivingWithFamily]
+    havingKids: [HavingKids]
+    wantKids: [WantKids]
+    residenceType: [ResidenceType]
+    lowerAge: Int
+    upperAge: Int
+    lowerHeight: Int
+    upperHeight: Int
+    lowerIncomeRange: IncomeRange
+    upperIncomeRange: IncomeRange
+    leadTimeToMarriage: [LeadTimeToMarriage]
+    parenting: [Parenting]
+    housework: [Housework]
+    bloodType: [BloodType]
+    occupation: [Occupation]
+    workingForm: [WorkingForm]
+    relocation: [Relocation]
+    regularHoliday: [RegularHoliday]
+    maritalHistory: [MaritalHistory]
+    prefecture: [Prefecture]
+    figureType: [FigureType]
+    drinking: [Drinking]
+    smoking: [Smoking]
+    lodger: [Lodger]
+    sibling: [Sibling]
+}
+
+input UserInput {
+    nickname: String
+    prefecture: Prefecture
+    regularHoliday: RegularHoliday
+    selfIntroduction: String
+    billingStatus: BillingStatus
+    id: String
+    incomeRange: IncomeRange
+    workingForm: WorkingForm
+    registrationStatus: RegistrationStatus
+    dateOfBirth: String
+    gender: Gender
+    email: String
+    notificationPermission: Boolean
+    isFacebookRegistered: Boolean
+    educationalBackground: EducationalBackground
+    schoolName: String
+    occupation: Occupation
+    isReceiveColumn: Boolean
+}
+
+input UserDetailedProfileInput {
+    maritalHistory: MaritalHistory
+    havingKids: HavingKids
+    figureType: FigureType
+    lodger: Lodger
+    livingWithFamily: LivingWithFamily
+    dualCareer: DualCareer
+    relocation: Relocation
+    leadTimeToMarriage: LeadTimeToMarriage
+    sibling: Sibling
+    wantKids: WantKids
+    residenceType: ResidenceType
+    prefectureOfBirth: Prefecture
+    height: Int
+    smoking: Smoking
+    drinking: Drinking
+    parenting: Parenting
+    bloodType: BloodType
+    housework: Housework
+    car: Car
+}
+
+input TagInput {
+    value: TagValue
+    type: TagType
+}
+
+type UsersResponse {
+    total: Int
+    userList: [User]
+}
+
+type User {
+    billingStatus: BillingStatus
+    dateOfBirth: String
+    details: UserDetailedProfile
+    educationalBackground: EducationalBackground
+    email: String
+    gender: Gender
+    id: String
+    incomeRange: IncomeRange
+    isFacebookRegistered: Boolean
+    isReceiveColumn: Boolean
+    isRecessed: Boolean
+    isWithdrawn: Boolean
+    lastLoginAt: String
+    liked: [String]
+    likes: [String]
+    matches: [String]
+    nickname: String
+    notificationPermission: Boolean
+    notifications: [Notification] # 未使用のため、消したい
+    occupation: Occupation
+    photos: UserPhotos
+    prefecture: Prefecture
+    qualification: Qualification
+    registeredAt: String
+    registrationStatus: RegistrationStatus
+    regularHoliday: RegularHoliday
+    schoolName: String
+    selfIntroduction: String
+    skips: [String]
+    tags: [Tag]
+    workingForm: WorkingForm
+}
+
+type UserDetailedProfile {
+    bloodType: BloodType
+    car: Car
+    drinking: Drinking
+    dualCareer: DualCareer
+    figureType: FigureType
+    havingKids: HavingKids
+    height: Int
+    housework: Housework
+    leadTimeToMarriage: LeadTimeToMarriage
+    livingWithFamily: LivingWithFamily
+    lodger: Lodger
+    maritalHistory: MaritalHistory
+    parenting: Parenting
+    prefectureOfBirth: Prefecture
+    relocation: Relocation
+    residenceType: ResidenceType
+    sibling: Sibling
+    smoking: Smoking
+    wantKids: WantKids
+}
+
+type UserPhotos {
+    fifth: UserPhoto
+    fourth: UserPhoto
+    main: UserPhoto
+    second: UserPhoto
+    third: UserPhoto
+}
+
+type UserPhoto {
+    downloadURL: String
+    id: String
+    isDeleted: Boolean
+    isMain: Boolean
+    isReviewed: Boolean
+    no: Int
+    registeredDate: String
+    rejectReason: String
+    reviewStatus: PhotoReviewStatus
+    updatedDate: String
+    userId: String
+}
+
+# ;prefixにUserって付ける
+type Qualification {
+    educationalBackgrounds: [EducationalBackground]
+    figureTypes: [FigureType]
+    lowerAge: Int
+    lowerHeight: Int
+    lowerIncomeRange: IncomeRange
+    prefectures: [Prefecture]
+    regularHolidays: [RegularHoliday]
+    siblings: [Sibling]
+    upperAge: Int
+    upperHeight: Int
+    upperIncomeRange: IncomeRange
+    workingForms: [WorkingForm]
+}
+
+# タグの設計いけてない感ある
+type Tag {
+    type: TagType
+    name: String
+    value: String
+}
+
+enum TagType {
+    LIFE_STYLE # ライフスタイル
+    VALUES # 価値観
+    HOBBY # 趣味
+}
+
+enum BillingStatus {
+    NON_BILLING # 未課金
+    BILLED # 課金済
+    FAILED # 決済失敗
+}
+
+enum EducationalBackground {
+    OTHER # その他
+    HIGH_SCHOOL # 高校卒
+    JUNIOR_COLLEGE # 短大/専門学校卒
+    UNIVERSITY # 大学卒
+    GRADUATE_SCHOOL # 大学院卒
+}
+
+enum Gender {
+    MALE # 男性
+    FEMALE # 女性
+}
+
+enum IncomeRange {
+    LESS_THAN_TWO_MIL_YEN # 200万円未満
+    LESS_THAN_THREE_MIL_YEN # 200〜299万円
+    LESS_THAN_FOUR_MIL_YEN # 300〜399万円
+    LESS_THAN_SIX_MIL_YEN # 500〜599万円
+    LESS_THAN_TEN_MIL_YEN # 800〜1000万円
+    LESS_THAN_THIRTY_MIL_YEN # 2000〜2999万円
+    LESS_THAN_FIVE_MIL_YEN # 400〜499万円
+    LESS_THAN_EIGHT_MIL_YEN # 600〜799万円
+    LESS_THAN_FIFTEEN_MIL_YEN # 1000〜1499万円
+    LESS_THAN_TWENTY_MIL_YEN # 1500〜1999万円
+    MORE_THAN_THIRTY_MIL_YEN # 3000万円〜
+}
+
+enum Occupation {
+    LAWYER # 弁護士
+    ANNOUNCER # アナウンサー
+    TRANSPORT # 運輸
+    FOREIGN_CAPITAL # 外資
+    CA # 客室乗務員
+    ENTERTAINER # 芸能
+    CONSULTANT # コンサルタント
+    MARINE_PRODUCT # 水産業
+    DOCTOR # 医師
+    PUBLIC_SERVANT # 公務員
+    PILOT # パイロット
+    TRAVEL # 旅行業関連
+    BEAUTY # 美容関連
+    OTHER # その他
+    SALES # 販売
+    APPAREL # アパレル
+    ARCHITECT # 建築
+    OFFICE_WORKER # 事務
+    TRADING_COMPANY # 商社
+    PHARMACY # 製薬
+    COMMUNICATION_SYSTEM # 通信
+    AGRICULTURE # 農業
+    FREELANCE # フリーランス
+    RECEPTIONIST # 受付
+    ENTERTAINMENT # エンターテイメント
+    EXECUTIVE # 会社役員
+    SECRETARY # 秘書
+    NURTURE # 保育
+    MEDICINE # 医療関連
+    STUDENT # 学生
+    CARE_WORKER # 介護
+    FINANCE # 金融
+    ADVERTISEMENT # 広告
+    WELFARE # 福祉関連
+    REAL_ESTATE # 不動産
+    IT # IT関連
+    LARGE_CORPORATION # 大手企業
+    NURSE # 看護
+    MANAGER # 経営者
+    INSURANCE # 保険
+    MASS_MEDIA # マスコミ
+    DISTRIBUTION # 流通関連
+    DESIGNER # デザイナー
+    RESTAURANT # 飲食関連
+    DIETITIAN # 栄養士
+    EDUCATION # 教育関連
+    CPA # 公認会計士
+    FOOD # 食品関連
+    MANUFACTURING # 製造
+    COOKING # 調理師
+    BRIDAL # ブライダル関連
+    FASHION_MODEL # モデル
+}
+
+# 都道府県コード順に取りたい
+enum Prefecture {
+    OVERSEAS # 海外
+    UNSELECTED # enum未選択とnull未選択が混在してる
+    MIYAGI
+    YAMAGATA
+    IBARAKI
+    GUNMA
+    CHIBA
+    TOYAMA
+    TOCHIGI
+    SHIMANE
+    TOKYO
+    GIFU
+    HYOGO
+    OKAYAMA
+    OKINAWA
+    IWATE
+    KANAGAWA
+    SHIGA
+    YAMAGUCHI
+    TOKUSHIMA
+    EHIME
+    MIYAZAKI
+    AOMORI
+    ISHIKAWA
+    KYOTO
+    NARA
+    WAKAYAMA
+    HIROSHIMA
+    FUKUOKA
+    OSAKA
+    AKITA
+    FUKUSHIMA
+    FUKUI
+    YAMANASHI
+    NAGANO
+    SHIZUOKA
+    MIE
+    KOCHI
+    KUMAMOTO
+    HOKKAIDO
+    SAITAMA
+    AICHI
+    TOTTORI
+    NAGASAKI
+    OITA
+    KAGOSHIMA
+    NIIGATA
+    KAGAWA
+    SAGA
+}
+
+enum RegistrationStatus {
+    EMPTY
+    TUTORIAL
+    PROFILE
+    QUALIFICATION
+}
+
+enum RegularHoliday {
+    WEEKEND # 土日
+    WEEKDAY # 平日
+    IRREGULAR # 不定休
+    OTHER # その他
+}
+
+enum WorkingForm {
+    REGULAR_EMPLOYEE # 正社員
+    CONTRACT_EMPLOYEE # 契約社員
+    TEMPORARY_EMPLOYEE # 派遣社員
+    MANAGER # 経営者
+    FREELANCE # フリーランス
+    PART_TIMER # パート/アルバイト
+}
+
+enum BloodType {
+    A
+    B
+    O
+    AB
+    UNCERTAIN # 不明
+    UNSELECTED # 未選択
+}
+
+enum Car {
+    OWNER # あり
+    PLAN # 購入予定
+    NON_OWNER # なし
+    UNSELECTED # 未選択
+}
+
+enum Drinking {
+    NEVER # 飲まない
+    SOMETIMES # 嗜む程度
+    OFTEN # 飲む
+    UNSELECTED # 未選択
+}
+
+enum DualCareer {
+    ACCEPTABLE # 賛成
+    UNACCEPTABLE # 反対
+    UNCERTAIN # 相手と相談して決めたい
+    UNSELECTED # 未選択
+}
+
+enum FigureType {
+    UNSELECTED # 未選択
+    SLIM # 細め
+    SLIGHTLY_SLIM # やや細め
+    REGULAR # 普通
+    VOLUPTUOUS # グラマー
+    BRAWNY # 筋肉質
+    SLIGHTLY_HEAVY # ややぽっちゃり
+    HEAVY # 太め
+}
+
+enum HavingKids {
+    NONE # なし
+    LIVING_TOGETHER # 同居中
+    LIVING_APART # 別居中
+    UNSELECTED # 未選択
+}
+
+enum Housework {
+    ACCEPTABLE # 積極的に参加したい
+    UNACCEPTABLE # 相手に任せたい
+    UNCERTAIN # 相手と相談して決めたい
+    UNSELECTED # 未選択
+}
+
+enum LeadTimeToMarriage {
+    ASAP # すぐにでもしたい
+    IN_A_YEAR # 1年以内にしたい
+    IN_A_COUPLE_OF_YEARS # 2〜3年以内にしたい
+    UNCERTAIN # 相手と相談して決めたい
+    UNSELECTED # 未選択
+}
+
+enum LivingWithFamily {
+    ACCEPTABLE # 同居の必要なし
+    UNACCEPTABLE # 同居を希望
+    UNCERTAIN # 相手と相談して決める
+    UNSELECTED # 未選択
+}
+
+enum Lodger {
+    NONE # 一人暮らし
+    PARENT # 実家暮らし
+    FRIEND # 友達と一緒
+    PET # ペットと一緒
+    UNSELECTED # 未選択
+}
+
+enum MaritalHistory {
+    NEVER # 未婚
+    DIVORCED # 離婚
+    LOST # 死別
+    UNSELECTED # 未選択
+}
+
+enum Parenting {
+    ACCEPTABLE # 積極的に参加したい
+    UNACCEPTABLE # 相手に任せたい
+    UNCERTAIN # 相手と相談して決めたい
+    UNSELECTED # 未選択
+}
+
+enum Relocation {
+    NEVER # ない
+    RARE # 稀にある
+    POSSIBLE_IN_THE_COUNTRY # ある（国内）
+    POSSIBLE_OUTSIDE_THE_COUNTRY # ある（海外も含む）
+    UNSELECTED # 未選択
+}
+
+enum ResidenceType {
+    RENTAL # 賃貸
+    DETACHED # 持ち家（戸建）
+    COLLECTIVE # 持ち家（マンション）
+    OTHER # その他
+    UNSELECTED # 未選択
+}
+
+enum Sibling {
+    FIRST_BORN # 長男（長女）
+    SECOND_BORN # 次男（次女）
+    THIRD_BORN # 三男（三女）
+    OTHER # その他
+    UNSELECTED # 未選択
+}
+
+enum Smoking {
+    NON_SMOKER # 吸わない
+    NOT_IN_FRONT_OF_NON_SMOKER # 非喫煙者の前では吸わない
+    POSSIBILITY_OF_GIVING_UP_SMOKING # 相手が嫌ならやめる
+    ELECTRONIC_CIGARETTE # 吸う（電子タバコ）
+    CIGARETTE # 吸う
+    UNSELECTED # 未選択
+}
+
+enum WantKids {
+    ACCEPTABLE # はい
+    UNACCEPTABLE # いいえ
+    UNCERTAIN # 相手と相談して決めたい
+    UNSELECTED # 未選択
+}
+
+enum UserSortKey {
+    DATE_OF_BIRTH # 生年月日
+    INCOME_RANGE # 年収
+    RANDOM # ランダム
+    REGISTERED_DATE # 登録日時
+    LAST_LOGIN_AT # 最終アクセス日時
+}
+
+# いけてないので直したい
+enum TagValue {
+    ALCOHOL # HOBBY__お酒好き
+    ANIMAL # HOBBY__動物好き
+    ANIME # HOBBY__アニメ
+    ART # HOBBY__アート好き
+    BASEBALL # HOBBY__野球好き
+    BASKETBALL # HOBBY__バスケ好き
+    BEER # HOBBY__ビール党
+    CAMERA # HOBBY__カメラ男子/女子
+    CAT # HOBBY__猫派
+    CIGARETTE # HOBBY__愛煙家
+    COMPUTER_GAME # HOBBY__ゲーム
+    COOKING # HOBBY__料理が得意
+    DOG # HOBBY__犬派
+    DOMESTIC_FILM # HOBBY__邦画LOVE
+    FASHION # HOBBY__おしゃれ好き
+    FOOTBALL # HOBBY__サッカー好き
+    FOREIGN_FILM # HOBBY__洋画LOVE
+    GOURMET # HOBBY__グルメ
+    INDOORSY # HOBBY__インドア
+    KARAOKE # HOBBY__カラオケ
+    MOUNTAIN # HOBBY__山派
+    MOVIE # HOBBY__映画好き
+    MUSEUM # HOBBY__美術館巡り
+    MUSIC # HOBBY__音楽好き
+    MUSIC_FESTIVAL # HOBBY__フェス好き
+    NON_ALCOHOL # HOBBY__お酒飲めない
+    OUTDOORSY # HOBBY__アウトドア
+    READING_BOOK # HOBBY__読書家
+    SAKE # HOBBY__日本酒LOVE
+    SEA # HOBBY__海派
+    SPORTS # HOBBY__スポーツ好き
+    SWEETS # HOBBY__甘党
+    TRAINING # HOBBY__ジム通い
+    WINE # HOBBY__ワイン好き
+    L_ALCOHOL # LIFE_STYLE__お酒好き
+    L_CAT # LIFE_STYLE__猫派
+    L_COOKING # LIFE_STYLE__自炊派
+    L_COUNTRY_LIVING # LIFE_STYLE__カントリーライフ
+    L_DOG # LIFE_STYLE__犬派
+    L_DOMESTIC_TRAVEL # LIFE_STYLE__国内旅行
+    L_EATING_OUT # LIFE_STYLE__外食派
+    L_NON_ALCOHOL # LIFE_STYLE__お酒飲めません
+    L_OVERSEAS_TRAVEL # LIFE_STYLE__海外旅行
+    L_PET # LIFE_STYLE__動物を飼いたい
+    L_URBAN_LIVING # LIFE_STYLE__アーバンライフ
+    L_VOLUNTEER # LIFE_STYLE__ボランティア
+    L_WEEKDAY_HOLIDAY # LIFE_STYLE__平日休み
+    L_WEEKEND_HOLIDAY # LIFE_STYLE__土日休み
+    V_CHUBBY # VALUES__ぽっちゃり好き
+    V_GETTING_IN_TOUCH_FREQUENTLY # VALUES__連絡はマメに
+    V_INDOORSY # VALUES__インドア
+    V_KIDS # VALUES__子供好き
+    V_OUTDOORSY # VALUES__アウトドア
+    V_PERSONAL_TIME # VALUES__プライベート重視
+    V_PREFERRING_DINNER_DATING # VALUES__デートはディナーで
+    V_PREFERRING_LUNCH_DATING # VALUES__デートはランチで
+    V_RESPECTING_TIME_OF_EACH_OTHER # VALUES__お互いの時間を大切に
+    V_SALT_FACE # VALUES__塩顔好き
+    V_SAUCE_FACE # VALUES__ソース顔好き
+    V_WORKING # VALUES__仕事頑張ってます
+}

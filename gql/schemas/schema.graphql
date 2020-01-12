@@ -1,24 +1,22 @@
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
+schema {
+    query: Query
+    mutation: Mutation
 }
 
-type User {
-  id: ID!
-  name: String!
+type Query {}
+type Mutation {}
+
+type NacodoResponse {
+    code: NacodoResponseCode
+    message: String
 }
 
-type Query {
-  todos: [Todo!]!
+enum NacodoResponseCode {
+    OK
+    NG
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
-}
-
-type Mutation {
-  createTodo(input: NewTodo!): Todo!
+enum OrderBy {
+    ASC # 昇順
+    DESC # 降順
 }

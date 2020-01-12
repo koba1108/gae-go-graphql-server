@@ -1,0 +1,41 @@
+extend type Query {
+    notifications(option: NotificationSearchInput): [Notification]
+    # admin only
+    registerNotification(userIds: [String]notification: NotificationInput): NacodoResponse
+    updateNotification(userIds: [String]notification: NotificationInput): NacodoResponse
+    deleteNotification(notificationId: String): NacodoResponse
+}
+
+type Notification {
+    batchId: String
+    body: String
+    forAllUser: Boolean
+    id: String
+    isDeleted: Boolean
+    isPublished: Boolean
+    isRead: Boolean
+    publishedDate: String
+    registeredDate: String
+    title: String
+    updatedDate: String
+    userIds: [String]
+}
+
+input NotificationSearchInput {
+    numOfResults: Int
+    offset: Int
+    userId: String
+    from: String
+    to: String
+    onlyEmailUnsent: Boolean
+    includeDeleted: Boolean
+}
+
+input NotificationInput {
+    forAllUser: Boolean
+    isPublished: Boolean
+    id: String
+    title: String
+    body: String
+    batchId: String
+}

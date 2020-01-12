@@ -2,20 +2,149 @@
 
 package models
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
-}
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
 
-type Todo struct {
-	ID   string `json:"id"`
-	ID2  string `json:"id2"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
-}
-
-type User struct {
+type Document struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+type NacodoResponse struct {
+	Code    *NacodoResponseCode `json:"code"`
+	Message *string             `json:"message"`
+}
+
+type DocumentReviewStatus string
+
+const (
+	DocumentReviewStatusPrepareForReview DocumentReviewStatus = "PREPARE_FOR_REVIEW"
+	DocumentReviewStatusInReview         DocumentReviewStatus = "IN_REVIEW"
+	DocumentReviewStatusConfirmed        DocumentReviewStatus = "CONFIRMED"
+	DocumentReviewStatusRejected         DocumentReviewStatus = "REJECTED"
+)
+
+var AllDocumentReviewStatus = []DocumentReviewStatus{
+	DocumentReviewStatusPrepareForReview,
+	DocumentReviewStatusInReview,
+	DocumentReviewStatusConfirmed,
+	DocumentReviewStatusRejected,
+}
+
+func (e DocumentReviewStatus) IsValid() bool {
+	switch e {
+	case DocumentReviewStatusPrepareForReview, DocumentReviewStatusInReview, DocumentReviewStatusConfirmed, DocumentReviewStatusRejected:
+		return true
+	}
+	return false
+}
+
+func (e DocumentReviewStatus) String() string {
+	return string(e)
+}
+
+func (e *DocumentReviewStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = DocumentReviewStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid DocumentReviewStatus", str)
+	}
+	return nil
+}
+
+func (e DocumentReviewStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type DocumentType string
+
+const (
+	DocumentTypeIDEntification                    DocumentType = "IDENTIFICATION"
+	DocumentTypeIncomeConfirmation                DocumentType = "INCOME_CONFIRMATION"
+	DocumentTypeSingleConfirmation                DocumentType = "SINGLE_CONFIRMATION"
+	DocumentTypeEducationalBackgroundConfirmation DocumentType = "EDUCATIONAL_BACKGROUND_CONFIRMATION"
+)
+
+var AllDocumentType = []DocumentType{
+	DocumentTypeIDEntification,
+	DocumentTypeIncomeConfirmation,
+	DocumentTypeSingleConfirmation,
+	DocumentTypeEducationalBackgroundConfirmation,
+}
+
+func (e DocumentType) IsValid() bool {
+	switch e {
+	case DocumentTypeIDEntification, DocumentTypeIncomeConfirmation, DocumentTypeSingleConfirmation, DocumentTypeEducationalBackgroundConfirmation:
+		return true
+	}
+	return false
+}
+
+func (e DocumentType) String() string {
+	return string(e)
+}
+
+func (e *DocumentType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = DocumentType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid DocumentType", str)
+	}
+	return nil
+}
+
+func (e DocumentType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type NacodoResponseCode string
+
+const (
+	NacodoResponseCodeOk NacodoResponseCode = "OK"
+	NacodoResponseCodeNg NacodoResponseCode = "NG"
+)
+
+var AllNacodoResponseCode = []NacodoResponseCode{
+	NacodoResponseCodeOk,
+	NacodoResponseCodeNg,
+}
+
+func (e NacodoResponseCode) IsValid() bool {
+	switch e {
+	case NacodoResponseCodeOk, NacodoResponseCodeNg:
+		return true
+	}
+	return false
+}
+
+func (e NacodoResponseCode) String() string {
+	return string(e)
+}
+
+func (e *NacodoResponseCode) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = NacodoResponseCode(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid NacodoResponseCode", str)
+	}
+	return nil
+}
+
+func (e NacodoResponseCode) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

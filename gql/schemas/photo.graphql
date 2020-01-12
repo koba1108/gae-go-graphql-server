@@ -1,0 +1,37 @@
+extend type Query {
+    photos(userId: String type: PhotoReviewStatus): [UserPhotos] # preifx で user 付けたい
+}
+
+extend type Mutation {
+    updatePhoto(
+        photoId: String
+        reviewStatus: PhotoReviewStatus
+        rejectReason: String
+    ): NacodoResponse
+}
+
+input PhotosInput {
+    exchangeMain: Int
+    main: String
+    second: String
+    third: String
+    fourth: String
+    fifth: String
+    deleted: DeletedPhotosInput
+}
+
+input DeletedPhotosInput {
+    third: Boolean
+    fourth: Boolean
+    fifth: Boolean
+    main: Boolean
+    second: Boolean
+}
+
+enum PhotoReviewStatus {
+    CONFIRMED # 承認済
+    REJECTED # 却下済
+    PREPARE_FOR_REVIEW # レビュー準備中
+    IN_REVIEW # レビュー中
+}
+

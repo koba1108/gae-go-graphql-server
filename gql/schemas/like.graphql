@@ -1,0 +1,28 @@
+extend type Query {
+    liked(id: String): [Liked]
+    likes(id: String): [Likes]
+}
+
+type Liked {
+    canceled_date: String
+    declined_date: String
+    is_canceled: Boolean
+    is_confirmed: Boolean
+    is_declined: Boolean
+    is_skipped: Boolean
+    last_modified: String
+    liked_date: String
+    sender: User
+}
+
+type Likes {
+    canceled_date: String
+    declined_date: String
+    is_canceled: Boolean
+    is_confirmed: Boolean
+    is_declined: Boolean
+    is_skipped: Boolean
+    last_modified: String
+    liked_date: String
+    receiver: User
+}

@@ -1,0 +1,33 @@
+extend type Query {
+    documents(userId: String type: DocumentReviewStatus): [Document]
+}
+
+extend type Mutation {
+    # uploadDocument に名前変えたい
+    uploadRegistrationDocument(documentType: DocumentType document: String): NacodoResponse
+    # admin only
+    updateDocument(
+        documentId: String
+        reviewStatus: DocumentReviewStatus
+        rejectReason: String
+    ): NacodoResponse
+}
+
+type Document {
+    id: ID!
+    name: String!
+}
+
+enum DocumentType {
+    IDENTIFICATION
+    INCOME_CONFIRMATION
+    SINGLE_CONFIRMATION
+    EDUCATIONAL_BACKGROUND_CONFIRMATION
+}
+
+enum DocumentReviewStatus {
+    PREPARE_FOR_REVIEW
+    IN_REVIEW
+    CONFIRMED
+    REJECTED
+}

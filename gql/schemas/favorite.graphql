@@ -1,0 +1,3 @@
+extend type Query {
+    favorites(id: String): UsersResponse
+}

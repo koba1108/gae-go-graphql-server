@@ -1,0 +1,40 @@
+extend type Query {
+    reports(option: ReportSearchInput): [Report]
+}
+
+input ReportSearchInput {
+    id: String
+    type: ReportType
+    from: String
+    to: String
+    limit: Int
+    offset: Int
+    reported: String
+    targetUserId: String
+    isClosed: Boolean
+    isOrderAsc: Boolean # enum OrderBy で良さそう
+    sortBy: String
+}
+
+type Report {
+    id: String
+    type: ReportType
+    reason: String
+    reported: String
+    reportedDate: String
+    targetUserId: String
+    isClosed: Boolean
+}
+
+enum ReportType {
+    FALSEHOOD_PROFILE # プロフィールの虚偽
+    INAPPROPRIATE_PHOTO # 不適切な写真（著名人の写真含む）
+    SLANDER # 誹謗中傷
+    OBSCENE_EXPRESSION # 卑猥なメッセージや言動
+    FOUND_INDUCER # 他のサイトへ勧誘行為
+    DEFRAUDING # 金銭目的
+    LAST_MINUTE_CANCELLATION # 当日のドタキャン
+    FOUND_PARTNER # パートナーがいた
+    INVALID_USAGE # 恋愛以外の利用
+    OTHER # その他
+}

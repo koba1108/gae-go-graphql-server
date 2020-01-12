@@ -1,0 +1,73 @@
+# admin only
+extend type Query {
+    inquiries(option: InquirySearchInput): [Inquiry]
+}
+
+extend type Mutation {
+    replyToInquiry(inquiryId: String text: String): NacodoResponse
+    deleteInquiry(inquiryId: String): NacodoResponse
+}
+
+type Inquiry {
+    adminId: String
+    deletedDate: String
+    email: String
+    id: String
+    inquiredDate: String
+    isDeleted: Boolean
+    name: String
+    reply: Reply # prefix に Inquiry って付けたい
+    replyFromId: String
+    sendBy: UserType
+    tel: String
+    text: String
+    type: InquiryType
+    userId: String
+}
+
+type Reply {
+    adminId: String
+    deletedDate: String
+    email: String
+    id: String
+    inquiredDate: String
+    isDeleted: Boolean
+    name: String
+    replyFromId: String
+    sendBy: UserType
+    tel: String
+    text: String
+    type: InquiryType
+    userId: String
+}
+
+input InquirySearchInput {
+    isOrderAsc: Boolean
+    type: InquiryType
+    userId: String
+    adminId: String
+    name: String
+    email: String
+    offset: Int
+    sendBy: UserType
+    orderBy: String
+    isDeleted: Boolean
+    tel: String
+    to: String
+    limit: Int
+    from: String
+    isAlreadyReply: Boolean
+}
+
+enum InquiryType {
+    REPORT # 不正ユーザー報告
+    SERVICE # サイト・サービス利用
+    COVERAGE # 取材依頼等
+    OTHER # その他
+    PAYMENT # お支払いについて
+}
+
+enum UserType {
+    ADMIN # 管理者
+    USER # ユーザ
+}
