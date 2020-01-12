@@ -3,8 +3,12 @@ schema {
     mutation: Mutation
 }
 
-type Query {}
-type Mutation {}
+type Query {
+    test: String
+}
+type Mutation {
+    test: String
+}
 
 type NacodoResponse {
     code: NacodoResponseCode

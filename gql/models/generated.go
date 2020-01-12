@@ -8,14 +8,485 @@ import (
 	"strconv"
 )
 
+type DeletedPhotosInput struct {
+	Third  *bool `json:"third"`
+	Fourth *bool `json:"fourth"`
+	Fifth  *bool `json:"fifth"`
+	Main   *bool `json:"main"`
+	Second *bool `json:"second"`
+}
+
 type Document struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
+type Inquiry struct {
+	AdminID      *string      `json:"adminId"`
+	DeletedDate  *string      `json:"deletedDate"`
+	Email        *string      `json:"email"`
+	ID           *string      `json:"id"`
+	InquiredDate *string      `json:"inquiredDate"`
+	IsDeleted    *bool        `json:"isDeleted"`
+	Name         *string      `json:"name"`
+	Reply        *Reply       `json:"reply"`
+	ReplyFromID  *string      `json:"replyFromId"`
+	SendBy       *UserType    `json:"sendBy"`
+	Tel          *string      `json:"tel"`
+	Text         *string      `json:"text"`
+	Type         *InquiryType `json:"type"`
+	UserID       *string      `json:"userId"`
+}
+
+type InquirySearchInput struct {
+	IsOrderAsc     *bool        `json:"isOrderAsc"`
+	Type           *InquiryType `json:"type"`
+	UserID         *string      `json:"userId"`
+	AdminID        *string      `json:"adminId"`
+	Name           *string      `json:"name"`
+	Email          *string      `json:"email"`
+	Offset         *int         `json:"offset"`
+	SendBy         *UserType    `json:"sendBy"`
+	OrderBy        *string      `json:"orderBy"`
+	IsDeleted      *bool        `json:"isDeleted"`
+	Tel            *string      `json:"tel"`
+	To             *string      `json:"to"`
+	Limit          *int         `json:"limit"`
+	From           *string      `json:"from"`
+	IsAlreadyReply *bool        `json:"isAlreadyReply"`
+}
+
+type Liked struct {
+	CanceledDate *string `json:"canceled_date"`
+	DeclinedDate *string `json:"declined_date"`
+	IsCanceled   *bool   `json:"is_canceled"`
+	IsConfirmed  *bool   `json:"is_confirmed"`
+	IsDeclined   *bool   `json:"is_declined"`
+	IsSkipped    *bool   `json:"is_skipped"`
+	LastModified *string `json:"last_modified"`
+	LikedDate    *string `json:"liked_date"`
+	Sender       *User   `json:"sender"`
+}
+
+type Likes struct {
+	CanceledDate *string `json:"canceled_date"`
+	DeclinedDate *string `json:"declined_date"`
+	IsCanceled   *bool   `json:"is_canceled"`
+	IsConfirmed  *bool   `json:"is_confirmed"`
+	IsDeclined   *bool   `json:"is_declined"`
+	IsSkipped    *bool   `json:"is_skipped"`
+	LastModified *string `json:"last_modified"`
+	LikedDate    *string `json:"liked_date"`
+	Receiver     *User   `json:"receiver"`
+}
+
 type NacodoResponse struct {
 	Code    *NacodoResponseCode `json:"code"`
 	Message *string             `json:"message"`
+}
+
+type Notification struct {
+	BatchID        *string   `json:"batchId"`
+	Body           *string   `json:"body"`
+	ForAllUser     *bool     `json:"forAllUser"`
+	ID             *string   `json:"id"`
+	IsDeleted      *bool     `json:"isDeleted"`
+	IsPublished    *bool     `json:"isPublished"`
+	IsRead         *bool     `json:"isRead"`
+	PublishedDate  *string   `json:"publishedDate"`
+	RegisteredDate *string   `json:"registeredDate"`
+	Title          *string   `json:"title"`
+	UpdatedDate    *string   `json:"updatedDate"`
+	UserIds        []*string `json:"userIds"`
+}
+
+type NotificationInput struct {
+	ForAllUser  *bool   `json:"forAllUser"`
+	IsPublished *bool   `json:"isPublished"`
+	ID          *string `json:"id"`
+	Title       *string `json:"title"`
+	Body        *string `json:"body"`
+	BatchID     *string `json:"batchId"`
+}
+
+type NotificationSearchInput struct {
+	NumOfResults    *int    `json:"numOfResults"`
+	Offset          *int    `json:"offset"`
+	UserID          *string `json:"userId"`
+	From            *string `json:"from"`
+	To              *string `json:"to"`
+	OnlyEmailUnsent *bool   `json:"onlyEmailUnsent"`
+	IncludeDeleted  *bool   `json:"includeDeleted"`
+}
+
+type PhotosInput struct {
+	ExchangeMain *int                `json:"exchangeMain"`
+	Main         *string             `json:"main"`
+	Second       *string             `json:"second"`
+	Third        *string             `json:"third"`
+	Fourth       *string             `json:"fourth"`
+	Fifth        *string             `json:"fifth"`
+	Deleted      *DeletedPhotosInput `json:"deleted"`
+}
+
+type Qualification struct {
+	EducationalBackgrounds []*EducationalBackground `json:"educationalBackgrounds"`
+	FigureTypes            []*FigureType            `json:"figureTypes"`
+	LowerAge               *int                     `json:"lowerAge"`
+	LowerHeight            *int                     `json:"lowerHeight"`
+	LowerIncomeRange       *IncomeRange             `json:"lowerIncomeRange"`
+	Prefectures            []*Prefecture            `json:"prefectures"`
+	RegularHolidays        []*RegularHoliday        `json:"regularHolidays"`
+	Siblings               []*Sibling               `json:"siblings"`
+	UpperAge               *int                     `json:"upperAge"`
+	UpperHeight            *int                     `json:"upperHeight"`
+	UpperIncomeRange       *IncomeRange             `json:"upperIncomeRange"`
+	WorkingForms           []*WorkingForm           `json:"workingForms"`
+}
+
+type Reply struct {
+	AdminID      *string      `json:"adminId"`
+	DeletedDate  *string      `json:"deletedDate"`
+	Email        *string      `json:"email"`
+	ID           *string      `json:"id"`
+	InquiredDate *string      `json:"inquiredDate"`
+	IsDeleted    *bool        `json:"isDeleted"`
+	Name         *string      `json:"name"`
+	ReplyFromID  *string      `json:"replyFromId"`
+	SendBy       *UserType    `json:"sendBy"`
+	Tel          *string      `json:"tel"`
+	Text         *string      `json:"text"`
+	Type         *InquiryType `json:"type"`
+	UserID       *string      `json:"userId"`
+}
+
+type Report struct {
+	ID           *string     `json:"id"`
+	Type         *ReportType `json:"type"`
+	Reason       *string     `json:"reason"`
+	Reported     *string     `json:"reported"`
+	ReportedDate *string     `json:"reportedDate"`
+	TargetUserID *string     `json:"targetUserId"`
+	IsClosed     *bool       `json:"isClosed"`
+}
+
+type ReportSearchInput struct {
+	ID           *string     `json:"id"`
+	Type         *ReportType `json:"type"`
+	From         *string     `json:"from"`
+	To           *string     `json:"to"`
+	Limit        *int        `json:"limit"`
+	Offset       *int        `json:"offset"`
+	Reported     *string     `json:"reported"`
+	TargetUserID *string     `json:"targetUserId"`
+	IsClosed     *bool       `json:"isClosed"`
+	IsOrderAsc   *bool       `json:"isOrderAsc"`
+	SortBy       *string     `json:"sortBy"`
+}
+
+type SearchOption struct {
+	PrefectureOfBirth     []*Prefecture            `json:"prefectureOfBirth"`
+	Car                   []*Car                   `json:"car"`
+	EducationalBackground []*EducationalBackground `json:"educationalBackground"`
+	LivingWithFamily      []*LivingWithFamily      `json:"livingWithFamily"`
+	HavingKids            []*HavingKids            `json:"havingKids"`
+	WantKids              []*WantKids              `json:"wantKids"`
+	ResidenceType         []*ResidenceType         `json:"residenceType"`
+	LowerAge              *int                     `json:"lowerAge"`
+	UpperAge              *int                     `json:"upperAge"`
+	LowerHeight           *int                     `json:"lowerHeight"`
+	UpperHeight           *int                     `json:"upperHeight"`
+	LowerIncomeRange      *IncomeRange             `json:"lowerIncomeRange"`
+	UpperIncomeRange      *IncomeRange             `json:"upperIncomeRange"`
+	LeadTimeToMarriage    []*LeadTimeToMarriage    `json:"leadTimeToMarriage"`
+	Parenting             []*Parenting             `json:"parenting"`
+	Housework             []*Housework             `json:"housework"`
+	BloodType             []*BloodType             `json:"bloodType"`
+	Occupation            []*Occupation            `json:"occupation"`
+	WorkingForm           []*WorkingForm           `json:"workingForm"`
+	Relocation            []*Relocation            `json:"relocation"`
+	RegularHoliday        []*RegularHoliday        `json:"regularHoliday"`
+	MaritalHistory        []*MaritalHistory        `json:"maritalHistory"`
+	Prefecture            []*Prefecture            `json:"prefecture"`
+	FigureType            []*FigureType            `json:"figureType"`
+	Drinking              []*Drinking              `json:"drinking"`
+	Smoking               []*Smoking               `json:"smoking"`
+	Lodger                []*Lodger                `json:"lodger"`
+	Sibling               []*Sibling               `json:"sibling"`
+}
+
+type Tag struct {
+	Type  *TagType `json:"type"`
+	Name  *string  `json:"name"`
+	Value *string  `json:"value"`
+}
+
+type TagInput struct {
+	Value *TagValue `json:"value"`
+	Type  *TagType  `json:"type"`
+}
+
+type User struct {
+	BillingStatus          *BillingStatus         `json:"billingStatus"`
+	DateOfBirth            *string                `json:"dateOfBirth"`
+	Details                *UserDetailedProfile   `json:"details"`
+	EducationalBackground  *EducationalBackground `json:"educationalBackground"`
+	Email                  *string                `json:"email"`
+	Gender                 *Gender                `json:"gender"`
+	ID                     *string                `json:"id"`
+	IncomeRange            *IncomeRange           `json:"incomeRange"`
+	IsFacebookRegistered   *bool                  `json:"isFacebookRegistered"`
+	IsReceiveColumn        *bool                  `json:"isReceiveColumn"`
+	IsRecessed             *bool                  `json:"isRecessed"`
+	IsWithdrawn            *bool                  `json:"isWithdrawn"`
+	LastLoginAt            *string                `json:"lastLoginAt"`
+	Liked                  []*string              `json:"liked"`
+	Likes                  []*string              `json:"likes"`
+	Matches                []*string              `json:"matches"`
+	Nickname               *string                `json:"nickname"`
+	NotificationPermission *bool                  `json:"notificationPermission"`
+	Notifications          []*Notification        `json:"notifications"`
+	Occupation             *Occupation            `json:"occupation"`
+	Photos                 *UserPhotos            `json:"photos"`
+	Prefecture             *Prefecture            `json:"prefecture"`
+	Qualification          *Qualification         `json:"qualification"`
+	RegisteredAt           *string                `json:"registeredAt"`
+	RegistrationStatus     *RegistrationStatus    `json:"registrationStatus"`
+	RegularHoliday         *RegularHoliday        `json:"regularHoliday"`
+	SchoolName             *string                `json:"schoolName"`
+	SelfIntroduction       *string                `json:"selfIntroduction"`
+	Skips                  []*string              `json:"skips"`
+	Tags                   []*Tag                 `json:"tags"`
+	WorkingForm            *WorkingForm           `json:"workingForm"`
+}
+
+type UserDetailedProfile struct {
+	BloodType          *BloodType          `json:"bloodType"`
+	Car                *Car                `json:"car"`
+	Drinking           *Drinking           `json:"drinking"`
+	DualCareer         *DualCareer         `json:"dualCareer"`
+	FigureType         *FigureType         `json:"figureType"`
+	HavingKids         *HavingKids         `json:"havingKids"`
+	Height             *int                `json:"height"`
+	Housework          *Housework          `json:"housework"`
+	LeadTimeToMarriage *LeadTimeToMarriage `json:"leadTimeToMarriage"`
+	LivingWithFamily   *LivingWithFamily   `json:"livingWithFamily"`
+	Lodger             *Lodger             `json:"lodger"`
+	MaritalHistory     *MaritalHistory     `json:"maritalHistory"`
+	Parenting          *Parenting          `json:"parenting"`
+	PrefectureOfBirth  *Prefecture         `json:"prefectureOfBirth"`
+	Relocation         *Relocation         `json:"relocation"`
+	ResidenceType      *ResidenceType      `json:"residenceType"`
+	Sibling            *Sibling            `json:"sibling"`
+	Smoking            *Smoking            `json:"smoking"`
+	WantKids           *WantKids           `json:"wantKids"`
+}
+
+type UserDetailedProfileInput struct {
+	MaritalHistory     *MaritalHistory     `json:"maritalHistory"`
+	HavingKids         *HavingKids         `json:"havingKids"`
+	FigureType         *FigureType         `json:"figureType"`
+	Lodger             *Lodger             `json:"lodger"`
+	LivingWithFamily   *LivingWithFamily   `json:"livingWithFamily"`
+	DualCareer         *DualCareer         `json:"dualCareer"`
+	Relocation         *Relocation         `json:"relocation"`
+	LeadTimeToMarriage *LeadTimeToMarriage `json:"leadTimeToMarriage"`
+	Sibling            *Sibling            `json:"sibling"`
+	WantKids           *WantKids           `json:"wantKids"`
+	ResidenceType      *ResidenceType      `json:"residenceType"`
+	PrefectureOfBirth  *Prefecture         `json:"prefectureOfBirth"`
+	Height             *int                `json:"height"`
+	Smoking            *Smoking            `json:"smoking"`
+	Drinking           *Drinking           `json:"drinking"`
+	Parenting          *Parenting          `json:"parenting"`
+	BloodType          *BloodType          `json:"bloodType"`
+	Housework          *Housework          `json:"housework"`
+	Car                *Car                `json:"car"`
+}
+
+type UserInput struct {
+	Nickname               *string                `json:"nickname"`
+	Prefecture             *Prefecture            `json:"prefecture"`
+	RegularHoliday         *RegularHoliday        `json:"regularHoliday"`
+	SelfIntroduction       *string                `json:"selfIntroduction"`
+	BillingStatus          *BillingStatus         `json:"billingStatus"`
+	ID                     *string                `json:"id"`
+	IncomeRange            *IncomeRange           `json:"incomeRange"`
+	WorkingForm            *WorkingForm           `json:"workingForm"`
+	RegistrationStatus     *RegistrationStatus    `json:"registrationStatus"`
+	DateOfBirth            *string                `json:"dateOfBirth"`
+	Gender                 *Gender                `json:"gender"`
+	Email                  *string                `json:"email"`
+	NotificationPermission *bool                  `json:"notificationPermission"`
+	IsFacebookRegistered   *bool                  `json:"isFacebookRegistered"`
+	EducationalBackground  *EducationalBackground `json:"educationalBackground"`
+	SchoolName             *string                `json:"schoolName"`
+	Occupation             *Occupation            `json:"occupation"`
+	IsReceiveColumn        *bool                  `json:"isReceiveColumn"`
+}
+
+type UserPhoto struct {
+	DownloadURL    *string            `json:"downloadURL"`
+	ID             *string            `json:"id"`
+	IsDeleted      *bool              `json:"isDeleted"`
+	IsMain         *bool              `json:"isMain"`
+	IsReviewed     *bool              `json:"isReviewed"`
+	No             *int               `json:"no"`
+	RegisteredDate *string            `json:"registeredDate"`
+	RejectReason   *string            `json:"rejectReason"`
+	ReviewStatus   *PhotoReviewStatus `json:"reviewStatus"`
+	UpdatedDate    *string            `json:"updatedDate"`
+	UserID         *string            `json:"userId"`
+}
+
+type UserPhotos struct {
+	Fifth  *UserPhoto `json:"fifth"`
+	Fourth *UserPhoto `json:"fourth"`
+	Main   *UserPhoto `json:"main"`
+	Second *UserPhoto `json:"second"`
+	Third  *UserPhoto `json:"third"`
+}
+
+type UsersResponse struct {
+	Total    *int    `json:"total"`
+	UserList []*User `json:"userList"`
+}
+
+type BillingStatus string
+
+const (
+	BillingStatusNonBilling BillingStatus = "NON_BILLING"
+	BillingStatusBilled     BillingStatus = "BILLED"
+	BillingStatusFailed     BillingStatus = "FAILED"
+)
+
+var AllBillingStatus = []BillingStatus{
+	BillingStatusNonBilling,
+	BillingStatusBilled,
+	BillingStatusFailed,
+}
+
+func (e BillingStatus) IsValid() bool {
+	switch e {
+	case BillingStatusNonBilling, BillingStatusBilled, BillingStatusFailed:
+		return true
+	}
+	return false
+}
+
+func (e BillingStatus) String() string {
+	return string(e)
+}
+
+func (e *BillingStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = BillingStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid BillingStatus", str)
+	}
+	return nil
+}
+
+func (e BillingStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type BloodType string
+
+const (
+	BloodTypeA          BloodType = "A"
+	BloodTypeB          BloodType = "B"
+	BloodTypeO          BloodType = "O"
+	BloodTypeAb         BloodType = "AB"
+	BloodTypeUncertain  BloodType = "UNCERTAIN"
+	BloodTypeUnselected BloodType = "UNSELECTED"
+)
+
+var AllBloodType = []BloodType{
+	BloodTypeA,
+	BloodTypeB,
+	BloodTypeO,
+	BloodTypeAb,
+	BloodTypeUncertain,
+	BloodTypeUnselected,
+}
+
+func (e BloodType) IsValid() bool {
+	switch e {
+	case BloodTypeA, BloodTypeB, BloodTypeO, BloodTypeAb, BloodTypeUncertain, BloodTypeUnselected:
+		return true
+	}
+	return false
+}
+
+func (e BloodType) String() string {
+	return string(e)
+}
+
+func (e *BloodType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = BloodType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid BloodType", str)
+	}
+	return nil
+}
+
+func (e BloodType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Car string
+
+const (
+	CarOwner      Car = "OWNER"
+	CarPlan       Car = "PLAN"
+	CarNonOwner   Car = "NON_OWNER"
+	CarUnselected Car = "UNSELECTED"
+)
+
+var AllCar = []Car{
+	CarOwner,
+	CarPlan,
+	CarNonOwner,
+	CarUnselected,
+}
+
+func (e Car) IsValid() bool {
+	switch e {
+	case CarOwner, CarPlan, CarNonOwner, CarUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Car) String() string {
+	return string(e)
+}
+
+func (e *Car) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Car(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Car", str)
+	}
+	return nil
+}
+
+func (e Car) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type DocumentReviewStatus string
@@ -108,6 +579,617 @@ func (e DocumentType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
+type Drinking string
+
+const (
+	DrinkingNever      Drinking = "NEVER"
+	DrinkingSometimes  Drinking = "SOMETIMES"
+	DrinkingOften      Drinking = "OFTEN"
+	DrinkingUnselected Drinking = "UNSELECTED"
+)
+
+var AllDrinking = []Drinking{
+	DrinkingNever,
+	DrinkingSometimes,
+	DrinkingOften,
+	DrinkingUnselected,
+}
+
+func (e Drinking) IsValid() bool {
+	switch e {
+	case DrinkingNever, DrinkingSometimes, DrinkingOften, DrinkingUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Drinking) String() string {
+	return string(e)
+}
+
+func (e *Drinking) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Drinking(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Drinking", str)
+	}
+	return nil
+}
+
+func (e Drinking) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type DualCareer string
+
+const (
+	DualCareerAcceptable   DualCareer = "ACCEPTABLE"
+	DualCareerUnacceptable DualCareer = "UNACCEPTABLE"
+	DualCareerUncertain    DualCareer = "UNCERTAIN"
+	DualCareerUnselected   DualCareer = "UNSELECTED"
+)
+
+var AllDualCareer = []DualCareer{
+	DualCareerAcceptable,
+	DualCareerUnacceptable,
+	DualCareerUncertain,
+	DualCareerUnselected,
+}
+
+func (e DualCareer) IsValid() bool {
+	switch e {
+	case DualCareerAcceptable, DualCareerUnacceptable, DualCareerUncertain, DualCareerUnselected:
+		return true
+	}
+	return false
+}
+
+func (e DualCareer) String() string {
+	return string(e)
+}
+
+func (e *DualCareer) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = DualCareer(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid DualCareer", str)
+	}
+	return nil
+}
+
+func (e DualCareer) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type EducationalBackground string
+
+const (
+	EducationalBackgroundOther          EducationalBackground = "OTHER"
+	EducationalBackgroundHighSchool     EducationalBackground = "HIGH_SCHOOL"
+	EducationalBackgroundJuniorCollege  EducationalBackground = "JUNIOR_COLLEGE"
+	EducationalBackgroundUniversity     EducationalBackground = "UNIVERSITY"
+	EducationalBackgroundGraduateSchool EducationalBackground = "GRADUATE_SCHOOL"
+)
+
+var AllEducationalBackground = []EducationalBackground{
+	EducationalBackgroundOther,
+	EducationalBackgroundHighSchool,
+	EducationalBackgroundJuniorCollege,
+	EducationalBackgroundUniversity,
+	EducationalBackgroundGraduateSchool,
+}
+
+func (e EducationalBackground) IsValid() bool {
+	switch e {
+	case EducationalBackgroundOther, EducationalBackgroundHighSchool, EducationalBackgroundJuniorCollege, EducationalBackgroundUniversity, EducationalBackgroundGraduateSchool:
+		return true
+	}
+	return false
+}
+
+func (e EducationalBackground) String() string {
+	return string(e)
+}
+
+func (e *EducationalBackground) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = EducationalBackground(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid EducationalBackground", str)
+	}
+	return nil
+}
+
+func (e EducationalBackground) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type FigureType string
+
+const (
+	FigureTypeUnselected    FigureType = "UNSELECTED"
+	FigureTypeSlim          FigureType = "SLIM"
+	FigureTypeSlightlySlim  FigureType = "SLIGHTLY_SLIM"
+	FigureTypeRegular       FigureType = "REGULAR"
+	FigureTypeVoluptuous    FigureType = "VOLUPTUOUS"
+	FigureTypeBrawny        FigureType = "BRAWNY"
+	FigureTypeSlightlyHeavy FigureType = "SLIGHTLY_HEAVY"
+	FigureTypeHeavy         FigureType = "HEAVY"
+)
+
+var AllFigureType = []FigureType{
+	FigureTypeUnselected,
+	FigureTypeSlim,
+	FigureTypeSlightlySlim,
+	FigureTypeRegular,
+	FigureTypeVoluptuous,
+	FigureTypeBrawny,
+	FigureTypeSlightlyHeavy,
+	FigureTypeHeavy,
+}
+
+func (e FigureType) IsValid() bool {
+	switch e {
+	case FigureTypeUnselected, FigureTypeSlim, FigureTypeSlightlySlim, FigureTypeRegular, FigureTypeVoluptuous, FigureTypeBrawny, FigureTypeSlightlyHeavy, FigureTypeHeavy:
+		return true
+	}
+	return false
+}
+
+func (e FigureType) String() string {
+	return string(e)
+}
+
+func (e *FigureType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = FigureType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid FigureType", str)
+	}
+	return nil
+}
+
+func (e FigureType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Gender string
+
+const (
+	GenderMale   Gender = "MALE"
+	GenderFemale Gender = "FEMALE"
+)
+
+var AllGender = []Gender{
+	GenderMale,
+	GenderFemale,
+}
+
+func (e Gender) IsValid() bool {
+	switch e {
+	case GenderMale, GenderFemale:
+		return true
+	}
+	return false
+}
+
+func (e Gender) String() string {
+	return string(e)
+}
+
+func (e *Gender) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Gender(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Gender", str)
+	}
+	return nil
+}
+
+func (e Gender) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type HavingKids string
+
+const (
+	HavingKidsNone           HavingKids = "NONE"
+	HavingKidsLivingTogether HavingKids = "LIVING_TOGETHER"
+	HavingKidsLivingApart    HavingKids = "LIVING_APART"
+	HavingKidsUnselected     HavingKids = "UNSELECTED"
+)
+
+var AllHavingKids = []HavingKids{
+	HavingKidsNone,
+	HavingKidsLivingTogether,
+	HavingKidsLivingApart,
+	HavingKidsUnselected,
+}
+
+func (e HavingKids) IsValid() bool {
+	switch e {
+	case HavingKidsNone, HavingKidsLivingTogether, HavingKidsLivingApart, HavingKidsUnselected:
+		return true
+	}
+	return false
+}
+
+func (e HavingKids) String() string {
+	return string(e)
+}
+
+func (e *HavingKids) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = HavingKids(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid HavingKids", str)
+	}
+	return nil
+}
+
+func (e HavingKids) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Housework string
+
+const (
+	HouseworkAcceptable   Housework = "ACCEPTABLE"
+	HouseworkUnacceptable Housework = "UNACCEPTABLE"
+	HouseworkUncertain    Housework = "UNCERTAIN"
+	HouseworkUnselected   Housework = "UNSELECTED"
+)
+
+var AllHousework = []Housework{
+	HouseworkAcceptable,
+	HouseworkUnacceptable,
+	HouseworkUncertain,
+	HouseworkUnselected,
+}
+
+func (e Housework) IsValid() bool {
+	switch e {
+	case HouseworkAcceptable, HouseworkUnacceptable, HouseworkUncertain, HouseworkUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Housework) String() string {
+	return string(e)
+}
+
+func (e *Housework) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Housework(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Housework", str)
+	}
+	return nil
+}
+
+func (e Housework) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type IncomeRange string
+
+const (
+	IncomeRangeLessThanTwoMilYen     IncomeRange = "LESS_THAN_TWO_MIL_YEN"
+	IncomeRangeLessThanThreeMilYen   IncomeRange = "LESS_THAN_THREE_MIL_YEN"
+	IncomeRangeLessThanFourMilYen    IncomeRange = "LESS_THAN_FOUR_MIL_YEN"
+	IncomeRangeLessThanSixMilYen     IncomeRange = "LESS_THAN_SIX_MIL_YEN"
+	IncomeRangeLessThanTenMilYen     IncomeRange = "LESS_THAN_TEN_MIL_YEN"
+	IncomeRangeLessThanThirtyMilYen  IncomeRange = "LESS_THAN_THIRTY_MIL_YEN"
+	IncomeRangeLessThanFiveMilYen    IncomeRange = "LESS_THAN_FIVE_MIL_YEN"
+	IncomeRangeLessThanEightMilYen   IncomeRange = "LESS_THAN_EIGHT_MIL_YEN"
+	IncomeRangeLessThanFifteenMilYen IncomeRange = "LESS_THAN_FIFTEEN_MIL_YEN"
+	IncomeRangeLessThanTwentyMilYen  IncomeRange = "LESS_THAN_TWENTY_MIL_YEN"
+	IncomeRangeMoreThanThirtyMilYen  IncomeRange = "MORE_THAN_THIRTY_MIL_YEN"
+)
+
+var AllIncomeRange = []IncomeRange{
+	IncomeRangeLessThanTwoMilYen,
+	IncomeRangeLessThanThreeMilYen,
+	IncomeRangeLessThanFourMilYen,
+	IncomeRangeLessThanSixMilYen,
+	IncomeRangeLessThanTenMilYen,
+	IncomeRangeLessThanThirtyMilYen,
+	IncomeRangeLessThanFiveMilYen,
+	IncomeRangeLessThanEightMilYen,
+	IncomeRangeLessThanFifteenMilYen,
+	IncomeRangeLessThanTwentyMilYen,
+	IncomeRangeMoreThanThirtyMilYen,
+}
+
+func (e IncomeRange) IsValid() bool {
+	switch e {
+	case IncomeRangeLessThanTwoMilYen, IncomeRangeLessThanThreeMilYen, IncomeRangeLessThanFourMilYen, IncomeRangeLessThanSixMilYen, IncomeRangeLessThanTenMilYen, IncomeRangeLessThanThirtyMilYen, IncomeRangeLessThanFiveMilYen, IncomeRangeLessThanEightMilYen, IncomeRangeLessThanFifteenMilYen, IncomeRangeLessThanTwentyMilYen, IncomeRangeMoreThanThirtyMilYen:
+		return true
+	}
+	return false
+}
+
+func (e IncomeRange) String() string {
+	return string(e)
+}
+
+func (e *IncomeRange) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = IncomeRange(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid IncomeRange", str)
+	}
+	return nil
+}
+
+func (e IncomeRange) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type InquiryType string
+
+const (
+	InquiryTypeReport   InquiryType = "REPORT"
+	InquiryTypeService  InquiryType = "SERVICE"
+	InquiryTypeCoverage InquiryType = "COVERAGE"
+	InquiryTypeOther    InquiryType = "OTHER"
+	InquiryTypePayment  InquiryType = "PAYMENT"
+)
+
+var AllInquiryType = []InquiryType{
+	InquiryTypeReport,
+	InquiryTypeService,
+	InquiryTypeCoverage,
+	InquiryTypeOther,
+	InquiryTypePayment,
+}
+
+func (e InquiryType) IsValid() bool {
+	switch e {
+	case InquiryTypeReport, InquiryTypeService, InquiryTypeCoverage, InquiryTypeOther, InquiryTypePayment:
+		return true
+	}
+	return false
+}
+
+func (e InquiryType) String() string {
+	return string(e)
+}
+
+func (e *InquiryType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = InquiryType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid InquiryType", str)
+	}
+	return nil
+}
+
+func (e InquiryType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type LeadTimeToMarriage string
+
+const (
+	LeadTimeToMarriageAsap             LeadTimeToMarriage = "ASAP"
+	LeadTimeToMarriageInAYear          LeadTimeToMarriage = "IN_A_YEAR"
+	LeadTimeToMarriageInACoupleOfYears LeadTimeToMarriage = "IN_A_COUPLE_OF_YEARS"
+	LeadTimeToMarriageUncertain        LeadTimeToMarriage = "UNCERTAIN"
+	LeadTimeToMarriageUnselected       LeadTimeToMarriage = "UNSELECTED"
+)
+
+var AllLeadTimeToMarriage = []LeadTimeToMarriage{
+	LeadTimeToMarriageAsap,
+	LeadTimeToMarriageInAYear,
+	LeadTimeToMarriageInACoupleOfYears,
+	LeadTimeToMarriageUncertain,
+	LeadTimeToMarriageUnselected,
+}
+
+func (e LeadTimeToMarriage) IsValid() bool {
+	switch e {
+	case LeadTimeToMarriageAsap, LeadTimeToMarriageInAYear, LeadTimeToMarriageInACoupleOfYears, LeadTimeToMarriageUncertain, LeadTimeToMarriageUnselected:
+		return true
+	}
+	return false
+}
+
+func (e LeadTimeToMarriage) String() string {
+	return string(e)
+}
+
+func (e *LeadTimeToMarriage) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = LeadTimeToMarriage(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid LeadTimeToMarriage", str)
+	}
+	return nil
+}
+
+func (e LeadTimeToMarriage) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type LivingWithFamily string
+
+const (
+	LivingWithFamilyAcceptable   LivingWithFamily = "ACCEPTABLE"
+	LivingWithFamilyUnacceptable LivingWithFamily = "UNACCEPTABLE"
+	LivingWithFamilyUncertain    LivingWithFamily = "UNCERTAIN"
+	LivingWithFamilyUnselected   LivingWithFamily = "UNSELECTED"
+)
+
+var AllLivingWithFamily = []LivingWithFamily{
+	LivingWithFamilyAcceptable,
+	LivingWithFamilyUnacceptable,
+	LivingWithFamilyUncertain,
+	LivingWithFamilyUnselected,
+}
+
+func (e LivingWithFamily) IsValid() bool {
+	switch e {
+	case LivingWithFamilyAcceptable, LivingWithFamilyUnacceptable, LivingWithFamilyUncertain, LivingWithFamilyUnselected:
+		return true
+	}
+	return false
+}
+
+func (e LivingWithFamily) String() string {
+	return string(e)
+}
+
+func (e *LivingWithFamily) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = LivingWithFamily(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid LivingWithFamily", str)
+	}
+	return nil
+}
+
+func (e LivingWithFamily) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Lodger string
+
+const (
+	LodgerNone       Lodger = "NONE"
+	LodgerParent     Lodger = "PARENT"
+	LodgerFriend     Lodger = "FRIEND"
+	LodgerPet        Lodger = "PET"
+	LodgerUnselected Lodger = "UNSELECTED"
+)
+
+var AllLodger = []Lodger{
+	LodgerNone,
+	LodgerParent,
+	LodgerFriend,
+	LodgerPet,
+	LodgerUnselected,
+}
+
+func (e Lodger) IsValid() bool {
+	switch e {
+	case LodgerNone, LodgerParent, LodgerFriend, LodgerPet, LodgerUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Lodger) String() string {
+	return string(e)
+}
+
+func (e *Lodger) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Lodger(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Lodger", str)
+	}
+	return nil
+}
+
+func (e Lodger) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type MaritalHistory string
+
+const (
+	MaritalHistoryNever      MaritalHistory = "NEVER"
+	MaritalHistoryDivorced   MaritalHistory = "DIVORCED"
+	MaritalHistoryLost       MaritalHistory = "LOST"
+	MaritalHistoryUnselected MaritalHistory = "UNSELECTED"
+)
+
+var AllMaritalHistory = []MaritalHistory{
+	MaritalHistoryNever,
+	MaritalHistoryDivorced,
+	MaritalHistoryLost,
+	MaritalHistoryUnselected,
+}
+
+func (e MaritalHistory) IsValid() bool {
+	switch e {
+	case MaritalHistoryNever, MaritalHistoryDivorced, MaritalHistoryLost, MaritalHistoryUnselected:
+		return true
+	}
+	return false
+}
+
+func (e MaritalHistory) String() string {
+	return string(e)
+}
+
+func (e *MaritalHistory) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MaritalHistory(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MaritalHistory", str)
+	}
+	return nil
+}
+
+func (e MaritalHistory) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
 type NacodoResponseCode string
 
 const (
@@ -146,5 +1228,1131 @@ func (e *NacodoResponseCode) UnmarshalGQL(v interface{}) error {
 }
 
 func (e NacodoResponseCode) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Occupation string
+
+const (
+	OccupationLawyer              Occupation = "LAWYER"
+	OccupationAnnouncer           Occupation = "ANNOUNCER"
+	OccupationTransport           Occupation = "TRANSPORT"
+	OccupationForeignCapital      Occupation = "FOREIGN_CAPITAL"
+	OccupationCa                  Occupation = "CA"
+	OccupationEntertainer         Occupation = "ENTERTAINER"
+	OccupationConsultant          Occupation = "CONSULTANT"
+	OccupationMarineProduct       Occupation = "MARINE_PRODUCT"
+	OccupationDoctor              Occupation = "DOCTOR"
+	OccupationPublicServant       Occupation = "PUBLIC_SERVANT"
+	OccupationPilot               Occupation = "PILOT"
+	OccupationTravel              Occupation = "TRAVEL"
+	OccupationBeauty              Occupation = "BEAUTY"
+	OccupationOther               Occupation = "OTHER"
+	OccupationSales               Occupation = "SALES"
+	OccupationApparel             Occupation = "APPAREL"
+	OccupationArchitect           Occupation = "ARCHITECT"
+	OccupationOfficeWorker        Occupation = "OFFICE_WORKER"
+	OccupationTradingCompany      Occupation = "TRADING_COMPANY"
+	OccupationPharmacy            Occupation = "PHARMACY"
+	OccupationCommunicationSystem Occupation = "COMMUNICATION_SYSTEM"
+	OccupationAgriculture         Occupation = "AGRICULTURE"
+	OccupationFreelance           Occupation = "FREELANCE"
+	OccupationReceptionist        Occupation = "RECEPTIONIST"
+	OccupationEntertainment       Occupation = "ENTERTAINMENT"
+	OccupationExecutive           Occupation = "EXECUTIVE"
+	OccupationSecretary           Occupation = "SECRETARY"
+	OccupationNurture             Occupation = "NURTURE"
+	OccupationMedicine            Occupation = "MEDICINE"
+	OccupationStudent             Occupation = "STUDENT"
+	OccupationCareWorker          Occupation = "CARE_WORKER"
+	OccupationFinance             Occupation = "FINANCE"
+	OccupationAdvertisement       Occupation = "ADVERTISEMENT"
+	OccupationWelfare             Occupation = "WELFARE"
+	OccupationRealEstate          Occupation = "REAL_ESTATE"
+	OccupationIt                  Occupation = "IT"
+	OccupationLargeCorporation    Occupation = "LARGE_CORPORATION"
+	OccupationNurse               Occupation = "NURSE"
+	OccupationManager             Occupation = "MANAGER"
+	OccupationInsurance           Occupation = "INSURANCE"
+	OccupationMassMedia           Occupation = "MASS_MEDIA"
+	OccupationDistribution        Occupation = "DISTRIBUTION"
+	OccupationDesigner            Occupation = "DESIGNER"
+	OccupationRestaurant          Occupation = "RESTAURANT"
+	OccupationDietitian           Occupation = "DIETITIAN"
+	OccupationEducation           Occupation = "EDUCATION"
+	OccupationCpa                 Occupation = "CPA"
+	OccupationFood                Occupation = "FOOD"
+	OccupationManufacturing       Occupation = "MANUFACTURING"
+	OccupationCooking             Occupation = "COOKING"
+	OccupationBridal              Occupation = "BRIDAL"
+	OccupationFashionModel        Occupation = "FASHION_MODEL"
+)
+
+var AllOccupation = []Occupation{
+	OccupationLawyer,
+	OccupationAnnouncer,
+	OccupationTransport,
+	OccupationForeignCapital,
+	OccupationCa,
+	OccupationEntertainer,
+	OccupationConsultant,
+	OccupationMarineProduct,
+	OccupationDoctor,
+	OccupationPublicServant,
+	OccupationPilot,
+	OccupationTravel,
+	OccupationBeauty,
+	OccupationOther,
+	OccupationSales,
+	OccupationApparel,
+	OccupationArchitect,
+	OccupationOfficeWorker,
+	OccupationTradingCompany,
+	OccupationPharmacy,
+	OccupationCommunicationSystem,
+	OccupationAgriculture,
+	OccupationFreelance,
+	OccupationReceptionist,
+	OccupationEntertainment,
+	OccupationExecutive,
+	OccupationSecretary,
+	OccupationNurture,
+	OccupationMedicine,
+	OccupationStudent,
+	OccupationCareWorker,
+	OccupationFinance,
+	OccupationAdvertisement,
+	OccupationWelfare,
+	OccupationRealEstate,
+	OccupationIt,
+	OccupationLargeCorporation,
+	OccupationNurse,
+	OccupationManager,
+	OccupationInsurance,
+	OccupationMassMedia,
+	OccupationDistribution,
+	OccupationDesigner,
+	OccupationRestaurant,
+	OccupationDietitian,
+	OccupationEducation,
+	OccupationCpa,
+	OccupationFood,
+	OccupationManufacturing,
+	OccupationCooking,
+	OccupationBridal,
+	OccupationFashionModel,
+}
+
+func (e Occupation) IsValid() bool {
+	switch e {
+	case OccupationLawyer, OccupationAnnouncer, OccupationTransport, OccupationForeignCapital, OccupationCa, OccupationEntertainer, OccupationConsultant, OccupationMarineProduct, OccupationDoctor, OccupationPublicServant, OccupationPilot, OccupationTravel, OccupationBeauty, OccupationOther, OccupationSales, OccupationApparel, OccupationArchitect, OccupationOfficeWorker, OccupationTradingCompany, OccupationPharmacy, OccupationCommunicationSystem, OccupationAgriculture, OccupationFreelance, OccupationReceptionist, OccupationEntertainment, OccupationExecutive, OccupationSecretary, OccupationNurture, OccupationMedicine, OccupationStudent, OccupationCareWorker, OccupationFinance, OccupationAdvertisement, OccupationWelfare, OccupationRealEstate, OccupationIt, OccupationLargeCorporation, OccupationNurse, OccupationManager, OccupationInsurance, OccupationMassMedia, OccupationDistribution, OccupationDesigner, OccupationRestaurant, OccupationDietitian, OccupationEducation, OccupationCpa, OccupationFood, OccupationManufacturing, OccupationCooking, OccupationBridal, OccupationFashionModel:
+		return true
+	}
+	return false
+}
+
+func (e Occupation) String() string {
+	return string(e)
+}
+
+func (e *Occupation) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Occupation(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Occupation", str)
+	}
+	return nil
+}
+
+func (e Occupation) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type OrderBy string
+
+const (
+	OrderByAsc  OrderBy = "ASC"
+	OrderByDesc OrderBy = "DESC"
+)
+
+var AllOrderBy = []OrderBy{
+	OrderByAsc,
+	OrderByDesc,
+}
+
+func (e OrderBy) IsValid() bool {
+	switch e {
+	case OrderByAsc, OrderByDesc:
+		return true
+	}
+	return false
+}
+
+func (e OrderBy) String() string {
+	return string(e)
+}
+
+func (e *OrderBy) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = OrderBy(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid OrderBy", str)
+	}
+	return nil
+}
+
+func (e OrderBy) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Parenting string
+
+const (
+	ParentingAcceptable   Parenting = "ACCEPTABLE"
+	ParentingUnacceptable Parenting = "UNACCEPTABLE"
+	ParentingUncertain    Parenting = "UNCERTAIN"
+	ParentingUnselected   Parenting = "UNSELECTED"
+)
+
+var AllParenting = []Parenting{
+	ParentingAcceptable,
+	ParentingUnacceptable,
+	ParentingUncertain,
+	ParentingUnselected,
+}
+
+func (e Parenting) IsValid() bool {
+	switch e {
+	case ParentingAcceptable, ParentingUnacceptable, ParentingUncertain, ParentingUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Parenting) String() string {
+	return string(e)
+}
+
+func (e *Parenting) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Parenting(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Parenting", str)
+	}
+	return nil
+}
+
+func (e Parenting) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type PhotoReviewStatus string
+
+const (
+	PhotoReviewStatusConfirmed        PhotoReviewStatus = "CONFIRMED"
+	PhotoReviewStatusRejected         PhotoReviewStatus = "REJECTED"
+	PhotoReviewStatusPrepareForReview PhotoReviewStatus = "PREPARE_FOR_REVIEW"
+	PhotoReviewStatusInReview         PhotoReviewStatus = "IN_REVIEW"
+)
+
+var AllPhotoReviewStatus = []PhotoReviewStatus{
+	PhotoReviewStatusConfirmed,
+	PhotoReviewStatusRejected,
+	PhotoReviewStatusPrepareForReview,
+	PhotoReviewStatusInReview,
+}
+
+func (e PhotoReviewStatus) IsValid() bool {
+	switch e {
+	case PhotoReviewStatusConfirmed, PhotoReviewStatusRejected, PhotoReviewStatusPrepareForReview, PhotoReviewStatusInReview:
+		return true
+	}
+	return false
+}
+
+func (e PhotoReviewStatus) String() string {
+	return string(e)
+}
+
+func (e *PhotoReviewStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = PhotoReviewStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid PhotoReviewStatus", str)
+	}
+	return nil
+}
+
+func (e PhotoReviewStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Prefecture string
+
+const (
+	PrefectureOverseas   Prefecture = "OVERSEAS"
+	PrefectureUnselected Prefecture = "UNSELECTED"
+	PrefectureMiyagi     Prefecture = "MIYAGI"
+	PrefectureYamagata   Prefecture = "YAMAGATA"
+	PrefectureIbaraki    Prefecture = "IBARAKI"
+	PrefectureGunma      Prefecture = "GUNMA"
+	PrefectureChiba      Prefecture = "CHIBA"
+	PrefectureToyama     Prefecture = "TOYAMA"
+	PrefectureTochigi    Prefecture = "TOCHIGI"
+	PrefectureShimane    Prefecture = "SHIMANE"
+	PrefectureTokyo      Prefecture = "TOKYO"
+	PrefectureGifu       Prefecture = "GIFU"
+	PrefectureHyogo      Prefecture = "HYOGO"
+	PrefectureOkayama    Prefecture = "OKAYAMA"
+	PrefectureOkinawa    Prefecture = "OKINAWA"
+	PrefectureIwate      Prefecture = "IWATE"
+	PrefectureKanagawa   Prefecture = "KANAGAWA"
+	PrefectureShiga      Prefecture = "SHIGA"
+	PrefectureYamaguchi  Prefecture = "YAMAGUCHI"
+	PrefectureTokushima  Prefecture = "TOKUSHIMA"
+	PrefectureEhime      Prefecture = "EHIME"
+	PrefectureMiyazaki   Prefecture = "MIYAZAKI"
+	PrefectureAomori     Prefecture = "AOMORI"
+	PrefectureIshikawa   Prefecture = "ISHIKAWA"
+	PrefectureKyoto      Prefecture = "KYOTO"
+	PrefectureNara       Prefecture = "NARA"
+	PrefectureWakayama   Prefecture = "WAKAYAMA"
+	PrefectureHiroshima  Prefecture = "HIROSHIMA"
+	PrefectureFukuoka    Prefecture = "FUKUOKA"
+	PrefectureOsaka      Prefecture = "OSAKA"
+	PrefectureAkita      Prefecture = "AKITA"
+	PrefectureFukushima  Prefecture = "FUKUSHIMA"
+	PrefectureFukui      Prefecture = "FUKUI"
+	PrefectureYamanashi  Prefecture = "YAMANASHI"
+	PrefectureNagano     Prefecture = "NAGANO"
+	PrefectureShizuoka   Prefecture = "SHIZUOKA"
+	PrefectureMie        Prefecture = "MIE"
+	PrefectureKochi      Prefecture = "KOCHI"
+	PrefectureKumamoto   Prefecture = "KUMAMOTO"
+	PrefectureHokkaido   Prefecture = "HOKKAIDO"
+	PrefectureSaitama    Prefecture = "SAITAMA"
+	PrefectureAichi      Prefecture = "AICHI"
+	PrefectureTottori    Prefecture = "TOTTORI"
+	PrefectureNagasaki   Prefecture = "NAGASAKI"
+	PrefectureOita       Prefecture = "OITA"
+	PrefectureKagoshima  Prefecture = "KAGOSHIMA"
+	PrefectureNiigata    Prefecture = "NIIGATA"
+	PrefectureKagawa     Prefecture = "KAGAWA"
+	PrefectureSaga       Prefecture = "SAGA"
+)
+
+var AllPrefecture = []Prefecture{
+	PrefectureOverseas,
+	PrefectureUnselected,
+	PrefectureMiyagi,
+	PrefectureYamagata,
+	PrefectureIbaraki,
+	PrefectureGunma,
+	PrefectureChiba,
+	PrefectureToyama,
+	PrefectureTochigi,
+	PrefectureShimane,
+	PrefectureTokyo,
+	PrefectureGifu,
+	PrefectureHyogo,
+	PrefectureOkayama,
+	PrefectureOkinawa,
+	PrefectureIwate,
+	PrefectureKanagawa,
+	PrefectureShiga,
+	PrefectureYamaguchi,
+	PrefectureTokushima,
+	PrefectureEhime,
+	PrefectureMiyazaki,
+	PrefectureAomori,
+	PrefectureIshikawa,
+	PrefectureKyoto,
+	PrefectureNara,
+	PrefectureWakayama,
+	PrefectureHiroshima,
+	PrefectureFukuoka,
+	PrefectureOsaka,
+	PrefectureAkita,
+	PrefectureFukushima,
+	PrefectureFukui,
+	PrefectureYamanashi,
+	PrefectureNagano,
+	PrefectureShizuoka,
+	PrefectureMie,
+	PrefectureKochi,
+	PrefectureKumamoto,
+	PrefectureHokkaido,
+	PrefectureSaitama,
+	PrefectureAichi,
+	PrefectureTottori,
+	PrefectureNagasaki,
+	PrefectureOita,
+	PrefectureKagoshima,
+	PrefectureNiigata,
+	PrefectureKagawa,
+	PrefectureSaga,
+}
+
+func (e Prefecture) IsValid() bool {
+	switch e {
+	case PrefectureOverseas, PrefectureUnselected, PrefectureMiyagi, PrefectureYamagata, PrefectureIbaraki, PrefectureGunma, PrefectureChiba, PrefectureToyama, PrefectureTochigi, PrefectureShimane, PrefectureTokyo, PrefectureGifu, PrefectureHyogo, PrefectureOkayama, PrefectureOkinawa, PrefectureIwate, PrefectureKanagawa, PrefectureShiga, PrefectureYamaguchi, PrefectureTokushima, PrefectureEhime, PrefectureMiyazaki, PrefectureAomori, PrefectureIshikawa, PrefectureKyoto, PrefectureNara, PrefectureWakayama, PrefectureHiroshima, PrefectureFukuoka, PrefectureOsaka, PrefectureAkita, PrefectureFukushima, PrefectureFukui, PrefectureYamanashi, PrefectureNagano, PrefectureShizuoka, PrefectureMie, PrefectureKochi, PrefectureKumamoto, PrefectureHokkaido, PrefectureSaitama, PrefectureAichi, PrefectureTottori, PrefectureNagasaki, PrefectureOita, PrefectureKagoshima, PrefectureNiigata, PrefectureKagawa, PrefectureSaga:
+		return true
+	}
+	return false
+}
+
+func (e Prefecture) String() string {
+	return string(e)
+}
+
+func (e *Prefecture) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Prefecture(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Prefecture", str)
+	}
+	return nil
+}
+
+func (e Prefecture) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type RegistrationStatus string
+
+const (
+	RegistrationStatusEmpty         RegistrationStatus = "EMPTY"
+	RegistrationStatusTutorial      RegistrationStatus = "TUTORIAL"
+	RegistrationStatusProfile       RegistrationStatus = "PROFILE"
+	RegistrationStatusQualification RegistrationStatus = "QUALIFICATION"
+)
+
+var AllRegistrationStatus = []RegistrationStatus{
+	RegistrationStatusEmpty,
+	RegistrationStatusTutorial,
+	RegistrationStatusProfile,
+	RegistrationStatusQualification,
+}
+
+func (e RegistrationStatus) IsValid() bool {
+	switch e {
+	case RegistrationStatusEmpty, RegistrationStatusTutorial, RegistrationStatusProfile, RegistrationStatusQualification:
+		return true
+	}
+	return false
+}
+
+func (e RegistrationStatus) String() string {
+	return string(e)
+}
+
+func (e *RegistrationStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = RegistrationStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid RegistrationStatus", str)
+	}
+	return nil
+}
+
+func (e RegistrationStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type RegularHoliday string
+
+const (
+	RegularHolidayWeekend   RegularHoliday = "WEEKEND"
+	RegularHolidayWeekday   RegularHoliday = "WEEKDAY"
+	RegularHolidayIrregular RegularHoliday = "IRREGULAR"
+	RegularHolidayOther     RegularHoliday = "OTHER"
+)
+
+var AllRegularHoliday = []RegularHoliday{
+	RegularHolidayWeekend,
+	RegularHolidayWeekday,
+	RegularHolidayIrregular,
+	RegularHolidayOther,
+}
+
+func (e RegularHoliday) IsValid() bool {
+	switch e {
+	case RegularHolidayWeekend, RegularHolidayWeekday, RegularHolidayIrregular, RegularHolidayOther:
+		return true
+	}
+	return false
+}
+
+func (e RegularHoliday) String() string {
+	return string(e)
+}
+
+func (e *RegularHoliday) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = RegularHoliday(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid RegularHoliday", str)
+	}
+	return nil
+}
+
+func (e RegularHoliday) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Relocation string
+
+const (
+	RelocationNever                     Relocation = "NEVER"
+	RelocationRare                      Relocation = "RARE"
+	RelocationPossibleInTheCountry      Relocation = "POSSIBLE_IN_THE_COUNTRY"
+	RelocationPossibleOutsideTheCountry Relocation = "POSSIBLE_OUTSIDE_THE_COUNTRY"
+	RelocationUnselected                Relocation = "UNSELECTED"
+)
+
+var AllRelocation = []Relocation{
+	RelocationNever,
+	RelocationRare,
+	RelocationPossibleInTheCountry,
+	RelocationPossibleOutsideTheCountry,
+	RelocationUnselected,
+}
+
+func (e Relocation) IsValid() bool {
+	switch e {
+	case RelocationNever, RelocationRare, RelocationPossibleInTheCountry, RelocationPossibleOutsideTheCountry, RelocationUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Relocation) String() string {
+	return string(e)
+}
+
+func (e *Relocation) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Relocation(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Relocation", str)
+	}
+	return nil
+}
+
+func (e Relocation) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type ReportType string
+
+const (
+	ReportTypeFalsehoodProfile       ReportType = "FALSEHOOD_PROFILE"
+	ReportTypeInappropriatePhoto     ReportType = "INAPPROPRIATE_PHOTO"
+	ReportTypeSLANder                ReportType = "SLANDER"
+	ReportTypeObsceneExpression      ReportType = "OBSCENE_EXPRESSION"
+	ReportTypeFoundInducer           ReportType = "FOUND_INDUCER"
+	ReportTypeDefrauding             ReportType = "DEFRAUDING"
+	ReportTypeLastMinuteCancellation ReportType = "LAST_MINUTE_CANCELLATION"
+	ReportTypeFoundPartner           ReportType = "FOUND_PARTNER"
+	ReportTypeInvalidUsage           ReportType = "INVALID_USAGE"
+	ReportTypeOther                  ReportType = "OTHER"
+)
+
+var AllReportType = []ReportType{
+	ReportTypeFalsehoodProfile,
+	ReportTypeInappropriatePhoto,
+	ReportTypeSLANder,
+	ReportTypeObsceneExpression,
+	ReportTypeFoundInducer,
+	ReportTypeDefrauding,
+	ReportTypeLastMinuteCancellation,
+	ReportTypeFoundPartner,
+	ReportTypeInvalidUsage,
+	ReportTypeOther,
+}
+
+func (e ReportType) IsValid() bool {
+	switch e {
+	case ReportTypeFalsehoodProfile, ReportTypeInappropriatePhoto, ReportTypeSLANder, ReportTypeObsceneExpression, ReportTypeFoundInducer, ReportTypeDefrauding, ReportTypeLastMinuteCancellation, ReportTypeFoundPartner, ReportTypeInvalidUsage, ReportTypeOther:
+		return true
+	}
+	return false
+}
+
+func (e ReportType) String() string {
+	return string(e)
+}
+
+func (e *ReportType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ReportType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ReportType", str)
+	}
+	return nil
+}
+
+func (e ReportType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type ResidenceType string
+
+const (
+	ResidenceTypeRental     ResidenceType = "RENTAL"
+	ResidenceTypeDetached   ResidenceType = "DETACHED"
+	ResidenceTypeCollective ResidenceType = "COLLECTIVE"
+	ResidenceTypeOther      ResidenceType = "OTHER"
+	ResidenceTypeUnselected ResidenceType = "UNSELECTED"
+)
+
+var AllResidenceType = []ResidenceType{
+	ResidenceTypeRental,
+	ResidenceTypeDetached,
+	ResidenceTypeCollective,
+	ResidenceTypeOther,
+	ResidenceTypeUnselected,
+}
+
+func (e ResidenceType) IsValid() bool {
+	switch e {
+	case ResidenceTypeRental, ResidenceTypeDetached, ResidenceTypeCollective, ResidenceTypeOther, ResidenceTypeUnselected:
+		return true
+	}
+	return false
+}
+
+func (e ResidenceType) String() string {
+	return string(e)
+}
+
+func (e *ResidenceType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = ResidenceType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid ResidenceType", str)
+	}
+	return nil
+}
+
+func (e ResidenceType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Sibling string
+
+const (
+	SiblingFirstBorn  Sibling = "FIRST_BORN"
+	SiblingSecondBorn Sibling = "SECOND_BORN"
+	SiblingThirdBorn  Sibling = "THIRD_BORN"
+	SiblingOther      Sibling = "OTHER"
+	SiblingUnselected Sibling = "UNSELECTED"
+)
+
+var AllSibling = []Sibling{
+	SiblingFirstBorn,
+	SiblingSecondBorn,
+	SiblingThirdBorn,
+	SiblingOther,
+	SiblingUnselected,
+}
+
+func (e Sibling) IsValid() bool {
+	switch e {
+	case SiblingFirstBorn, SiblingSecondBorn, SiblingThirdBorn, SiblingOther, SiblingUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Sibling) String() string {
+	return string(e)
+}
+
+func (e *Sibling) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Sibling(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Sibling", str)
+	}
+	return nil
+}
+
+func (e Sibling) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Smoking string
+
+const (
+	SmokingNonSmoker                    Smoking = "NON_SMOKER"
+	SmokingNotInFrontOfNonSmoker        Smoking = "NOT_IN_FRONT_OF_NON_SMOKER"
+	SmokingPossibilityOfGivingUpSmoking Smoking = "POSSIBILITY_OF_GIVING_UP_SMOKING"
+	SmokingElectronicCigarette          Smoking = "ELECTRONIC_CIGARETTE"
+	SmokingCigarette                    Smoking = "CIGARETTE"
+	SmokingUnselected                   Smoking = "UNSELECTED"
+)
+
+var AllSmoking = []Smoking{
+	SmokingNonSmoker,
+	SmokingNotInFrontOfNonSmoker,
+	SmokingPossibilityOfGivingUpSmoking,
+	SmokingElectronicCigarette,
+	SmokingCigarette,
+	SmokingUnselected,
+}
+
+func (e Smoking) IsValid() bool {
+	switch e {
+	case SmokingNonSmoker, SmokingNotInFrontOfNonSmoker, SmokingPossibilityOfGivingUpSmoking, SmokingElectronicCigarette, SmokingCigarette, SmokingUnselected:
+		return true
+	}
+	return false
+}
+
+func (e Smoking) String() string {
+	return string(e)
+}
+
+func (e *Smoking) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Smoking(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Smoking", str)
+	}
+	return nil
+}
+
+func (e Smoking) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TagType string
+
+const (
+	TagTypeLifeStyle TagType = "LIFE_STYLE"
+	TagTypeValues    TagType = "VALUES"
+	TagTypeHobby     TagType = "HOBBY"
+)
+
+var AllTagType = []TagType{
+	TagTypeLifeStyle,
+	TagTypeValues,
+	TagTypeHobby,
+}
+
+func (e TagType) IsValid() bool {
+	switch e {
+	case TagTypeLifeStyle, TagTypeValues, TagTypeHobby:
+		return true
+	}
+	return false
+}
+
+func (e TagType) String() string {
+	return string(e)
+}
+
+func (e *TagType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TagType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TagType", str)
+	}
+	return nil
+}
+
+func (e TagType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TagValue string
+
+const (
+	TagValueAlcohol                    TagValue = "ALCOHOL"
+	TagValueAnimal                     TagValue = "ANIMAL"
+	TagValueAnime                      TagValue = "ANIME"
+	TagValueArt                        TagValue = "ART"
+	TagValueBaseball                   TagValue = "BASEBALL"
+	TagValueBasketball                 TagValue = "BASKETBALL"
+	TagValueBeer                       TagValue = "BEER"
+	TagValueCamera                     TagValue = "CAMERA"
+	TagValueCat                        TagValue = "CAT"
+	TagValueCigarette                  TagValue = "CIGARETTE"
+	TagValueComputerGame               TagValue = "COMPUTER_GAME"
+	TagValueCooking                    TagValue = "COOKING"
+	TagValueDog                        TagValue = "DOG"
+	TagValueDomesticFilm               TagValue = "DOMESTIC_FILM"
+	TagValueFashion                    TagValue = "FASHION"
+	TagValueFootball                   TagValue = "FOOTBALL"
+	TagValueForeignFilm                TagValue = "FOREIGN_FILM"
+	TagValueGourmet                    TagValue = "GOURMET"
+	TagValueIndoorsy                   TagValue = "INDOORSY"
+	TagValueKaraoke                    TagValue = "KARAOKE"
+	TagValueMountain                   TagValue = "MOUNTAIN"
+	TagValueMovie                      TagValue = "MOVIE"
+	TagValueMuseum                     TagValue = "MUSEUM"
+	TagValueMusic                      TagValue = "MUSIC"
+	TagValueMusicFestival              TagValue = "MUSIC_FESTIVAL"
+	TagValueNonAlcohol                 TagValue = "NON_ALCOHOL"
+	TagValueOutdoorsy                  TagValue = "OUTDOORSY"
+	TagValueReadingBook                TagValue = "READING_BOOK"
+	TagValueSake                       TagValue = "SAKE"
+	TagValueSea                        TagValue = "SEA"
+	TagValueSports                     TagValue = "SPORTS"
+	TagValueSweets                     TagValue = "SWEETS"
+	TagValueTraining                   TagValue = "TRAINING"
+	TagValueWine                       TagValue = "WINE"
+	TagValueLAlcohol                   TagValue = "L_ALCOHOL"
+	TagValueLCat                       TagValue = "L_CAT"
+	TagValueLCooking                   TagValue = "L_COOKING"
+	TagValueLCountryLiving             TagValue = "L_COUNTRY_LIVING"
+	TagValueLDog                       TagValue = "L_DOG"
+	TagValueLDomesticTravel            TagValue = "L_DOMESTIC_TRAVEL"
+	TagValueLEatingOut                 TagValue = "L_EATING_OUT"
+	TagValueLNonAlcohol                TagValue = "L_NON_ALCOHOL"
+	TagValueLOverseasTravel            TagValue = "L_OVERSEAS_TRAVEL"
+	TagValueLPet                       TagValue = "L_PET"
+	TagValueLUrbanLiving               TagValue = "L_URBAN_LIVING"
+	TagValueLVolunteer                 TagValue = "L_VOLUNTEER"
+	TagValueLWeekdayHoliday            TagValue = "L_WEEKDAY_HOLIDAY"
+	TagValueLWeekendHoliday            TagValue = "L_WEEKEND_HOLIDAY"
+	TagValueVChubby                    TagValue = "V_CHUBBY"
+	TagValueVGettingInTouchFrequently  TagValue = "V_GETTING_IN_TOUCH_FREQUENTLY"
+	TagValueVIndoorsy                  TagValue = "V_INDOORSY"
+	TagValueVKids                      TagValue = "V_KIDS"
+	TagValueVOutdoorsy                 TagValue = "V_OUTDOORSY"
+	TagValueVPersonalTime              TagValue = "V_PERSONAL_TIME"
+	TagValueVPreferringDinnerDating    TagValue = "V_PREFERRING_DINNER_DATING"
+	TagValueVPreferringLunchDating     TagValue = "V_PREFERRING_LUNCH_DATING"
+	TagValueVRespectingTimeOfEachOther TagValue = "V_RESPECTING_TIME_OF_EACH_OTHER"
+	TagValueVSaltFace                  TagValue = "V_SALT_FACE"
+	TagValueVSauceFace                 TagValue = "V_SAUCE_FACE"
+	TagValueVWorking                   TagValue = "V_WORKING"
+)
+
+var AllTagValue = []TagValue{
+	TagValueAlcohol,
+	TagValueAnimal,
+	TagValueAnime,
+	TagValueArt,
+	TagValueBaseball,
+	TagValueBasketball,
+	TagValueBeer,
+	TagValueCamera,
+	TagValueCat,
+	TagValueCigarette,
+	TagValueComputerGame,
+	TagValueCooking,
+	TagValueDog,
+	TagValueDomesticFilm,
+	TagValueFashion,
+	TagValueFootball,
+	TagValueForeignFilm,
+	TagValueGourmet,
+	TagValueIndoorsy,
+	TagValueKaraoke,
+	TagValueMountain,
+	TagValueMovie,
+	TagValueMuseum,
+	TagValueMusic,
+	TagValueMusicFestival,
+	TagValueNonAlcohol,
+	TagValueOutdoorsy,
+	TagValueReadingBook,
+	TagValueSake,
+	TagValueSea,
+	TagValueSports,
+	TagValueSweets,
+	TagValueTraining,
+	TagValueWine,
+	TagValueLAlcohol,
+	TagValueLCat,
+	TagValueLCooking,
+	TagValueLCountryLiving,
+	TagValueLDog,
+	TagValueLDomesticTravel,
+	TagValueLEatingOut,
+	TagValueLNonAlcohol,
+	TagValueLOverseasTravel,
+	TagValueLPet,
+	TagValueLUrbanLiving,
+	TagValueLVolunteer,
+	TagValueLWeekdayHoliday,
+	TagValueLWeekendHoliday,
+	TagValueVChubby,
+	TagValueVGettingInTouchFrequently,
+	TagValueVIndoorsy,
+	TagValueVKids,
+	TagValueVOutdoorsy,
+	TagValueVPersonalTime,
+	TagValueVPreferringDinnerDating,
+	TagValueVPreferringLunchDating,
+	TagValueVRespectingTimeOfEachOther,
+	TagValueVSaltFace,
+	TagValueVSauceFace,
+	TagValueVWorking,
+}
+
+func (e TagValue) IsValid() bool {
+	switch e {
+	case TagValueAlcohol, TagValueAnimal, TagValueAnime, TagValueArt, TagValueBaseball, TagValueBasketball, TagValueBeer, TagValueCamera, TagValueCat, TagValueCigarette, TagValueComputerGame, TagValueCooking, TagValueDog, TagValueDomesticFilm, TagValueFashion, TagValueFootball, TagValueForeignFilm, TagValueGourmet, TagValueIndoorsy, TagValueKaraoke, TagValueMountain, TagValueMovie, TagValueMuseum, TagValueMusic, TagValueMusicFestival, TagValueNonAlcohol, TagValueOutdoorsy, TagValueReadingBook, TagValueSake, TagValueSea, TagValueSports, TagValueSweets, TagValueTraining, TagValueWine, TagValueLAlcohol, TagValueLCat, TagValueLCooking, TagValueLCountryLiving, TagValueLDog, TagValueLDomesticTravel, TagValueLEatingOut, TagValueLNonAlcohol, TagValueLOverseasTravel, TagValueLPet, TagValueLUrbanLiving, TagValueLVolunteer, TagValueLWeekdayHoliday, TagValueLWeekendHoliday, TagValueVChubby, TagValueVGettingInTouchFrequently, TagValueVIndoorsy, TagValueVKids, TagValueVOutdoorsy, TagValueVPersonalTime, TagValueVPreferringDinnerDating, TagValueVPreferringLunchDating, TagValueVRespectingTimeOfEachOther, TagValueVSaltFace, TagValueVSauceFace, TagValueVWorking:
+		return true
+	}
+	return false
+}
+
+func (e TagValue) String() string {
+	return string(e)
+}
+
+func (e *TagValue) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TagValue(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TagValue", str)
+	}
+	return nil
+}
+
+func (e TagValue) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type UserSortKey string
+
+const (
+	UserSortKeyDateOfBirth    UserSortKey = "DATE_OF_BIRTH"
+	UserSortKeyIncomeRange    UserSortKey = "INCOME_RANGE"
+	UserSortKeyRandom         UserSortKey = "RANDOM"
+	UserSortKeyRegisteredDate UserSortKey = "REGISTERED_DATE"
+	UserSortKeyLastLoginAt    UserSortKey = "LAST_LOGIN_AT"
+)
+
+var AllUserSortKey = []UserSortKey{
+	UserSortKeyDateOfBirth,
+	UserSortKeyIncomeRange,
+	UserSortKeyRandom,
+	UserSortKeyRegisteredDate,
+	UserSortKeyLastLoginAt,
+}
+
+func (e UserSortKey) IsValid() bool {
+	switch e {
+	case UserSortKeyDateOfBirth, UserSortKeyIncomeRange, UserSortKeyRandom, UserSortKeyRegisteredDate, UserSortKeyLastLoginAt:
+		return true
+	}
+	return false
+}
+
+func (e UserSortKey) String() string {
+	return string(e)
+}
+
+func (e *UserSortKey) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UserSortKey(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UserSortKey", str)
+	}
+	return nil
+}
+
+func (e UserSortKey) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type UserType string
+
+const (
+	UserTypeAdmin UserType = "ADMIN"
+	UserTypeUser  UserType = "USER"
+)
+
+var AllUserType = []UserType{
+	UserTypeAdmin,
+	UserTypeUser,
+}
+
+func (e UserType) IsValid() bool {
+	switch e {
+	case UserTypeAdmin, UserTypeUser:
+		return true
+	}
+	return false
+}
+
+func (e UserType) String() string {
+	return string(e)
+}
+
+func (e *UserType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = UserType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid UserType", str)
+	}
+	return nil
+}
+
+func (e UserType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type WantKids string
+
+const (
+	WantKidsAcceptable   WantKids = "ACCEPTABLE"
+	WantKidsUnacceptable WantKids = "UNACCEPTABLE"
+	WantKidsUncertain    WantKids = "UNCERTAIN"
+	WantKidsUnselected   WantKids = "UNSELECTED"
+)
+
+var AllWantKids = []WantKids{
+	WantKidsAcceptable,
+	WantKidsUnacceptable,
+	WantKidsUncertain,
+	WantKidsUnselected,
+}
+
+func (e WantKids) IsValid() bool {
+	switch e {
+	case WantKidsAcceptable, WantKidsUnacceptable, WantKidsUncertain, WantKidsUnselected:
+		return true
+	}
+	return false
+}
+
+func (e WantKids) String() string {
+	return string(e)
+}
+
+func (e *WantKids) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = WantKids(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid WantKids", str)
+	}
+	return nil
+}
+
+func (e WantKids) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type WorkingForm string
+
+const (
+	WorkingFormRegularEmployee   WorkingForm = "REGULAR_EMPLOYEE"
+	WorkingFormContractEmployee  WorkingForm = "CONTRACT_EMPLOYEE"
+	WorkingFormTemporaryEmployee WorkingForm = "TEMPORARY_EMPLOYEE"
+	WorkingFormManager           WorkingForm = "MANAGER"
+	WorkingFormFreelance         WorkingForm = "FREELANCE"
+	WorkingFormPartTimer         WorkingForm = "PART_TIMER"
+)
+
+var AllWorkingForm = []WorkingForm{
+	WorkingFormRegularEmployee,
+	WorkingFormContractEmployee,
+	WorkingFormTemporaryEmployee,
+	WorkingFormManager,
+	WorkingFormFreelance,
+	WorkingFormPartTimer,
+}
+
+func (e WorkingForm) IsValid() bool {
+	switch e {
+	case WorkingFormRegularEmployee, WorkingFormContractEmployee, WorkingFormTemporaryEmployee, WorkingFormManager, WorkingFormFreelance, WorkingFormPartTimer:
+		return true
+	}
+	return false
+}
+
+func (e WorkingForm) String() string {
+	return string(e)
+}
+
+func (e *WorkingForm) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = WorkingForm(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid WorkingForm", str)
+	}
+	return nil
+}
+
+func (e WorkingForm) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
