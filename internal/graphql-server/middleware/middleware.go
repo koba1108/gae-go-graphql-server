@@ -4,8 +4,8 @@ import (
 	"errors"
 	"firebase.google.com/go/auth"
 	"github.com/gin-gonic/gin"
-	"github.com/koba1108/gae-go-graphql-server/external"
-	"github.com/koba1108/gae-go-graphql-server/gql/models"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/external"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models"
 	"regexp"
 )
 

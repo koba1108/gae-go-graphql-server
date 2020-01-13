@@ -4,18 +4,18 @@ import (
 	"context"
 	"log"
 
-	"github.com/koba1108/gae-go-graphql-server/gql"
-	"github.com/koba1108/gae-go-graphql-server/gql/models"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 
 type Resolver struct{}
 
-func (r *Resolver) Mutation() gql.MutationResolver {
+func (r *Resolver) Mutation() gqlgen.MutationResolver {
 	return &mutationResolver{r}
 }
-func (r *Resolver) Query() gql.QueryResolver {
+func (r *Resolver) Query() gqlgen.QueryResolver {
 	return &queryResolver{r}
 }
 

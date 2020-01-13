@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/koba1108/gae-go-graphql-server/external"
-	"github.com/koba1108/gae-go-graphql-server/handlers"
-	"github.com/koba1108/gae-go-graphql-server/middleware"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/external"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/handlers"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/middleware"
 	"os"
 )
 

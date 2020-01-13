@@ -6,20 +6,20 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/handler"
 	"github.com/gin-gonic/gin"
-	"github.com/koba1108/gae-go-graphql-server/gql"
-	"github.com/koba1108/gae-go-graphql-server/gql/models"
-	"github.com/koba1108/gae-go-graphql-server/gql/resolvers"
-	"github.com/koba1108/gae-go-graphql-server/middleware"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/resolvers"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/middleware"
 	"github.com/vektah/gqlparser/gqlerror"
 	"log"
 )
 
 func UserGraphqlHandler() gin.HandlerFunc {
-	gqlConfig := gql.Config{}
+	gqlConfig := gqlgen.Config{}
 	gqlConfig.Resolvers = &resolvers.Resolver{}
 	gqlConfig.Directives.HasRole = hasRoleHandler
 	h := handler.GraphQL(
-		gql.NewExecutableSchema(gqlConfig),
+		gqlgen.NewExecutableSchema(gqlConfig),
 		handler.RequestMiddleware(requestMiddlewareHandler),
 		handler.ResolverMiddleware(resolverMiddlewareHandler),
 		handler.RecoverFunc(recoverHandler),

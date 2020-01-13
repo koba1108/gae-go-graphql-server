@@ -13,7 +13,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/koba1108/gae-go-graphql-server/gql/models"
+	"github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models"
 	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 )
@@ -1946,7 +1946,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var parsedSchema = gqlparser.MustLoadSchema(
-	&ast.Source{Name: "gql/schemas/document.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/document.graphql", Input: `extend type Query {
     documents(userId: String type: DocumentReviewStatus): [Document]
 }
 
@@ -1979,7 +1979,7 @@ enum DocumentReviewStatus {
     REJECTED
 }
 `},
-	&ast.Source{Name: "gql/schemas/favorite.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/favorite.graphql", Input: `extend type Query {
     favorites(id: String): UsersResponse
 }
 
@@ -1988,7 +1988,7 @@ extend type Mutation {
     deleteFavorite(favoriteUserId: String): NacodoResponse
 }
 `},
-	&ast.Source{Name: "gql/schemas/inquiry.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/inquiry.graphql", Input: `extend type Query {
     inquiries(option: InquirySearchInput): [Inquiry] @hasRole(role: ADMIN)
 }
 
@@ -2067,7 +2067,7 @@ enum UserType {
     USER # ユーザ
 }
 `},
-	&ast.Source{Name: "gql/schemas/like.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/like.graphql", Input: `extend type Query {
     liked(id: String): [Liked]
     likes(id: String): [Likes]
 }
@@ -2103,7 +2103,7 @@ type Likes {
     receiver: User
 }
 `},
-	&ast.Source{Name: "gql/schemas/notification.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/notification.graphql", Input: `extend type Query {
     notifications(option: NotificationSearchInput): [Notification]
 }
 
@@ -2148,7 +2148,7 @@ input NotificationInput {
     batchId: String
 }
 `},
-	&ast.Source{Name: "gql/schemas/photo.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/photo.graphql", Input: `extend type Query {
     photos(userId: String type: PhotoReviewStatus): [UserPhotos]
 }
 
@@ -2186,11 +2186,11 @@ enum PhotoReviewStatus {
 }
 
 `},
-	&ast.Source{Name: "gql/schemas/recommend.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/recommend.graphql", Input: `extend type Query {
     recommends(userId: String): UsersResponse
 }
 `},
-	&ast.Source{Name: "gql/schemas/report.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/report.graphql", Input: `extend type Query {
     reports(option: ReportSearchInput): [Report] @hasRole(role: ADMIN)
 }
 
@@ -2241,7 +2241,7 @@ enum ReportType {
     OTHER # その他
 }
 `},
-	&ast.Source{Name: "gql/schemas/schema.graphql", Input: `schema {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/schema.graphql", Input: `schema {
     query: Query
     mutation: Mutation
 }
@@ -2281,7 +2281,7 @@ enum Role {
     USER
 }
 `},
-	&ast.Source{Name: "gql/schemas/user.graphql", Input: `extend type Query {
+	&ast.Source{Name: "internal/graphql-server/gqlgen/schemas/user.graphql", Input: `extend type Query {
     user(id: String): User
     users(
         option: SearchOption
@@ -2922,7 +2922,7 @@ func (ec *executionContext) dir_hasRole_args(ctx context.Context, rawArgs map[st
 	args := map[string]interface{}{}
 	var arg0 models.Role
 	if tmp, ok := rawArgs["role"]; ok {
-		arg0, err = ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, tmp)
+		arg0, err = ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2936,7 +2936,7 @@ func (ec *executionContext) field_Mutation_UpdatePermissions_args(ctx context.Co
 	args := map[string]interface{}{}
 	var arg0 *models.PermissionsInput
 	if tmp, ok := rawArgs["permissions"]; ok {
-		arg0, err = ec.unmarshalOPermissionsInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx, tmp)
+		arg0, err = ec.unmarshalOPermissionsInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPermissionsInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3034,7 +3034,7 @@ func (ec *executionContext) field_Mutation_inquire_args(ctx context.Context, raw
 	args := map[string]interface{}{}
 	var arg0 *models.InquiryInput
 	if tmp, ok := rawArgs["detail"]; ok {
-		arg0, err = ec.unmarshalOInquiryInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx, tmp)
+		arg0, err = ec.unmarshalOInquiryInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3084,7 +3084,7 @@ func (ec *executionContext) field_Mutation_registerNotification_args(ctx context
 	args["userIds"] = arg0
 	var arg1 *models.NotificationInput
 	if tmp, ok := rawArgs["notification"]; ok {
-		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx, tmp)
+		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3098,7 +3098,7 @@ func (ec *executionContext) field_Mutation_registerQualification_args(ctx contex
 	args := map[string]interface{}{}
 	var arg0 *models.QualificationInput
 	if tmp, ok := rawArgs["qualification"]; ok {
-		arg0, err = ec.unmarshalOQualificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx, tmp)
+		arg0, err = ec.unmarshalOQualificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐQualificationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3120,7 +3120,7 @@ func (ec *executionContext) field_Mutation_registerUserAndBuyPlan_args(ctx conte
 	args["planId"] = arg0
 	var arg1 *models.UserInput
 	if tmp, ok := rawArgs["user"]; ok {
-		arg1, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx, tmp)
+		arg1, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3128,7 +3128,7 @@ func (ec *executionContext) field_Mutation_registerUserAndBuyPlan_args(ctx conte
 	args["user"] = arg1
 	var arg2 *models.PhotosInput
 	if tmp, ok := rawArgs["photos"]; ok {
-		arg2, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx, tmp)
+		arg2, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotosInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3136,7 +3136,7 @@ func (ec *executionContext) field_Mutation_registerUserAndBuyPlan_args(ctx conte
 	args["photos"] = arg2
 	var arg3 *models.UserDetailedProfileInput
 	if tmp, ok := rawArgs["details"]; ok {
-		arg3, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
+		arg3, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3144,7 +3144,7 @@ func (ec *executionContext) field_Mutation_registerUserAndBuyPlan_args(ctx conte
 	args["details"] = arg3
 	var arg4 []*models.TagInput
 	if tmp, ok := rawArgs["tags"]; ok {
-		arg4, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx, tmp)
+		arg4, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3166,7 +3166,7 @@ func (ec *executionContext) field_Mutation_registerUser_args(ctx context.Context
 	args := map[string]interface{}{}
 	var arg0 *models.UserInput
 	if tmp, ok := rawArgs["user"]; ok {
-		arg0, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx, tmp)
+		arg0, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3174,7 +3174,7 @@ func (ec *executionContext) field_Mutation_registerUser_args(ctx context.Context
 	args["user"] = arg0
 	var arg1 *models.PhotosInput
 	if tmp, ok := rawArgs["photos"]; ok {
-		arg1, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx, tmp)
+		arg1, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotosInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3182,7 +3182,7 @@ func (ec *executionContext) field_Mutation_registerUser_args(ctx context.Context
 	args["photos"] = arg1
 	var arg2 *models.UserDetailedProfileInput
 	if tmp, ok := rawArgs["details"]; ok {
-		arg2, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
+		arg2, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3190,7 +3190,7 @@ func (ec *executionContext) field_Mutation_registerUser_args(ctx context.Context
 	args["details"] = arg2
 	var arg3 []*models.TagInput
 	if tmp, ok := rawArgs["tags"]; ok {
-		arg3, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx, tmp)
+		arg3, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3226,7 +3226,7 @@ func (ec *executionContext) field_Mutation_report_args(ctx context.Context, rawA
 	args := map[string]interface{}{}
 	var arg0 *models.ReportInput
 	if tmp, ok := rawArgs["detail"]; ok {
-		arg0, err = ec.unmarshalOReportInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx, tmp)
+		arg0, err = ec.unmarshalOReportInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3262,7 +3262,7 @@ func (ec *executionContext) field_Mutation_updateDocument_args(ctx context.Conte
 	args["documentId"] = arg0
 	var arg1 *models.DocumentReviewStatus
 	if tmp, ok := rawArgs["reviewStatus"]; ok {
-		arg1, err = ec.unmarshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentReviewStatus(ctx, tmp)
+		arg1, err = ec.unmarshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentReviewStatus(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3292,7 +3292,7 @@ func (ec *executionContext) field_Mutation_updateNotification_args(ctx context.C
 	args["userIds"] = arg0
 	var arg1 *models.NotificationInput
 	if tmp, ok := rawArgs["notification"]; ok {
-		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx, tmp)
+		arg1, err = ec.unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3314,7 +3314,7 @@ func (ec *executionContext) field_Mutation_updatePhoto_args(ctx context.Context,
 	args["photoId"] = arg0
 	var arg1 *models.PhotoReviewStatus
 	if tmp, ok := rawArgs["reviewStatus"]; ok {
-		arg1, err = ec.unmarshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx, tmp)
+		arg1, err = ec.unmarshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3336,7 +3336,7 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 	args := map[string]interface{}{}
 	var arg0 *models.UserInput
 	if tmp, ok := rawArgs["user"]; ok {
-		arg0, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx, tmp)
+		arg0, err = ec.unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3344,7 +3344,7 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 	args["user"] = arg0
 	var arg1 *models.PhotosInput
 	if tmp, ok := rawArgs["photos"]; ok {
-		arg1, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx, tmp)
+		arg1, err = ec.unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotosInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3352,7 +3352,7 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 	args["photos"] = arg1
 	var arg2 *models.UserDetailedProfileInput
 	if tmp, ok := rawArgs["details"]; ok {
-		arg2, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
+		arg2, err = ec.unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfileInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3360,7 +3360,7 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 	args["details"] = arg2
 	var arg3 []*models.TagInput
 	if tmp, ok := rawArgs["tags"]; ok {
-		arg3, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx, tmp)
+		arg3, err = ec.unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3374,7 +3374,7 @@ func (ec *executionContext) field_Mutation_uploadRegistrationDocument_args(ctx c
 	args := map[string]interface{}{}
 	var arg0 *models.DocumentType
 	if tmp, ok := rawArgs["documentType"]; ok {
-		arg0, err = ec.unmarshalODocumentType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentType(ctx, tmp)
+		arg0, err = ec.unmarshalODocumentType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentType(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3418,7 +3418,7 @@ func (ec *executionContext) field_Query_documents_args(ctx context.Context, rawA
 	args["userId"] = arg0
 	var arg1 *models.DocumentReviewStatus
 	if tmp, ok := rawArgs["type"]; ok {
-		arg1, err = ec.unmarshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentReviewStatus(ctx, tmp)
+		arg1, err = ec.unmarshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentReviewStatus(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3446,7 +3446,7 @@ func (ec *executionContext) field_Query_inquiries_args(ctx context.Context, rawA
 	args := map[string]interface{}{}
 	var arg0 *models.InquirySearchInput
 	if tmp, ok := rawArgs["option"]; ok {
-		arg0, err = ec.unmarshalOInquirySearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquirySearchInput(ctx, tmp)
+		arg0, err = ec.unmarshalOInquirySearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquirySearchInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3488,7 +3488,7 @@ func (ec *executionContext) field_Query_notifications_args(ctx context.Context, 
 	args := map[string]interface{}{}
 	var arg0 *models.NotificationSearchInput
 	if tmp, ok := rawArgs["option"]; ok {
-		arg0, err = ec.unmarshalONotificationSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationSearchInput(ctx, tmp)
+		arg0, err = ec.unmarshalONotificationSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationSearchInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3510,7 +3510,7 @@ func (ec *executionContext) field_Query_photos_args(ctx context.Context, rawArgs
 	args["userId"] = arg0
 	var arg1 *models.PhotoReviewStatus
 	if tmp, ok := rawArgs["type"]; ok {
-		arg1, err = ec.unmarshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx, tmp)
+		arg1, err = ec.unmarshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3538,7 +3538,7 @@ func (ec *executionContext) field_Query_reports_args(ctx context.Context, rawArg
 	args := map[string]interface{}{}
 	var arg0 *models.ReportSearchInput
 	if tmp, ok := rawArgs["option"]; ok {
-		arg0, err = ec.unmarshalOReportSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportSearchInput(ctx, tmp)
+		arg0, err = ec.unmarshalOReportSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportSearchInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3566,7 +3566,7 @@ func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs 
 	args := map[string]interface{}{}
 	var arg0 *models.SearchOption
 	if tmp, ok := rawArgs["option"]; ok {
-		arg0, err = ec.unmarshalOSearchOption2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSearchOption(ctx, tmp)
+		arg0, err = ec.unmarshalOSearchOption2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSearchOption(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3590,7 +3590,7 @@ func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs 
 	args["excludes"] = arg2
 	var arg3 *models.UserSortKey
 	if tmp, ok := rawArgs["sortKey"]; ok {
-		arg3, err = ec.unmarshalOUserSortKey2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserSortKey(ctx, tmp)
+		arg3, err = ec.unmarshalOUserSortKey2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserSortKey(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -3614,7 +3614,7 @@ func (ec *executionContext) field_Query_users_args(ctx context.Context, rawArgs 
 	args["offset"] = arg5
 	var arg6 *models.OrderBy
 	if tmp, ok := rawArgs["orderBy"]; ok {
-		arg6, err = ec.unmarshalOOrderBy2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOrderBy(ctx, tmp)
+		arg6, err = ec.unmarshalOOrderBy2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOrderBy(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -4002,7 +4002,7 @@ func (ec *executionContext) _Inquiry_reply(ctx context.Context, field graphql.Co
 	res := resTmp.(*models.Reply)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOReply2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReply(ctx, field.Selections, res)
+	return ec.marshalOReply2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReply(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Inquiry_replyFromId(ctx context.Context, field graphql.CollectedField, obj *models.Inquiry) (ret graphql.Marshaler) {
@@ -4070,7 +4070,7 @@ func (ec *executionContext) _Inquiry_sendBy(ctx context.Context, field graphql.C
 	res := resTmp.(*models.UserType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx, field.Selections, res)
+	return ec.marshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Inquiry_tel(ctx context.Context, field graphql.CollectedField, obj *models.Inquiry) (ret graphql.Marshaler) {
@@ -4172,7 +4172,7 @@ func (ec *executionContext) _Inquiry_type(ctx context.Context, field graphql.Col
 	res := resTmp.(*models.InquiryType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx, field.Selections, res)
+	return ec.marshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Inquiry_userId(ctx context.Context, field graphql.CollectedField, obj *models.Inquiry) (ret graphql.Marshaler) {
@@ -4512,7 +4512,7 @@ func (ec *executionContext) _Liked_sender(ctx context.Context, field graphql.Col
 	res := resTmp.(*models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Likes_canceled_date(ctx context.Context, field graphql.CollectedField, obj *models.Likes) (ret graphql.Marshaler) {
@@ -4818,7 +4818,7 @@ func (ec *executionContext) _Likes_receiver(ctx context.Context, field graphql.C
 	res := resTmp.(*models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_test(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4893,7 +4893,7 @@ func (ec *executionContext) _Mutation_uploadRegistrationDocument(ctx context.Con
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4926,7 +4926,7 @@ func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field 
 			return ec.resolvers.Mutation().UpdateDocument(rctx, args["documentId"].(*string), args["reviewStatus"].(*models.DocumentReviewStatus), args["rejectReason"].(*string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -4946,7 +4946,7 @@ func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field 
 		if data, ok := tmp.(*models.NacodoResponse); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4958,7 +4958,7 @@ func (ec *executionContext) _Mutation_updateDocument(ctx context.Context, field 
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_favorite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4999,7 +4999,7 @@ func (ec *executionContext) _Mutation_favorite(ctx context.Context, field graphq
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteFavorite(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5040,7 +5040,7 @@ func (ec *executionContext) _Mutation_deleteFavorite(ctx context.Context, field 
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_inquire(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5081,7 +5081,7 @@ func (ec *executionContext) _Mutation_inquire(ctx context.Context, field graphql
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_replyToInquiry(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5114,7 +5114,7 @@ func (ec *executionContext) _Mutation_replyToInquiry(ctx context.Context, field 
 			return ec.resolvers.Mutation().ReplyToInquiry(rctx, args["inquiryId"].(*string), args["text"].(*string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -5134,7 +5134,7 @@ func (ec *executionContext) _Mutation_replyToInquiry(ctx context.Context, field 
 		if data, ok := tmp.(*models.NacodoResponse); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5146,7 +5146,7 @@ func (ec *executionContext) _Mutation_replyToInquiry(ctx context.Context, field 
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteInquiry(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5179,7 +5179,7 @@ func (ec *executionContext) _Mutation_deleteInquiry(ctx context.Context, field g
 			return ec.resolvers.Mutation().DeleteInquiry(rctx, args["inquiryId"].(*string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -5199,7 +5199,7 @@ func (ec *executionContext) _Mutation_deleteInquiry(ctx context.Context, field g
 		if data, ok := tmp.(*models.NacodoResponse); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5211,7 +5211,7 @@ func (ec *executionContext) _Mutation_deleteInquiry(ctx context.Context, field g
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_like(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5252,7 +5252,7 @@ func (ec *executionContext) _Mutation_like(ctx context.Context, field graphql.Co
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_skip(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5293,7 +5293,7 @@ func (ec *executionContext) _Mutation_skip(ctx context.Context, field graphql.Co
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_cancelLike(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5334,7 +5334,7 @@ func (ec *executionContext) _Mutation_cancelLike(ctx context.Context, field grap
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_decline(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5375,7 +5375,7 @@ func (ec *executionContext) _Mutation_decline(ctx context.Context, field graphql
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_readNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5416,7 +5416,7 @@ func (ec *executionContext) _Mutation_readNotification(ctx context.Context, fiel
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_registerNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5449,7 +5449,7 @@ func (ec *executionContext) _Mutation_registerNotification(ctx context.Context, 
 			return ec.resolvers.Mutation().RegisterNotification(rctx, args["userIds"].([]*string), args["notification"].(*models.NotificationInput))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -5469,7 +5469,7 @@ func (ec *executionContext) _Mutation_registerNotification(ctx context.Context, 
 		if data, ok := tmp.(*models.NacodoResponse); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5481,7 +5481,7 @@ func (ec *executionContext) _Mutation_registerNotification(ctx context.Context, 
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5514,7 +5514,7 @@ func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, fi
 			return ec.resolvers.Mutation().UpdateNotification(rctx, args["userIds"].([]*string), args["notification"].(*models.NotificationInput))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -5534,7 +5534,7 @@ func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, fi
 		if data, ok := tmp.(*models.NacodoResponse); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5546,7 +5546,7 @@ func (ec *executionContext) _Mutation_updateNotification(ctx context.Context, fi
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteNotification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5579,7 +5579,7 @@ func (ec *executionContext) _Mutation_deleteNotification(ctx context.Context, fi
 			return ec.resolvers.Mutation().DeleteNotification(rctx, args["notificationId"].(*string))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -5599,7 +5599,7 @@ func (ec *executionContext) _Mutation_deleteNotification(ctx context.Context, fi
 		if data, ok := tmp.(*models.NacodoResponse); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/gql/models.NacodoResponse`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be *github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.NacodoResponse`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5611,7 +5611,7 @@ func (ec *executionContext) _Mutation_deleteNotification(ctx context.Context, fi
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updatePhoto(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5652,7 +5652,7 @@ func (ec *executionContext) _Mutation_updatePhoto(ctx context.Context, field gra
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_report(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5693,7 +5693,7 @@ func (ec *executionContext) _Mutation_report(ctx context.Context, field graphql.
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_comeback(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5727,7 +5727,7 @@ func (ec *executionContext) _Mutation_comeback(ctx context.Context, field graphq
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_recess(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5761,7 +5761,7 @@ func (ec *executionContext) _Mutation_recess(ctx context.Context, field graphql.
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_withdraw(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5795,7 +5795,7 @@ func (ec *executionContext) _Mutation_withdraw(ctx context.Context, field graphq
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_UpdatePermissions(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5836,7 +5836,7 @@ func (ec *executionContext) _Mutation_UpdatePermissions(ctx context.Context, fie
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_session(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5870,7 +5870,7 @@ func (ec *executionContext) _Mutation_session(ctx context.Context, field graphql
 	res := resTmp.(*models.Session)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOSession2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_registerUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5911,7 +5911,7 @@ func (ec *executionContext) _Mutation_registerUser(ctx context.Context, field gr
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_registerUserAndBuyPlan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5952,7 +5952,7 @@ func (ec *executionContext) _Mutation_registerUserAndBuyPlan(ctx context.Context
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_registerQualification(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5993,7 +5993,7 @@ func (ec *executionContext) _Mutation_registerQualification(ctx context.Context,
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -6034,7 +6034,7 @@ func (ec *executionContext) _Mutation_updateUser(ctx context.Context, field grap
 	res := resTmp.(*models.NacodoResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
+	return ec.marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _NacodoResponse_code(ctx context.Context, field graphql.CollectedField, obj *models.NacodoResponse) (ret graphql.Marshaler) {
@@ -6068,7 +6068,7 @@ func (ec *executionContext) _NacodoResponse_code(ctx context.Context, field grap
 	res := resTmp.(*models.NacodoResponseCode)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONacodoResponseCode2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponseCode(ctx, field.Selections, res)
+	return ec.marshalONacodoResponseCode2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponseCode(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _NacodoResponse_message(ctx context.Context, field graphql.CollectedField, obj *models.NacodoResponse) (ret graphql.Marshaler) {
@@ -6544,7 +6544,7 @@ func (ec *executionContext) _Qualification_educationalBackgrounds(ctx context.Co
 	res := resTmp.([]*models.EducationalBackground)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, field.Selections, res)
+	return ec.marshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Qualification_figureTypes(ctx context.Context, field graphql.CollectedField, obj *models.Qualification) (ret graphql.Marshaler) {
@@ -6578,7 +6578,7 @@ func (ec *executionContext) _Qualification_figureTypes(ctx context.Context, fiel
 	res := resTmp.([]*models.FigureType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, field.Selections, res)
+	return ec.marshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Qualification_lowerAge(ctx context.Context, field graphql.CollectedField, obj *models.Qualification) (ret graphql.Marshaler) {
@@ -6680,7 +6680,7 @@ func (ec *executionContext) _Qualification_lowerIncomeRange(ctx context.Context,
 	res := resTmp.(*models.IncomeRange)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, field.Selections, res)
+	return ec.marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Qualification_prefectures(ctx context.Context, field graphql.CollectedField, obj *models.Qualification) (ret graphql.Marshaler) {
@@ -6714,7 +6714,7 @@ func (ec *executionContext) _Qualification_prefectures(ctx context.Context, fiel
 	res := resTmp.([]*models.Prefecture)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, field.Selections, res)
+	return ec.marshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Qualification_regularHolidays(ctx context.Context, field graphql.CollectedField, obj *models.Qualification) (ret graphql.Marshaler) {
@@ -6748,7 +6748,7 @@ func (ec *executionContext) _Qualification_regularHolidays(ctx context.Context, 
 	res := resTmp.([]*models.RegularHoliday)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, field.Selections, res)
+	return ec.marshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Qualification_siblings(ctx context.Context, field graphql.CollectedField, obj *models.Qualification) (ret graphql.Marshaler) {
@@ -6782,7 +6782,7 @@ func (ec *executionContext) _Qualification_siblings(ctx context.Context, field g
 	res := resTmp.([]*models.Sibling)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, field.Selections, res)
+	return ec.marshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Qualification_upperAge(ctx context.Context, field graphql.CollectedField, obj *models.Qualification) (ret graphql.Marshaler) {
@@ -6884,7 +6884,7 @@ func (ec *executionContext) _Qualification_upperIncomeRange(ctx context.Context,
 	res := resTmp.(*models.IncomeRange)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, field.Selections, res)
+	return ec.marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Qualification_workingForms(ctx context.Context, field graphql.CollectedField, obj *models.Qualification) (ret graphql.Marshaler) {
@@ -6918,7 +6918,7 @@ func (ec *executionContext) _Qualification_workingForms(ctx context.Context, fie
 	res := resTmp.([]*models.WorkingForm)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, field.Selections, res)
+	return ec.marshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_test(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -6993,7 +6993,7 @@ func (ec *executionContext) _Query_documents(ctx context.Context, field graphql.
 	res := resTmp.([]*models.Document)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocument(ctx, field.Selections, res)
+	return ec.marshalODocument2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocument(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_favorites(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7034,7 +7034,7 @@ func (ec *executionContext) _Query_favorites(ctx context.Context, field graphql.
 	res := resTmp.(*models.UsersResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUsersResponse(ctx, field.Selections, res)
+	return ec.marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUsersResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_inquiries(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7067,7 +7067,7 @@ func (ec *executionContext) _Query_inquiries(ctx context.Context, field graphql.
 			return ec.resolvers.Query().Inquiries(rctx, args["option"].(*models.InquirySearchInput))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -7087,7 +7087,7 @@ func (ec *executionContext) _Query_inquiries(ctx context.Context, field graphql.
 		if data, ok := tmp.([]*models.Inquiry); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/koba1108/gae-go-graphql-server/gql/models.Inquiry`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.Inquiry`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7099,7 +7099,7 @@ func (ec *executionContext) _Query_inquiries(ctx context.Context, field graphql.
 	res := resTmp.([]*models.Inquiry)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInquiry2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiry(ctx, field.Selections, res)
+	return ec.marshalOInquiry2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiry(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_liked(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7140,7 +7140,7 @@ func (ec *executionContext) _Query_liked(ctx context.Context, field graphql.Coll
 	res := resTmp.([]*models.Liked)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOLiked2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLiked(ctx, field.Selections, res)
+	return ec.marshalOLiked2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLiked(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_likes(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7181,7 +7181,7 @@ func (ec *executionContext) _Query_likes(ctx context.Context, field graphql.Coll
 	res := resTmp.([]*models.Likes)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOLikes2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLikes(ctx, field.Selections, res)
+	return ec.marshalOLikes2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLikes(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_notifications(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7222,7 +7222,7 @@ func (ec *executionContext) _Query_notifications(ctx context.Context, field grap
 	res := resTmp.([]*models.Notification)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_photos(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7263,7 +7263,7 @@ func (ec *executionContext) _Query_photos(ctx context.Context, field graphql.Col
 	res := resTmp.([]*models.UserPhotos)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserPhotos2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhotos(ctx, field.Selections, res)
+	return ec.marshalOUserPhotos2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhotos(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_recommends(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7304,7 +7304,7 @@ func (ec *executionContext) _Query_recommends(ctx context.Context, field graphql
 	res := resTmp.(*models.UsersResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUsersResponse(ctx, field.Selections, res)
+	return ec.marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUsersResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_reports(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7337,7 +7337,7 @@ func (ec *executionContext) _Query_reports(ctx context.Context, field graphql.Co
 			return ec.resolvers.Query().Reports(rctx, args["option"].(*models.ReportSearchInput))
 		}
 		directive1 := func(ctx context.Context) (interface{}, error) {
-			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx, "ADMIN")
+			role, err := ec.unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx, "ADMIN")
 			if err != nil {
 				return nil, err
 			}
@@ -7357,7 +7357,7 @@ func (ec *executionContext) _Query_reports(ctx context.Context, field graphql.Co
 		if data, ok := tmp.([]*models.Report); ok {
 			return data, nil
 		}
-		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/koba1108/gae-go-graphql-server/gql/models.Report`, tmp)
+		return nil, fmt.Errorf(`unexpected type %T from directive, should be []*github.com/koba1108/gae-go-graphql-server/internal/graphql-server/gqlgen/models.Report`, tmp)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -7369,7 +7369,7 @@ func (ec *executionContext) _Query_reports(ctx context.Context, field graphql.Co
 	res := resTmp.([]*models.Report)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOReport2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReport(ctx, field.Selections, res)
+	return ec.marshalOReport2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReport(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_user(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7410,7 +7410,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	res := resTmp.(*models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7451,7 +7451,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	res := resTmp.(*models.UsersResponse)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUsersResponse(ctx, field.Selections, res)
+	return ec.marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUsersResponse(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7832,7 +7832,7 @@ func (ec *executionContext) _Reply_sendBy(ctx context.Context, field graphql.Col
 	res := resTmp.(*models.UserType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx, field.Selections, res)
+	return ec.marshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Reply_tel(ctx context.Context, field graphql.CollectedField, obj *models.Reply) (ret graphql.Marshaler) {
@@ -7934,7 +7934,7 @@ func (ec *executionContext) _Reply_type(ctx context.Context, field graphql.Colle
 	res := resTmp.(*models.InquiryType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx, field.Selections, res)
+	return ec.marshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Reply_userId(ctx context.Context, field graphql.CollectedField, obj *models.Reply) (ret graphql.Marshaler) {
@@ -8036,7 +8036,7 @@ func (ec *executionContext) _Report_type(ctx context.Context, field graphql.Coll
 	res := resTmp.(*models.ReportType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx, field.Selections, res)
+	return ec.marshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Report_reason(ctx context.Context, field graphql.CollectedField, obj *models.Report) (ret graphql.Marshaler) {
@@ -8410,7 +8410,7 @@ func (ec *executionContext) _Tag_type(ctx context.Context, field graphql.Collect
 	res := resTmp.(*models.TagType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagType(ctx, field.Selections, res)
+	return ec.marshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Tag_name(ctx context.Context, field graphql.CollectedField, obj *models.Tag) (ret graphql.Marshaler) {
@@ -8512,7 +8512,7 @@ func (ec *executionContext) _User_billingStatus(ctx context.Context, field graph
 	res := resTmp.(*models.BillingStatus)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBillingStatus(ctx, field.Selections, res)
+	return ec.marshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBillingStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_dateOfBirth(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -8580,7 +8580,7 @@ func (ec *executionContext) _User_details(ctx context.Context, field graphql.Col
 	res := resTmp.(*models.UserDetailedProfile)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserDetailedProfile2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfile(ctx, field.Selections, res)
+	return ec.marshalOUserDetailedProfile2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfile(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_educationalBackground(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -8614,7 +8614,7 @@ func (ec *executionContext) _User_educationalBackground(ctx context.Context, fie
 	res := resTmp.(*models.EducationalBackground)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, field.Selections, res)
+	return ec.marshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -8682,7 +8682,7 @@ func (ec *executionContext) _User_gender(ctx context.Context, field graphql.Coll
 	res := resTmp.(*models.Gender)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐGender(ctx, field.Selections, res)
+	return ec.marshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐGender(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -8750,7 +8750,7 @@ func (ec *executionContext) _User_incomeRange(ctx context.Context, field graphql
 	res := resTmp.(*models.IncomeRange)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, field.Selections, res)
+	return ec.marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_isFacebookRegistered(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9124,7 +9124,7 @@ func (ec *executionContext) _User_notifications(ctx context.Context, field graph
 	res := resTmp.([]*models.Notification)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotification(ctx, field.Selections, res)
+	return ec.marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_occupation(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9158,7 +9158,7 @@ func (ec *executionContext) _User_occupation(ctx context.Context, field graphql.
 	res := resTmp.(*models.Occupation)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx, field.Selections, res)
+	return ec.marshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_photos(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9192,7 +9192,7 @@ func (ec *executionContext) _User_photos(ctx context.Context, field graphql.Coll
 	res := resTmp.(*models.UserPhotos)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserPhotos2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhotos(ctx, field.Selections, res)
+	return ec.marshalOUserPhotos2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhotos(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_prefecture(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9226,7 +9226,7 @@ func (ec *executionContext) _User_prefecture(ctx context.Context, field graphql.
 	res := resTmp.(*models.Prefecture)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, field.Selections, res)
+	return ec.marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_qualification(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9260,7 +9260,7 @@ func (ec *executionContext) _User_qualification(ctx context.Context, field graph
 	res := resTmp.(*models.Qualification)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOQualification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualification(ctx, field.Selections, res)
+	return ec.marshalOQualification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐQualification(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_registeredAt(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9328,7 +9328,7 @@ func (ec *executionContext) _User_registrationStatus(ctx context.Context, field 
 	res := resTmp.(*models.RegistrationStatus)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx, field.Selections, res)
+	return ec.marshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegistrationStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_regularHoliday(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9362,7 +9362,7 @@ func (ec *executionContext) _User_regularHoliday(ctx context.Context, field grap
 	res := resTmp.(*models.RegularHoliday)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, field.Selections, res)
+	return ec.marshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_schoolName(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9498,7 +9498,7 @@ func (ec *executionContext) _User_tags(ctx context.Context, field graphql.Collec
 	res := resTmp.([]*models.Tag)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOTag2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTag(ctx, field.Selections, res)
+	return ec.marshalOTag2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTag(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_workingForm(ctx context.Context, field graphql.CollectedField, obj *models.User) (ret graphql.Marshaler) {
@@ -9532,7 +9532,7 @@ func (ec *executionContext) _User_workingForm(ctx context.Context, field graphql
 	res := resTmp.(*models.WorkingForm)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, field.Selections, res)
+	return ec.marshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_bloodType(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9566,7 +9566,7 @@ func (ec *executionContext) _UserDetailedProfile_bloodType(ctx context.Context, 
 	res := resTmp.(*models.BloodType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx, field.Selections, res)
+	return ec.marshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_car(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9600,7 +9600,7 @@ func (ec *executionContext) _UserDetailedProfile_car(ctx context.Context, field 
 	res := resTmp.(*models.Car)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx, field.Selections, res)
+	return ec.marshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_drinking(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9634,7 +9634,7 @@ func (ec *executionContext) _UserDetailedProfile_drinking(ctx context.Context, f
 	res := resTmp.(*models.Drinking)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx, field.Selections, res)
+	return ec.marshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_dualCareer(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9668,7 +9668,7 @@ func (ec *executionContext) _UserDetailedProfile_dualCareer(ctx context.Context,
 	res := resTmp.(*models.DualCareer)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDualCareer(ctx, field.Selections, res)
+	return ec.marshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDualCareer(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_figureType(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9702,7 +9702,7 @@ func (ec *executionContext) _UserDetailedProfile_figureType(ctx context.Context,
 	res := resTmp.(*models.FigureType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, field.Selections, res)
+	return ec.marshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_havingKids(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9736,7 +9736,7 @@ func (ec *executionContext) _UserDetailedProfile_havingKids(ctx context.Context,
 	res := resTmp.(*models.HavingKids)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx, field.Selections, res)
+	return ec.marshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_height(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9804,7 +9804,7 @@ func (ec *executionContext) _UserDetailedProfile_housework(ctx context.Context, 
 	res := resTmp.(*models.Housework)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx, field.Selections, res)
+	return ec.marshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_leadTimeToMarriage(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9838,7 +9838,7 @@ func (ec *executionContext) _UserDetailedProfile_leadTimeToMarriage(ctx context.
 	res := resTmp.(*models.LeadTimeToMarriage)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx, field.Selections, res)
+	return ec.marshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_livingWithFamily(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9872,7 +9872,7 @@ func (ec *executionContext) _UserDetailedProfile_livingWithFamily(ctx context.Co
 	res := resTmp.(*models.LivingWithFamily)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx, field.Selections, res)
+	return ec.marshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_lodger(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9906,7 +9906,7 @@ func (ec *executionContext) _UserDetailedProfile_lodger(ctx context.Context, fie
 	res := resTmp.(*models.Lodger)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx, field.Selections, res)
+	return ec.marshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_maritalHistory(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9940,7 +9940,7 @@ func (ec *executionContext) _UserDetailedProfile_maritalHistory(ctx context.Cont
 	res := resTmp.(*models.MaritalHistory)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx, field.Selections, res)
+	return ec.marshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_parenting(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -9974,7 +9974,7 @@ func (ec *executionContext) _UserDetailedProfile_parenting(ctx context.Context, 
 	res := resTmp.(*models.Parenting)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx, field.Selections, res)
+	return ec.marshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_prefectureOfBirth(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -10008,7 +10008,7 @@ func (ec *executionContext) _UserDetailedProfile_prefectureOfBirth(ctx context.C
 	res := resTmp.(*models.Prefecture)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, field.Selections, res)
+	return ec.marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_relocation(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -10042,7 +10042,7 @@ func (ec *executionContext) _UserDetailedProfile_relocation(ctx context.Context,
 	res := resTmp.(*models.Relocation)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx, field.Selections, res)
+	return ec.marshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_residenceType(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -10076,7 +10076,7 @@ func (ec *executionContext) _UserDetailedProfile_residenceType(ctx context.Conte
 	res := resTmp.(*models.ResidenceType)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx, field.Selections, res)
+	return ec.marshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_sibling(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -10110,7 +10110,7 @@ func (ec *executionContext) _UserDetailedProfile_sibling(ctx context.Context, fi
 	res := resTmp.(*models.Sibling)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, field.Selections, res)
+	return ec.marshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_smoking(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -10144,7 +10144,7 @@ func (ec *executionContext) _UserDetailedProfile_smoking(ctx context.Context, fi
 	res := resTmp.(*models.Smoking)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx, field.Selections, res)
+	return ec.marshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserDetailedProfile_wantKids(ctx context.Context, field graphql.CollectedField, obj *models.UserDetailedProfile) (ret graphql.Marshaler) {
@@ -10178,7 +10178,7 @@ func (ec *executionContext) _UserDetailedProfile_wantKids(ctx context.Context, f
 	res := resTmp.(*models.WantKids)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx, field.Selections, res)
+	return ec.marshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPhoto_downloadURL(ctx context.Context, field graphql.CollectedField, obj *models.UserPhoto) (ret graphql.Marshaler) {
@@ -10484,7 +10484,7 @@ func (ec *executionContext) _UserPhoto_reviewStatus(ctx context.Context, field g
 	res := resTmp.(*models.PhotoReviewStatus)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx, field.Selections, res)
+	return ec.marshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPhoto_updatedDate(ctx context.Context, field graphql.CollectedField, obj *models.UserPhoto) (ret graphql.Marshaler) {
@@ -10586,7 +10586,7 @@ func (ec *executionContext) _UserPhotos_fifth(ctx context.Context, field graphql
 	res := resTmp.(*models.UserPhoto)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
+	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPhotos_fourth(ctx context.Context, field graphql.CollectedField, obj *models.UserPhotos) (ret graphql.Marshaler) {
@@ -10620,7 +10620,7 @@ func (ec *executionContext) _UserPhotos_fourth(ctx context.Context, field graphq
 	res := resTmp.(*models.UserPhoto)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
+	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPhotos_main(ctx context.Context, field graphql.CollectedField, obj *models.UserPhotos) (ret graphql.Marshaler) {
@@ -10654,7 +10654,7 @@ func (ec *executionContext) _UserPhotos_main(ctx context.Context, field graphql.
 	res := resTmp.(*models.UserPhoto)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
+	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPhotos_second(ctx context.Context, field graphql.CollectedField, obj *models.UserPhotos) (ret graphql.Marshaler) {
@@ -10688,7 +10688,7 @@ func (ec *executionContext) _UserPhotos_second(ctx context.Context, field graphq
 	res := resTmp.(*models.UserPhoto)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
+	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserPhotos_third(ctx context.Context, field graphql.CollectedField, obj *models.UserPhotos) (ret graphql.Marshaler) {
@@ -10722,7 +10722,7 @@ func (ec *executionContext) _UserPhotos_third(ctx context.Context, field graphql
 	res := resTmp.(*models.UserPhoto)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
+	return ec.marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhoto(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UsersResponse_total(ctx context.Context, field graphql.CollectedField, obj *models.UsersResponse) (ret graphql.Marshaler) {
@@ -10790,7 +10790,7 @@ func (ec *executionContext) _UsersResponse_userList(ctx context.Context, field g
 	res := resTmp.([]*models.User)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -12000,7 +12000,7 @@ func (ec *executionContext) unmarshalInputInquiryInput(ctx context.Context, obj 
 			}
 		case "type":
 			var err error
-			it.Type, err = ec.unmarshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx, v)
+			it.Type, err = ec.unmarshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12024,7 +12024,7 @@ func (ec *executionContext) unmarshalInputInquirySearchInput(ctx context.Context
 			}
 		case "type":
 			var err error
-			it.Type, err = ec.unmarshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx, v)
+			it.Type, err = ec.unmarshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12060,7 +12060,7 @@ func (ec *executionContext) unmarshalInputInquirySearchInput(ctx context.Context
 			}
 		case "sendBy":
 			var err error
-			it.SendBy, err = ec.unmarshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx, v)
+			it.SendBy, err = ec.unmarshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12282,7 +12282,7 @@ func (ec *executionContext) unmarshalInputPhotosInput(ctx context.Context, obj i
 			}
 		case "deleted":
 			var err error
-			it.Deleted, err = ec.unmarshalODeletedPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDeletedPhotosInput(ctx, v)
+			it.Deleted, err = ec.unmarshalODeletedPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDeletedPhotosInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12300,7 +12300,7 @@ func (ec *executionContext) unmarshalInputQualificationInput(ctx context.Context
 		switch k {
 		case "siblings":
 			var err error
-			it.Siblings, err = ec.unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, v)
+			it.Siblings, err = ec.unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12318,19 +12318,19 @@ func (ec *executionContext) unmarshalInputQualificationInput(ctx context.Context
 			}
 		case "figureTypes":
 			var err error
-			it.FigureTypes, err = ec.unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, v)
+			it.FigureTypes, err = ec.unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "workingForms":
 			var err error
-			it.WorkingForms, err = ec.unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, v)
+			it.WorkingForms, err = ec.unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "regularHolidays":
 			var err error
-			it.RegularHolidays, err = ec.unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, v)
+			it.RegularHolidays, err = ec.unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12342,7 +12342,7 @@ func (ec *executionContext) unmarshalInputQualificationInput(ctx context.Context
 			}
 		case "prefectures":
 			var err error
-			it.Prefectures, err = ec.unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, v)
+			it.Prefectures, err = ec.unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12354,19 +12354,19 @@ func (ec *executionContext) unmarshalInputQualificationInput(ctx context.Context
 			}
 		case "lowerIncomeRange":
 			var err error
-			it.LowerIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+			it.LowerIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "upperIncomeRange":
 			var err error
-			it.UpperIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+			it.UpperIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "educationalBackgrounds":
 			var err error
-			it.EducationalBackgrounds, err = ec.unmarshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, v)
+			it.EducationalBackgrounds, err = ec.unmarshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12390,7 +12390,7 @@ func (ec *executionContext) unmarshalInputReportInput(ctx context.Context, obj i
 			}
 		case "type":
 			var err error
-			it.Type, err = ec.unmarshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx, v)
+			it.Type, err = ec.unmarshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12420,7 +12420,7 @@ func (ec *executionContext) unmarshalInputReportSearchInput(ctx context.Context,
 			}
 		case "type":
 			var err error
-			it.Type, err = ec.unmarshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx, v)
+			it.Type, err = ec.unmarshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12492,43 +12492,43 @@ func (ec *executionContext) unmarshalInputSearchOption(ctx context.Context, obj 
 		switch k {
 		case "prefectureOfBirth":
 			var err error
-			it.PrefectureOfBirth, err = ec.unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, v)
+			it.PrefectureOfBirth, err = ec.unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "car":
 			var err error
-			it.Car, err = ec.unmarshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx, v)
+			it.Car, err = ec.unmarshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "educationalBackground":
 			var err error
-			it.EducationalBackground, err = ec.unmarshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, v)
+			it.EducationalBackground, err = ec.unmarshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "livingWithFamily":
 			var err error
-			it.LivingWithFamily, err = ec.unmarshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx, v)
+			it.LivingWithFamily, err = ec.unmarshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "havingKids":
 			var err error
-			it.HavingKids, err = ec.unmarshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx, v)
+			it.HavingKids, err = ec.unmarshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "wantKids":
 			var err error
-			it.WantKids, err = ec.unmarshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx, v)
+			it.WantKids, err = ec.unmarshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "residenceType":
 			var err error
-			it.ResidenceType, err = ec.unmarshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx, v)
+			it.ResidenceType, err = ec.unmarshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12558,103 +12558,103 @@ func (ec *executionContext) unmarshalInputSearchOption(ctx context.Context, obj 
 			}
 		case "lowerIncomeRange":
 			var err error
-			it.LowerIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+			it.LowerIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "upperIncomeRange":
 			var err error
-			it.UpperIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+			it.UpperIncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "leadTimeToMarriage":
 			var err error
-			it.LeadTimeToMarriage, err = ec.unmarshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx, v)
+			it.LeadTimeToMarriage, err = ec.unmarshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "parenting":
 			var err error
-			it.Parenting, err = ec.unmarshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx, v)
+			it.Parenting, err = ec.unmarshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "housework":
 			var err error
-			it.Housework, err = ec.unmarshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx, v)
+			it.Housework, err = ec.unmarshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "bloodType":
 			var err error
-			it.BloodType, err = ec.unmarshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx, v)
+			it.BloodType, err = ec.unmarshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "occupation":
 			var err error
-			it.Occupation, err = ec.unmarshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx, v)
+			it.Occupation, err = ec.unmarshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "workingForm":
 			var err error
-			it.WorkingForm, err = ec.unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, v)
+			it.WorkingForm, err = ec.unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "relocation":
 			var err error
-			it.Relocation, err = ec.unmarshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx, v)
+			it.Relocation, err = ec.unmarshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "regularHoliday":
 			var err error
-			it.RegularHoliday, err = ec.unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, v)
+			it.RegularHoliday, err = ec.unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "maritalHistory":
 			var err error
-			it.MaritalHistory, err = ec.unmarshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx, v)
+			it.MaritalHistory, err = ec.unmarshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "prefecture":
 			var err error
-			it.Prefecture, err = ec.unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, v)
+			it.Prefecture, err = ec.unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "figureType":
 			var err error
-			it.FigureType, err = ec.unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, v)
+			it.FigureType, err = ec.unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "drinking":
 			var err error
-			it.Drinking, err = ec.unmarshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx, v)
+			it.Drinking, err = ec.unmarshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "smoking":
 			var err error
-			it.Smoking, err = ec.unmarshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx, v)
+			it.Smoking, err = ec.unmarshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "lodger":
 			var err error
-			it.Lodger, err = ec.unmarshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx, v)
+			it.Lodger, err = ec.unmarshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "sibling":
 			var err error
-			it.Sibling, err = ec.unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, v)
+			it.Sibling, err = ec.unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12672,13 +12672,13 @@ func (ec *executionContext) unmarshalInputTagInput(ctx context.Context, obj inte
 		switch k {
 		case "value":
 			var err error
-			it.Value, err = ec.unmarshalOTagValue2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagValue(ctx, v)
+			it.Value, err = ec.unmarshalOTagValue2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagValue(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "type":
 			var err error
-			it.Type, err = ec.unmarshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagType(ctx, v)
+			it.Type, err = ec.unmarshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagType(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12696,73 +12696,73 @@ func (ec *executionContext) unmarshalInputUserDetailedProfileInput(ctx context.C
 		switch k {
 		case "maritalHistory":
 			var err error
-			it.MaritalHistory, err = ec.unmarshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx, v)
+			it.MaritalHistory, err = ec.unmarshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "havingKids":
 			var err error
-			it.HavingKids, err = ec.unmarshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx, v)
+			it.HavingKids, err = ec.unmarshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "figureType":
 			var err error
-			it.FigureType, err = ec.unmarshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, v)
+			it.FigureType, err = ec.unmarshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "lodger":
 			var err error
-			it.Lodger, err = ec.unmarshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx, v)
+			it.Lodger, err = ec.unmarshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "livingWithFamily":
 			var err error
-			it.LivingWithFamily, err = ec.unmarshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx, v)
+			it.LivingWithFamily, err = ec.unmarshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "dualCareer":
 			var err error
-			it.DualCareer, err = ec.unmarshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDualCareer(ctx, v)
+			it.DualCareer, err = ec.unmarshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDualCareer(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "relocation":
 			var err error
-			it.Relocation, err = ec.unmarshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx, v)
+			it.Relocation, err = ec.unmarshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "leadTimeToMarriage":
 			var err error
-			it.LeadTimeToMarriage, err = ec.unmarshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx, v)
+			it.LeadTimeToMarriage, err = ec.unmarshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "sibling":
 			var err error
-			it.Sibling, err = ec.unmarshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, v)
+			it.Sibling, err = ec.unmarshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "wantKids":
 			var err error
-			it.WantKids, err = ec.unmarshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx, v)
+			it.WantKids, err = ec.unmarshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "residenceType":
 			var err error
-			it.ResidenceType, err = ec.unmarshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx, v)
+			it.ResidenceType, err = ec.unmarshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "prefectureOfBirth":
 			var err error
-			it.PrefectureOfBirth, err = ec.unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, v)
+			it.PrefectureOfBirth, err = ec.unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12774,37 +12774,37 @@ func (ec *executionContext) unmarshalInputUserDetailedProfileInput(ctx context.C
 			}
 		case "smoking":
 			var err error
-			it.Smoking, err = ec.unmarshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx, v)
+			it.Smoking, err = ec.unmarshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "drinking":
 			var err error
-			it.Drinking, err = ec.unmarshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx, v)
+			it.Drinking, err = ec.unmarshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "parenting":
 			var err error
-			it.Parenting, err = ec.unmarshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx, v)
+			it.Parenting, err = ec.unmarshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "bloodType":
 			var err error
-			it.BloodType, err = ec.unmarshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx, v)
+			it.BloodType, err = ec.unmarshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "housework":
 			var err error
-			it.Housework, err = ec.unmarshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx, v)
+			it.Housework, err = ec.unmarshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "car":
 			var err error
-			it.Car, err = ec.unmarshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx, v)
+			it.Car, err = ec.unmarshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12828,13 +12828,13 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			}
 		case "prefecture":
 			var err error
-			it.Prefecture, err = ec.unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, v)
+			it.Prefecture, err = ec.unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "regularHoliday":
 			var err error
-			it.RegularHoliday, err = ec.unmarshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, v)
+			it.RegularHoliday, err = ec.unmarshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12846,7 +12846,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			}
 		case "billingStatus":
 			var err error
-			it.BillingStatus, err = ec.unmarshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBillingStatus(ctx, v)
+			it.BillingStatus, err = ec.unmarshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBillingStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12858,19 +12858,19 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			}
 		case "incomeRange":
 			var err error
-			it.IncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+			it.IncomeRange, err = ec.unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "workingForm":
 			var err error
-			it.WorkingForm, err = ec.unmarshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, v)
+			it.WorkingForm, err = ec.unmarshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "registrationStatus":
 			var err error
-			it.RegistrationStatus, err = ec.unmarshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx, v)
+			it.RegistrationStatus, err = ec.unmarshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegistrationStatus(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12882,7 +12882,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			}
 		case "gender":
 			var err error
-			it.Gender, err = ec.unmarshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐGender(ctx, v)
+			it.Gender, err = ec.unmarshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐGender(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12906,7 +12906,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			}
 		case "educationalBackground":
 			var err error
-			it.EducationalBackground, err = ec.unmarshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, v)
+			it.EducationalBackground, err = ec.unmarshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12918,7 +12918,7 @@ func (ec *executionContext) unmarshalInputUserInput(ctx context.Context, obj int
 			}
 		case "occupation":
 			var err error
-			it.Occupation, err = ec.unmarshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx, v)
+			it.Occupation, err = ec.unmarshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -14127,12 +14127,12 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
+func (ec *executionContext) unmarshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx context.Context, v interface{}) (models.Role, error) {
 	var res models.Role
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
+func (ec *executionContext) marshalNRole2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRole(ctx context.Context, sel ast.SelectionSet, v models.Role) graphql.Marshaler {
 	return v
 }
 
@@ -14376,40 +14376,40 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 	return res
 }
 
-func (ec *executionContext) unmarshalOBillingStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBillingStatus(ctx context.Context, v interface{}) (models.BillingStatus, error) {
+func (ec *executionContext) unmarshalOBillingStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBillingStatus(ctx context.Context, v interface{}) (models.BillingStatus, error) {
 	var res models.BillingStatus
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOBillingStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBillingStatus(ctx context.Context, sel ast.SelectionSet, v models.BillingStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOBillingStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBillingStatus(ctx context.Context, sel ast.SelectionSet, v models.BillingStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBillingStatus(ctx context.Context, v interface{}) (*models.BillingStatus, error) {
+func (ec *executionContext) unmarshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBillingStatus(ctx context.Context, v interface{}) (*models.BillingStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOBillingStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBillingStatus(ctx, v)
+	res, err := ec.unmarshalOBillingStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBillingStatus(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBillingStatus(ctx context.Context, sel ast.SelectionSet, v *models.BillingStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOBillingStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBillingStatus(ctx context.Context, sel ast.SelectionSet, v *models.BillingStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOBloodType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx context.Context, v interface{}) (models.BloodType, error) {
+func (ec *executionContext) unmarshalOBloodType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx context.Context, v interface{}) (models.BloodType, error) {
 	var res models.BloodType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOBloodType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx context.Context, sel ast.SelectionSet, v models.BloodType) graphql.Marshaler {
+func (ec *executionContext) marshalOBloodType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx context.Context, sel ast.SelectionSet, v models.BloodType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx context.Context, v interface{}) ([]*models.BloodType, error) {
+func (ec *executionContext) unmarshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx context.Context, v interface{}) ([]*models.BloodType, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -14421,7 +14421,7 @@ func (ec *executionContext) unmarshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 	var err error
 	res := make([]*models.BloodType, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -14429,7 +14429,7 @@ func (ec *executionContext) unmarshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx context.Context, sel ast.SelectionSet, v []*models.BloodType) graphql.Marshaler {
+func (ec *executionContext) marshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx context.Context, sel ast.SelectionSet, v []*models.BloodType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -14456,7 +14456,7 @@ func (ec *executionContext) marshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx, sel, v[i])
+			ret[i] = ec.marshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14469,15 +14469,15 @@ func (ec *executionContext) marshalOBloodType2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 	return ret
 }
 
-func (ec *executionContext) unmarshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx context.Context, v interface{}) (*models.BloodType, error) {
+func (ec *executionContext) unmarshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx context.Context, v interface{}) (*models.BloodType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOBloodType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx, v)
+	res, err := ec.unmarshalOBloodType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐBloodType(ctx context.Context, sel ast.SelectionSet, v *models.BloodType) graphql.Marshaler {
+func (ec *executionContext) marshalOBloodType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐBloodType(ctx context.Context, sel ast.SelectionSet, v *models.BloodType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -14507,16 +14507,16 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return ec.marshalOBoolean2bool(ctx, sel, *v)
 }
 
-func (ec *executionContext) unmarshalOCar2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx context.Context, v interface{}) (models.Car, error) {
+func (ec *executionContext) unmarshalOCar2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx context.Context, v interface{}) (models.Car, error) {
 	var res models.Car
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOCar2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx context.Context, sel ast.SelectionSet, v models.Car) graphql.Marshaler {
+func (ec *executionContext) marshalOCar2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx context.Context, sel ast.SelectionSet, v models.Car) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx context.Context, v interface{}) ([]*models.Car, error) {
+func (ec *executionContext) unmarshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx context.Context, v interface{}) ([]*models.Car, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -14528,7 +14528,7 @@ func (ec *executionContext) unmarshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑ
 	var err error
 	res := make([]*models.Car, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -14536,7 +14536,7 @@ func (ec *executionContext) unmarshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑ
 	return res, nil
 }
 
-func (ec *executionContext) marshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx context.Context, sel ast.SelectionSet, v []*models.Car) graphql.Marshaler {
+func (ec *executionContext) marshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx context.Context, sel ast.SelectionSet, v []*models.Car) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -14563,7 +14563,7 @@ func (ec *executionContext) marshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx, sel, v[i])
+			ret[i] = ec.marshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14576,38 +14576,38 @@ func (ec *executionContext) marshalOCar2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgo
 	return ret
 }
 
-func (ec *executionContext) unmarshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx context.Context, v interface{}) (*models.Car, error) {
+func (ec *executionContext) unmarshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx context.Context, v interface{}) (*models.Car, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOCar2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx, v)
+	res, err := ec.unmarshalOCar2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐCar(ctx context.Context, sel ast.SelectionSet, v *models.Car) graphql.Marshaler {
+func (ec *executionContext) marshalOCar2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐCar(ctx context.Context, sel ast.SelectionSet, v *models.Car) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalODeletedPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDeletedPhotosInput(ctx context.Context, v interface{}) (models.DeletedPhotosInput, error) {
+func (ec *executionContext) unmarshalODeletedPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDeletedPhotosInput(ctx context.Context, v interface{}) (models.DeletedPhotosInput, error) {
 	return ec.unmarshalInputDeletedPhotosInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalODeletedPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDeletedPhotosInput(ctx context.Context, v interface{}) (*models.DeletedPhotosInput, error) {
+func (ec *executionContext) unmarshalODeletedPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDeletedPhotosInput(ctx context.Context, v interface{}) (*models.DeletedPhotosInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalODeletedPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDeletedPhotosInput(ctx, v)
+	res, err := ec.unmarshalODeletedPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDeletedPhotosInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalODocument2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocument(ctx context.Context, sel ast.SelectionSet, v models.Document) graphql.Marshaler {
+func (ec *executionContext) marshalODocument2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocument(ctx context.Context, sel ast.SelectionSet, v models.Document) graphql.Marshaler {
 	return ec._Document(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocument(ctx context.Context, sel ast.SelectionSet, v []*models.Document) graphql.Marshaler {
+func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocument(ctx context.Context, sel ast.SelectionSet, v []*models.Document) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -14634,7 +14634,7 @@ func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODocument2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocument(ctx, sel, v[i])
+			ret[i] = ec.marshalODocument2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocument(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14647,71 +14647,71 @@ func (ec *executionContext) marshalODocument2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 	return ret
 }
 
-func (ec *executionContext) marshalODocument2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocument(ctx context.Context, sel ast.SelectionSet, v *models.Document) graphql.Marshaler {
+func (ec *executionContext) marshalODocument2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocument(ctx context.Context, sel ast.SelectionSet, v *models.Document) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Document(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalODocumentReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentReviewStatus(ctx context.Context, v interface{}) (models.DocumentReviewStatus, error) {
+func (ec *executionContext) unmarshalODocumentReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentReviewStatus(ctx context.Context, v interface{}) (models.DocumentReviewStatus, error) {
 	var res models.DocumentReviewStatus
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalODocumentReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentReviewStatus(ctx context.Context, sel ast.SelectionSet, v models.DocumentReviewStatus) graphql.Marshaler {
+func (ec *executionContext) marshalODocumentReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentReviewStatus(ctx context.Context, sel ast.SelectionSet, v models.DocumentReviewStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentReviewStatus(ctx context.Context, v interface{}) (*models.DocumentReviewStatus, error) {
+func (ec *executionContext) unmarshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentReviewStatus(ctx context.Context, v interface{}) (*models.DocumentReviewStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalODocumentReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentReviewStatus(ctx, v)
+	res, err := ec.unmarshalODocumentReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentReviewStatus(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentReviewStatus(ctx context.Context, sel ast.SelectionSet, v *models.DocumentReviewStatus) graphql.Marshaler {
+func (ec *executionContext) marshalODocumentReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentReviewStatus(ctx context.Context, sel ast.SelectionSet, v *models.DocumentReviewStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalODocumentType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentType(ctx context.Context, v interface{}) (models.DocumentType, error) {
+func (ec *executionContext) unmarshalODocumentType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentType(ctx context.Context, v interface{}) (models.DocumentType, error) {
 	var res models.DocumentType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalODocumentType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v models.DocumentType) graphql.Marshaler {
+func (ec *executionContext) marshalODocumentType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v models.DocumentType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalODocumentType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentType(ctx context.Context, v interface{}) (*models.DocumentType, error) {
+func (ec *executionContext) unmarshalODocumentType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentType(ctx context.Context, v interface{}) (*models.DocumentType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalODocumentType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentType(ctx, v)
+	res, err := ec.unmarshalODocumentType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalODocumentType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v *models.DocumentType) graphql.Marshaler {
+func (ec *executionContext) marshalODocumentType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDocumentType(ctx context.Context, sel ast.SelectionSet, v *models.DocumentType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalODrinking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx context.Context, v interface{}) (models.Drinking, error) {
+func (ec *executionContext) unmarshalODrinking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx context.Context, v interface{}) (models.Drinking, error) {
 	var res models.Drinking
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalODrinking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx context.Context, sel ast.SelectionSet, v models.Drinking) graphql.Marshaler {
+func (ec *executionContext) marshalODrinking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx context.Context, sel ast.SelectionSet, v models.Drinking) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx context.Context, v interface{}) ([]*models.Drinking, error) {
+func (ec *executionContext) unmarshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx context.Context, v interface{}) ([]*models.Drinking, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -14723,7 +14723,7 @@ func (ec *executionContext) unmarshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	var err error
 	res := make([]*models.Drinking, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx, vSlice[i])
+		res[i], err = ec.unmarshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -14731,7 +14731,7 @@ func (ec *executionContext) unmarshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return res, nil
 }
 
-func (ec *executionContext) marshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx context.Context, sel ast.SelectionSet, v []*models.Drinking) graphql.Marshaler {
+func (ec *executionContext) marshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx context.Context, sel ast.SelectionSet, v []*models.Drinking) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -14758,7 +14758,7 @@ func (ec *executionContext) marshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx, sel, v[i])
+			ret[i] = ec.marshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14771,55 +14771,55 @@ func (ec *executionContext) marshalODrinking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 	return ret
 }
 
-func (ec *executionContext) unmarshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx context.Context, v interface{}) (*models.Drinking, error) {
+func (ec *executionContext) unmarshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx context.Context, v interface{}) (*models.Drinking, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalODrinking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx, v)
+	res, err := ec.unmarshalODrinking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDrinking(ctx context.Context, sel ast.SelectionSet, v *models.Drinking) graphql.Marshaler {
+func (ec *executionContext) marshalODrinking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDrinking(ctx context.Context, sel ast.SelectionSet, v *models.Drinking) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalODualCareer2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDualCareer(ctx context.Context, v interface{}) (models.DualCareer, error) {
+func (ec *executionContext) unmarshalODualCareer2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDualCareer(ctx context.Context, v interface{}) (models.DualCareer, error) {
 	var res models.DualCareer
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalODualCareer2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDualCareer(ctx context.Context, sel ast.SelectionSet, v models.DualCareer) graphql.Marshaler {
+func (ec *executionContext) marshalODualCareer2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDualCareer(ctx context.Context, sel ast.SelectionSet, v models.DualCareer) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDualCareer(ctx context.Context, v interface{}) (*models.DualCareer, error) {
+func (ec *executionContext) unmarshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDualCareer(ctx context.Context, v interface{}) (*models.DualCareer, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalODualCareer2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDualCareer(ctx, v)
+	res, err := ec.unmarshalODualCareer2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDualCareer(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐDualCareer(ctx context.Context, sel ast.SelectionSet, v *models.DualCareer) graphql.Marshaler {
+func (ec *executionContext) marshalODualCareer2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐDualCareer(ctx context.Context, sel ast.SelectionSet, v *models.DualCareer) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOEducationalBackground2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx context.Context, v interface{}) (models.EducationalBackground, error) {
+func (ec *executionContext) unmarshalOEducationalBackground2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx context.Context, v interface{}) (models.EducationalBackground, error) {
 	var res models.EducationalBackground
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOEducationalBackground2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx context.Context, sel ast.SelectionSet, v models.EducationalBackground) graphql.Marshaler {
+func (ec *executionContext) marshalOEducationalBackground2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx context.Context, sel ast.SelectionSet, v models.EducationalBackground) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx context.Context, v interface{}) ([]*models.EducationalBackground, error) {
+func (ec *executionContext) unmarshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx context.Context, v interface{}) ([]*models.EducationalBackground, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -14831,7 +14831,7 @@ func (ec *executionContext) unmarshalOEducationalBackground2ᚕᚖgithubᚗcom�
 	var err error
 	res := make([]*models.EducationalBackground, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -14839,7 +14839,7 @@ func (ec *executionContext) unmarshalOEducationalBackground2ᚕᚖgithubᚗcom�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx context.Context, sel ast.SelectionSet, v []*models.EducationalBackground) graphql.Marshaler {
+func (ec *executionContext) marshalOEducationalBackground2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx context.Context, sel ast.SelectionSet, v []*models.EducationalBackground) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -14866,7 +14866,7 @@ func (ec *executionContext) marshalOEducationalBackground2ᚕᚖgithubᚗcomᚋk
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, sel, v[i])
+			ret[i] = ec.marshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14879,31 +14879,31 @@ func (ec *executionContext) marshalOEducationalBackground2ᚕᚖgithubᚗcomᚋk
 	return ret
 }
 
-func (ec *executionContext) unmarshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx context.Context, v interface{}) (*models.EducationalBackground, error) {
+func (ec *executionContext) unmarshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx context.Context, v interface{}) (*models.EducationalBackground, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOEducationalBackground2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx, v)
+	res, err := ec.unmarshalOEducationalBackground2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐEducationalBackground(ctx context.Context, sel ast.SelectionSet, v *models.EducationalBackground) graphql.Marshaler {
+func (ec *executionContext) marshalOEducationalBackground2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐEducationalBackground(ctx context.Context, sel ast.SelectionSet, v *models.EducationalBackground) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOFigureType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx context.Context, v interface{}) (models.FigureType, error) {
+func (ec *executionContext) unmarshalOFigureType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx context.Context, v interface{}) (models.FigureType, error) {
 	var res models.FigureType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOFigureType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx context.Context, sel ast.SelectionSet, v models.FigureType) graphql.Marshaler {
+func (ec *executionContext) marshalOFigureType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx context.Context, sel ast.SelectionSet, v models.FigureType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx context.Context, v interface{}) ([]*models.FigureType, error) {
+func (ec *executionContext) unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx context.Context, v interface{}) ([]*models.FigureType, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -14915,7 +14915,7 @@ func (ec *executionContext) unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108�
 	var err error
 	res := make([]*models.FigureType, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -14923,7 +14923,7 @@ func (ec *executionContext) unmarshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx context.Context, sel ast.SelectionSet, v []*models.FigureType) graphql.Marshaler {
+func (ec *executionContext) marshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx context.Context, sel ast.SelectionSet, v []*models.FigureType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -14950,7 +14950,7 @@ func (ec *executionContext) marshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, sel, v[i])
+			ret[i] = ec.marshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -14963,55 +14963,55 @@ func (ec *executionContext) marshalOFigureType2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return ret
 }
 
-func (ec *executionContext) unmarshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx context.Context, v interface{}) (*models.FigureType, error) {
+func (ec *executionContext) unmarshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx context.Context, v interface{}) (*models.FigureType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOFigureType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx, v)
+	res, err := ec.unmarshalOFigureType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐFigureType(ctx context.Context, sel ast.SelectionSet, v *models.FigureType) graphql.Marshaler {
+func (ec *executionContext) marshalOFigureType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐFigureType(ctx context.Context, sel ast.SelectionSet, v *models.FigureType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOGender2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐGender(ctx context.Context, v interface{}) (models.Gender, error) {
+func (ec *executionContext) unmarshalOGender2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐGender(ctx context.Context, v interface{}) (models.Gender, error) {
 	var res models.Gender
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOGender2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v models.Gender) graphql.Marshaler {
+func (ec *executionContext) marshalOGender2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v models.Gender) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐGender(ctx context.Context, v interface{}) (*models.Gender, error) {
+func (ec *executionContext) unmarshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐGender(ctx context.Context, v interface{}) (*models.Gender, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOGender2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐGender(ctx, v)
+	res, err := ec.unmarshalOGender2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐGender(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v *models.Gender) graphql.Marshaler {
+func (ec *executionContext) marshalOGender2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐGender(ctx context.Context, sel ast.SelectionSet, v *models.Gender) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOHavingKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx context.Context, v interface{}) (models.HavingKids, error) {
+func (ec *executionContext) unmarshalOHavingKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx context.Context, v interface{}) (models.HavingKids, error) {
 	var res models.HavingKids
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOHavingKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx context.Context, sel ast.SelectionSet, v models.HavingKids) graphql.Marshaler {
+func (ec *executionContext) marshalOHavingKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx context.Context, sel ast.SelectionSet, v models.HavingKids) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx context.Context, v interface{}) ([]*models.HavingKids, error) {
+func (ec *executionContext) unmarshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx context.Context, v interface{}) ([]*models.HavingKids, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15023,7 +15023,7 @@ func (ec *executionContext) unmarshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108�
 	var err error
 	res := make([]*models.HavingKids, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15031,7 +15031,7 @@ func (ec *executionContext) unmarshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx context.Context, sel ast.SelectionSet, v []*models.HavingKids) graphql.Marshaler {
+func (ec *executionContext) marshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx context.Context, sel ast.SelectionSet, v []*models.HavingKids) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15058,7 +15058,7 @@ func (ec *executionContext) marshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx, sel, v[i])
+			ret[i] = ec.marshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15071,31 +15071,31 @@ func (ec *executionContext) marshalOHavingKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return ret
 }
 
-func (ec *executionContext) unmarshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx context.Context, v interface{}) (*models.HavingKids, error) {
+func (ec *executionContext) unmarshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx context.Context, v interface{}) (*models.HavingKids, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOHavingKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx, v)
+	res, err := ec.unmarshalOHavingKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHavingKids(ctx context.Context, sel ast.SelectionSet, v *models.HavingKids) graphql.Marshaler {
+func (ec *executionContext) marshalOHavingKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHavingKids(ctx context.Context, sel ast.SelectionSet, v *models.HavingKids) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOHousework2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx context.Context, v interface{}) (models.Housework, error) {
+func (ec *executionContext) unmarshalOHousework2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx context.Context, v interface{}) (models.Housework, error) {
 	var res models.Housework
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOHousework2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx context.Context, sel ast.SelectionSet, v models.Housework) graphql.Marshaler {
+func (ec *executionContext) marshalOHousework2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx context.Context, sel ast.SelectionSet, v models.Housework) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx context.Context, v interface{}) ([]*models.Housework, error) {
+func (ec *executionContext) unmarshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx context.Context, v interface{}) ([]*models.Housework, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15107,7 +15107,7 @@ func (ec *executionContext) unmarshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 	var err error
 	res := make([]*models.Housework, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15115,7 +15115,7 @@ func (ec *executionContext) unmarshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx context.Context, sel ast.SelectionSet, v []*models.Housework) graphql.Marshaler {
+func (ec *executionContext) marshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx context.Context, sel ast.SelectionSet, v []*models.Housework) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15142,7 +15142,7 @@ func (ec *executionContext) marshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx, sel, v[i])
+			ret[i] = ec.marshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15155,50 +15155,50 @@ func (ec *executionContext) marshalOHousework2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 	return ret
 }
 
-func (ec *executionContext) unmarshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx context.Context, v interface{}) (*models.Housework, error) {
+func (ec *executionContext) unmarshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx context.Context, v interface{}) (*models.Housework, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOHousework2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx, v)
+	res, err := ec.unmarshalOHousework2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐHousework(ctx context.Context, sel ast.SelectionSet, v *models.Housework) graphql.Marshaler {
+func (ec *executionContext) marshalOHousework2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐHousework(ctx context.Context, sel ast.SelectionSet, v *models.Housework) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOIncomeRange2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx context.Context, v interface{}) (models.IncomeRange, error) {
+func (ec *executionContext) unmarshalOIncomeRange2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx context.Context, v interface{}) (models.IncomeRange, error) {
 	var res models.IncomeRange
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOIncomeRange2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx context.Context, sel ast.SelectionSet, v models.IncomeRange) graphql.Marshaler {
+func (ec *executionContext) marshalOIncomeRange2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx context.Context, sel ast.SelectionSet, v models.IncomeRange) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx context.Context, v interface{}) (*models.IncomeRange, error) {
+func (ec *executionContext) unmarshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx context.Context, v interface{}) (*models.IncomeRange, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOIncomeRange2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx, v)
+	res, err := ec.unmarshalOIncomeRange2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐIncomeRange(ctx context.Context, sel ast.SelectionSet, v *models.IncomeRange) graphql.Marshaler {
+func (ec *executionContext) marshalOIncomeRange2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐIncomeRange(ctx context.Context, sel ast.SelectionSet, v *models.IncomeRange) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOInquiry2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiry(ctx context.Context, sel ast.SelectionSet, v models.Inquiry) graphql.Marshaler {
+func (ec *executionContext) marshalOInquiry2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiry(ctx context.Context, sel ast.SelectionSet, v models.Inquiry) graphql.Marshaler {
 	return ec._Inquiry(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOInquiry2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiry(ctx context.Context, sel ast.SelectionSet, v []*models.Inquiry) graphql.Marshaler {
+func (ec *executionContext) marshalOInquiry2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiry(ctx context.Context, sel ast.SelectionSet, v []*models.Inquiry) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15225,7 +15225,7 @@ func (ec *executionContext) marshalOInquiry2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOInquiry2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiry(ctx, sel, v[i])
+			ret[i] = ec.marshalOInquiry2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiry(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15238,55 +15238,55 @@ func (ec *executionContext) marshalOInquiry2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 	return ret
 }
 
-func (ec *executionContext) marshalOInquiry2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiry(ctx context.Context, sel ast.SelectionSet, v *models.Inquiry) graphql.Marshaler {
+func (ec *executionContext) marshalOInquiry2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiry(ctx context.Context, sel ast.SelectionSet, v *models.Inquiry) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Inquiry(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOInquiryInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx context.Context, v interface{}) (models.InquiryInput, error) {
+func (ec *executionContext) unmarshalOInquiryInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryInput(ctx context.Context, v interface{}) (models.InquiryInput, error) {
 	return ec.unmarshalInputInquiryInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOInquiryInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx context.Context, v interface{}) (*models.InquiryInput, error) {
+func (ec *executionContext) unmarshalOInquiryInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryInput(ctx context.Context, v interface{}) (*models.InquiryInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOInquiryInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryInput(ctx, v)
+	res, err := ec.unmarshalOInquiryInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOInquirySearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquirySearchInput(ctx context.Context, v interface{}) (models.InquirySearchInput, error) {
+func (ec *executionContext) unmarshalOInquirySearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquirySearchInput(ctx context.Context, v interface{}) (models.InquirySearchInput, error) {
 	return ec.unmarshalInputInquirySearchInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOInquirySearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquirySearchInput(ctx context.Context, v interface{}) (*models.InquirySearchInput, error) {
+func (ec *executionContext) unmarshalOInquirySearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquirySearchInput(ctx context.Context, v interface{}) (*models.InquirySearchInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOInquirySearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquirySearchInput(ctx, v)
+	res, err := ec.unmarshalOInquirySearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquirySearchInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOInquiryType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx context.Context, v interface{}) (models.InquiryType, error) {
+func (ec *executionContext) unmarshalOInquiryType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx context.Context, v interface{}) (models.InquiryType, error) {
 	var res models.InquiryType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOInquiryType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx context.Context, sel ast.SelectionSet, v models.InquiryType) graphql.Marshaler {
+func (ec *executionContext) marshalOInquiryType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx context.Context, sel ast.SelectionSet, v models.InquiryType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx context.Context, v interface{}) (*models.InquiryType, error) {
+func (ec *executionContext) unmarshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx context.Context, v interface{}) (*models.InquiryType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOInquiryType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx, v)
+	res, err := ec.unmarshalOInquiryType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐInquiryType(ctx context.Context, sel ast.SelectionSet, v *models.InquiryType) graphql.Marshaler {
+func (ec *executionContext) marshalOInquiryType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐInquiryType(ctx context.Context, sel ast.SelectionSet, v *models.InquiryType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15316,16 +15316,16 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return ec.marshalOInt2int(ctx, sel, *v)
 }
 
-func (ec *executionContext) unmarshalOLeadTimeToMarriage2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, v interface{}) (models.LeadTimeToMarriage, error) {
+func (ec *executionContext) unmarshalOLeadTimeToMarriage2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, v interface{}) (models.LeadTimeToMarriage, error) {
 	var res models.LeadTimeToMarriage
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOLeadTimeToMarriage2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, sel ast.SelectionSet, v models.LeadTimeToMarriage) graphql.Marshaler {
+func (ec *executionContext) marshalOLeadTimeToMarriage2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, sel ast.SelectionSet, v models.LeadTimeToMarriage) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, v interface{}) ([]*models.LeadTimeToMarriage, error) {
+func (ec *executionContext) unmarshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, v interface{}) ([]*models.LeadTimeToMarriage, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15337,7 +15337,7 @@ func (ec *executionContext) unmarshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋko
 	var err error
 	res := make([]*models.LeadTimeToMarriage, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15345,7 +15345,7 @@ func (ec *executionContext) unmarshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋko
 	return res, nil
 }
 
-func (ec *executionContext) marshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, sel ast.SelectionSet, v []*models.LeadTimeToMarriage) graphql.Marshaler {
+func (ec *executionContext) marshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, sel ast.SelectionSet, v []*models.LeadTimeToMarriage) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15372,7 +15372,7 @@ func (ec *executionContext) marshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx, sel, v[i])
+			ret[i] = ec.marshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15385,26 +15385,26 @@ func (ec *executionContext) marshalOLeadTimeToMarriage2ᚕᚖgithubᚗcomᚋkoba
 	return ret
 }
 
-func (ec *executionContext) unmarshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, v interface{}) (*models.LeadTimeToMarriage, error) {
+func (ec *executionContext) unmarshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, v interface{}) (*models.LeadTimeToMarriage, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOLeadTimeToMarriage2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx, v)
+	res, err := ec.unmarshalOLeadTimeToMarriage2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, sel ast.SelectionSet, v *models.LeadTimeToMarriage) graphql.Marshaler {
+func (ec *executionContext) marshalOLeadTimeToMarriage2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLeadTimeToMarriage(ctx context.Context, sel ast.SelectionSet, v *models.LeadTimeToMarriage) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOLiked2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLiked(ctx context.Context, sel ast.SelectionSet, v models.Liked) graphql.Marshaler {
+func (ec *executionContext) marshalOLiked2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLiked(ctx context.Context, sel ast.SelectionSet, v models.Liked) graphql.Marshaler {
 	return ec._Liked(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOLiked2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLiked(ctx context.Context, sel ast.SelectionSet, v []*models.Liked) graphql.Marshaler {
+func (ec *executionContext) marshalOLiked2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLiked(ctx context.Context, sel ast.SelectionSet, v []*models.Liked) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15431,7 +15431,7 @@ func (ec *executionContext) marshalOLiked2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOLiked2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLiked(ctx, sel, v[i])
+			ret[i] = ec.marshalOLiked2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLiked(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15444,18 +15444,18 @@ func (ec *executionContext) marshalOLiked2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑ
 	return ret
 }
 
-func (ec *executionContext) marshalOLiked2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLiked(ctx context.Context, sel ast.SelectionSet, v *models.Liked) graphql.Marshaler {
+func (ec *executionContext) marshalOLiked2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLiked(ctx context.Context, sel ast.SelectionSet, v *models.Liked) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Liked(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOLikes2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLikes(ctx context.Context, sel ast.SelectionSet, v models.Likes) graphql.Marshaler {
+func (ec *executionContext) marshalOLikes2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLikes(ctx context.Context, sel ast.SelectionSet, v models.Likes) graphql.Marshaler {
 	return ec._Likes(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOLikes2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLikes(ctx context.Context, sel ast.SelectionSet, v []*models.Likes) graphql.Marshaler {
+func (ec *executionContext) marshalOLikes2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLikes(ctx context.Context, sel ast.SelectionSet, v []*models.Likes) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15482,7 +15482,7 @@ func (ec *executionContext) marshalOLikes2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOLikes2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLikes(ctx, sel, v[i])
+			ret[i] = ec.marshalOLikes2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLikes(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15495,23 +15495,23 @@ func (ec *executionContext) marshalOLikes2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑ
 	return ret
 }
 
-func (ec *executionContext) marshalOLikes2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLikes(ctx context.Context, sel ast.SelectionSet, v *models.Likes) graphql.Marshaler {
+func (ec *executionContext) marshalOLikes2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLikes(ctx context.Context, sel ast.SelectionSet, v *models.Likes) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Likes(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOLivingWithFamily2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx context.Context, v interface{}) (models.LivingWithFamily, error) {
+func (ec *executionContext) unmarshalOLivingWithFamily2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx context.Context, v interface{}) (models.LivingWithFamily, error) {
 	var res models.LivingWithFamily
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOLivingWithFamily2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx context.Context, sel ast.SelectionSet, v models.LivingWithFamily) graphql.Marshaler {
+func (ec *executionContext) marshalOLivingWithFamily2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx context.Context, sel ast.SelectionSet, v models.LivingWithFamily) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx context.Context, v interface{}) ([]*models.LivingWithFamily, error) {
+func (ec *executionContext) unmarshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx context.Context, v interface{}) ([]*models.LivingWithFamily, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15523,7 +15523,7 @@ func (ec *executionContext) unmarshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba
 	var err error
 	res := make([]*models.LivingWithFamily, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15531,7 +15531,7 @@ func (ec *executionContext) unmarshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba
 	return res, nil
 }
 
-func (ec *executionContext) marshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx context.Context, sel ast.SelectionSet, v []*models.LivingWithFamily) graphql.Marshaler {
+func (ec *executionContext) marshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx context.Context, sel ast.SelectionSet, v []*models.LivingWithFamily) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15558,7 +15558,7 @@ func (ec *executionContext) marshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba11
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx, sel, v[i])
+			ret[i] = ec.marshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15571,31 +15571,31 @@ func (ec *executionContext) marshalOLivingWithFamily2ᚕᚖgithubᚗcomᚋkoba11
 	return ret
 }
 
-func (ec *executionContext) unmarshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx context.Context, v interface{}) (*models.LivingWithFamily, error) {
+func (ec *executionContext) unmarshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx context.Context, v interface{}) (*models.LivingWithFamily, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOLivingWithFamily2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx, v)
+	res, err := ec.unmarshalOLivingWithFamily2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLivingWithFamily(ctx context.Context, sel ast.SelectionSet, v *models.LivingWithFamily) graphql.Marshaler {
+func (ec *executionContext) marshalOLivingWithFamily2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLivingWithFamily(ctx context.Context, sel ast.SelectionSet, v *models.LivingWithFamily) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOLodger2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx context.Context, v interface{}) (models.Lodger, error) {
+func (ec *executionContext) unmarshalOLodger2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx context.Context, v interface{}) (models.Lodger, error) {
 	var res models.Lodger
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOLodger2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx context.Context, sel ast.SelectionSet, v models.Lodger) graphql.Marshaler {
+func (ec *executionContext) marshalOLodger2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx context.Context, sel ast.SelectionSet, v models.Lodger) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx context.Context, v interface{}) ([]*models.Lodger, error) {
+func (ec *executionContext) unmarshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx context.Context, v interface{}) ([]*models.Lodger, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15607,7 +15607,7 @@ func (ec *executionContext) unmarshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 	var err error
 	res := make([]*models.Lodger, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15615,7 +15615,7 @@ func (ec *executionContext) unmarshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 	return res, nil
 }
 
-func (ec *executionContext) marshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx context.Context, sel ast.SelectionSet, v []*models.Lodger) graphql.Marshaler {
+func (ec *executionContext) marshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx context.Context, sel ast.SelectionSet, v []*models.Lodger) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15642,7 +15642,7 @@ func (ec *executionContext) marshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx, sel, v[i])
+			ret[i] = ec.marshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15655,31 +15655,31 @@ func (ec *executionContext) marshalOLodger2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 	return ret
 }
 
-func (ec *executionContext) unmarshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx context.Context, v interface{}) (*models.Lodger, error) {
+func (ec *executionContext) unmarshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx context.Context, v interface{}) (*models.Lodger, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOLodger2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx, v)
+	res, err := ec.unmarshalOLodger2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐLodger(ctx context.Context, sel ast.SelectionSet, v *models.Lodger) graphql.Marshaler {
+func (ec *executionContext) marshalOLodger2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐLodger(ctx context.Context, sel ast.SelectionSet, v *models.Lodger) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOMaritalHistory2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx context.Context, v interface{}) (models.MaritalHistory, error) {
+func (ec *executionContext) unmarshalOMaritalHistory2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx context.Context, v interface{}) (models.MaritalHistory, error) {
 	var res models.MaritalHistory
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOMaritalHistory2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx context.Context, sel ast.SelectionSet, v models.MaritalHistory) graphql.Marshaler {
+func (ec *executionContext) marshalOMaritalHistory2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx context.Context, sel ast.SelectionSet, v models.MaritalHistory) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx context.Context, v interface{}) ([]*models.MaritalHistory, error) {
+func (ec *executionContext) unmarshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx context.Context, v interface{}) ([]*models.MaritalHistory, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15691,7 +15691,7 @@ func (ec *executionContext) unmarshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba11
 	var err error
 	res := make([]*models.MaritalHistory, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15699,7 +15699,7 @@ func (ec *executionContext) unmarshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba11
 	return res, nil
 }
 
-func (ec *executionContext) marshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx context.Context, sel ast.SelectionSet, v []*models.MaritalHistory) graphql.Marshaler {
+func (ec *executionContext) marshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx context.Context, sel ast.SelectionSet, v []*models.MaritalHistory) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15726,7 +15726,7 @@ func (ec *executionContext) marshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx, sel, v[i])
+			ret[i] = ec.marshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15739,61 +15739,61 @@ func (ec *executionContext) marshalOMaritalHistory2ᚕᚖgithubᚗcomᚋkoba1108
 	return ret
 }
 
-func (ec *executionContext) unmarshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx context.Context, v interface{}) (*models.MaritalHistory, error) {
+func (ec *executionContext) unmarshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx context.Context, v interface{}) (*models.MaritalHistory, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOMaritalHistory2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx, v)
+	res, err := ec.unmarshalOMaritalHistory2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐMaritalHistory(ctx context.Context, sel ast.SelectionSet, v *models.MaritalHistory) graphql.Marshaler {
+func (ec *executionContext) marshalOMaritalHistory2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐMaritalHistory(ctx context.Context, sel ast.SelectionSet, v *models.MaritalHistory) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalONacodoResponse2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx context.Context, sel ast.SelectionSet, v models.NacodoResponse) graphql.Marshaler {
+func (ec *executionContext) marshalONacodoResponse2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx context.Context, sel ast.SelectionSet, v models.NacodoResponse) graphql.Marshaler {
 	return ec._NacodoResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponse(ctx context.Context, sel ast.SelectionSet, v *models.NacodoResponse) graphql.Marshaler {
+func (ec *executionContext) marshalONacodoResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponse(ctx context.Context, sel ast.SelectionSet, v *models.NacodoResponse) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._NacodoResponse(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalONacodoResponseCode2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponseCode(ctx context.Context, v interface{}) (models.NacodoResponseCode, error) {
+func (ec *executionContext) unmarshalONacodoResponseCode2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponseCode(ctx context.Context, v interface{}) (models.NacodoResponseCode, error) {
 	var res models.NacodoResponseCode
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalONacodoResponseCode2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponseCode(ctx context.Context, sel ast.SelectionSet, v models.NacodoResponseCode) graphql.Marshaler {
+func (ec *executionContext) marshalONacodoResponseCode2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponseCode(ctx context.Context, sel ast.SelectionSet, v models.NacodoResponseCode) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalONacodoResponseCode2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponseCode(ctx context.Context, v interface{}) (*models.NacodoResponseCode, error) {
+func (ec *executionContext) unmarshalONacodoResponseCode2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponseCode(ctx context.Context, v interface{}) (*models.NacodoResponseCode, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalONacodoResponseCode2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponseCode(ctx, v)
+	res, err := ec.unmarshalONacodoResponseCode2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponseCode(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalONacodoResponseCode2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNacodoResponseCode(ctx context.Context, sel ast.SelectionSet, v *models.NacodoResponseCode) graphql.Marshaler {
+func (ec *executionContext) marshalONacodoResponseCode2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNacodoResponseCode(ctx context.Context, sel ast.SelectionSet, v *models.NacodoResponseCode) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalONotification2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotification(ctx context.Context, sel ast.SelectionSet, v models.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalONotification2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotification(ctx context.Context, sel ast.SelectionSet, v models.Notification) graphql.Marshaler {
 	return ec._Notification(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*models.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotification(ctx context.Context, sel ast.SelectionSet, v []*models.Notification) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15820,7 +15820,7 @@ func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalONotification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotification(ctx, sel, v[i])
+			ret[i] = ec.marshalONotification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotification(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15833,47 +15833,47 @@ func (ec *executionContext) marshalONotification2ᚕᚖgithubᚗcomᚋkoba1108�
 	return ret
 }
 
-func (ec *executionContext) marshalONotification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotification(ctx context.Context, sel ast.SelectionSet, v *models.Notification) graphql.Marshaler {
+func (ec *executionContext) marshalONotification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotification(ctx context.Context, sel ast.SelectionSet, v *models.Notification) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Notification(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalONotificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx context.Context, v interface{}) (models.NotificationInput, error) {
+func (ec *executionContext) unmarshalONotificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationInput(ctx context.Context, v interface{}) (models.NotificationInput, error) {
 	return ec.unmarshalInputNotificationInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx context.Context, v interface{}) (*models.NotificationInput, error) {
+func (ec *executionContext) unmarshalONotificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationInput(ctx context.Context, v interface{}) (*models.NotificationInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalONotificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationInput(ctx, v)
+	res, err := ec.unmarshalONotificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalONotificationSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationSearchInput(ctx context.Context, v interface{}) (models.NotificationSearchInput, error) {
+func (ec *executionContext) unmarshalONotificationSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationSearchInput(ctx context.Context, v interface{}) (models.NotificationSearchInput, error) {
 	return ec.unmarshalInputNotificationSearchInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalONotificationSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationSearchInput(ctx context.Context, v interface{}) (*models.NotificationSearchInput, error) {
+func (ec *executionContext) unmarshalONotificationSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationSearchInput(ctx context.Context, v interface{}) (*models.NotificationSearchInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalONotificationSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐNotificationSearchInput(ctx, v)
+	res, err := ec.unmarshalONotificationSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐNotificationSearchInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOOccupation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx context.Context, v interface{}) (models.Occupation, error) {
+func (ec *executionContext) unmarshalOOccupation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx context.Context, v interface{}) (models.Occupation, error) {
 	var res models.Occupation
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOOccupation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx context.Context, sel ast.SelectionSet, v models.Occupation) graphql.Marshaler {
+func (ec *executionContext) marshalOOccupation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx context.Context, sel ast.SelectionSet, v models.Occupation) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx context.Context, v interface{}) ([]*models.Occupation, error) {
+func (ec *executionContext) unmarshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx context.Context, v interface{}) ([]*models.Occupation, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15885,7 +15885,7 @@ func (ec *executionContext) unmarshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108�
 	var err error
 	res := make([]*models.Occupation, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -15893,7 +15893,7 @@ func (ec *executionContext) unmarshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx context.Context, sel ast.SelectionSet, v []*models.Occupation) graphql.Marshaler {
+func (ec *executionContext) marshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx context.Context, sel ast.SelectionSet, v []*models.Occupation) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -15920,7 +15920,7 @@ func (ec *executionContext) marshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx, sel, v[i])
+			ret[i] = ec.marshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -15933,55 +15933,55 @@ func (ec *executionContext) marshalOOccupation2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return ret
 }
 
-func (ec *executionContext) unmarshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx context.Context, v interface{}) (*models.Occupation, error) {
+func (ec *executionContext) unmarshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx context.Context, v interface{}) (*models.Occupation, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOOccupation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx, v)
+	res, err := ec.unmarshalOOccupation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOccupation(ctx context.Context, sel ast.SelectionSet, v *models.Occupation) graphql.Marshaler {
+func (ec *executionContext) marshalOOccupation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOccupation(ctx context.Context, sel ast.SelectionSet, v *models.Occupation) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOOrderBy2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOrderBy(ctx context.Context, v interface{}) (models.OrderBy, error) {
+func (ec *executionContext) unmarshalOOrderBy2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOrderBy(ctx context.Context, v interface{}) (models.OrderBy, error) {
 	var res models.OrderBy
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOOrderBy2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOrderBy(ctx context.Context, sel ast.SelectionSet, v models.OrderBy) graphql.Marshaler {
+func (ec *executionContext) marshalOOrderBy2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOrderBy(ctx context.Context, sel ast.SelectionSet, v models.OrderBy) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOOrderBy2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOrderBy(ctx context.Context, v interface{}) (*models.OrderBy, error) {
+func (ec *executionContext) unmarshalOOrderBy2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOrderBy(ctx context.Context, v interface{}) (*models.OrderBy, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOOrderBy2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOrderBy(ctx, v)
+	res, err := ec.unmarshalOOrderBy2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOrderBy(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOOrderBy2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐOrderBy(ctx context.Context, sel ast.SelectionSet, v *models.OrderBy) graphql.Marshaler {
+func (ec *executionContext) marshalOOrderBy2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐOrderBy(ctx context.Context, sel ast.SelectionSet, v *models.OrderBy) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOParenting2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx context.Context, v interface{}) (models.Parenting, error) {
+func (ec *executionContext) unmarshalOParenting2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx context.Context, v interface{}) (models.Parenting, error) {
 	var res models.Parenting
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOParenting2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx context.Context, sel ast.SelectionSet, v models.Parenting) graphql.Marshaler {
+func (ec *executionContext) marshalOParenting2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx context.Context, sel ast.SelectionSet, v models.Parenting) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx context.Context, v interface{}) ([]*models.Parenting, error) {
+func (ec *executionContext) unmarshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx context.Context, v interface{}) ([]*models.Parenting, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -15993,7 +15993,7 @@ func (ec *executionContext) unmarshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 	var err error
 	res := make([]*models.Parenting, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16001,7 +16001,7 @@ func (ec *executionContext) unmarshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx context.Context, sel ast.SelectionSet, v []*models.Parenting) graphql.Marshaler {
+func (ec *executionContext) marshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx context.Context, sel ast.SelectionSet, v []*models.Parenting) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16028,7 +16028,7 @@ func (ec *executionContext) marshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx, sel, v[i])
+			ret[i] = ec.marshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16041,79 +16041,79 @@ func (ec *executionContext) marshalOParenting2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 	return ret
 }
 
-func (ec *executionContext) unmarshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx context.Context, v interface{}) (*models.Parenting, error) {
+func (ec *executionContext) unmarshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx context.Context, v interface{}) (*models.Parenting, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOParenting2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx, v)
+	res, err := ec.unmarshalOParenting2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐParenting(ctx context.Context, sel ast.SelectionSet, v *models.Parenting) graphql.Marshaler {
+func (ec *executionContext) marshalOParenting2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐParenting(ctx context.Context, sel ast.SelectionSet, v *models.Parenting) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOPermissionsInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx context.Context, v interface{}) (models.PermissionsInput, error) {
+func (ec *executionContext) unmarshalOPermissionsInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPermissionsInput(ctx context.Context, v interface{}) (models.PermissionsInput, error) {
 	return ec.unmarshalInputPermissionsInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOPermissionsInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx context.Context, v interface{}) (*models.PermissionsInput, error) {
+func (ec *executionContext) unmarshalOPermissionsInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPermissionsInput(ctx context.Context, v interface{}) (*models.PermissionsInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOPermissionsInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPermissionsInput(ctx, v)
+	res, err := ec.unmarshalOPermissionsInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPermissionsInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOPhotoReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx context.Context, v interface{}) (models.PhotoReviewStatus, error) {
+func (ec *executionContext) unmarshalOPhotoReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx context.Context, v interface{}) (models.PhotoReviewStatus, error) {
 	var res models.PhotoReviewStatus
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOPhotoReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx context.Context, sel ast.SelectionSet, v models.PhotoReviewStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOPhotoReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx context.Context, sel ast.SelectionSet, v models.PhotoReviewStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx context.Context, v interface{}) (*models.PhotoReviewStatus, error) {
+func (ec *executionContext) unmarshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx context.Context, v interface{}) (*models.PhotoReviewStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOPhotoReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx, v)
+	res, err := ec.unmarshalOPhotoReviewStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotoReviewStatus(ctx context.Context, sel ast.SelectionSet, v *models.PhotoReviewStatus) graphql.Marshaler {
+func (ec *executionContext) marshalOPhotoReviewStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotoReviewStatus(ctx context.Context, sel ast.SelectionSet, v *models.PhotoReviewStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx context.Context, v interface{}) (models.PhotosInput, error) {
+func (ec *executionContext) unmarshalOPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotosInput(ctx context.Context, v interface{}) (models.PhotosInput, error) {
 	return ec.unmarshalInputPhotosInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx context.Context, v interface{}) (*models.PhotosInput, error) {
+func (ec *executionContext) unmarshalOPhotosInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotosInput(ctx context.Context, v interface{}) (*models.PhotosInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPhotosInput(ctx, v)
+	res, err := ec.unmarshalOPhotosInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPhotosInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOPrefecture2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx context.Context, v interface{}) (models.Prefecture, error) {
+func (ec *executionContext) unmarshalOPrefecture2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx context.Context, v interface{}) (models.Prefecture, error) {
 	var res models.Prefecture
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOPrefecture2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx context.Context, sel ast.SelectionSet, v models.Prefecture) graphql.Marshaler {
+func (ec *executionContext) marshalOPrefecture2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx context.Context, sel ast.SelectionSet, v models.Prefecture) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx context.Context, v interface{}) ([]*models.Prefecture, error) {
+func (ec *executionContext) unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx context.Context, v interface{}) ([]*models.Prefecture, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -16125,7 +16125,7 @@ func (ec *executionContext) unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108�
 	var err error
 	res := make([]*models.Prefecture, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16133,7 +16133,7 @@ func (ec *executionContext) unmarshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx context.Context, sel ast.SelectionSet, v []*models.Prefecture) graphql.Marshaler {
+func (ec *executionContext) marshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx context.Context, sel ast.SelectionSet, v []*models.Prefecture) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16160,7 +16160,7 @@ func (ec *executionContext) marshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, sel, v[i])
+			ret[i] = ec.marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16173,78 +16173,78 @@ func (ec *executionContext) marshalOPrefecture2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return ret
 }
 
-func (ec *executionContext) unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx context.Context, v interface{}) (*models.Prefecture, error) {
+func (ec *executionContext) unmarshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx context.Context, v interface{}) (*models.Prefecture, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOPrefecture2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx, v)
+	res, err := ec.unmarshalOPrefecture2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐPrefecture(ctx context.Context, sel ast.SelectionSet, v *models.Prefecture) graphql.Marshaler {
+func (ec *executionContext) marshalOPrefecture2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐPrefecture(ctx context.Context, sel ast.SelectionSet, v *models.Prefecture) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOQualification2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualification(ctx context.Context, sel ast.SelectionSet, v models.Qualification) graphql.Marshaler {
+func (ec *executionContext) marshalOQualification2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐQualification(ctx context.Context, sel ast.SelectionSet, v models.Qualification) graphql.Marshaler {
 	return ec._Qualification(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOQualification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualification(ctx context.Context, sel ast.SelectionSet, v *models.Qualification) graphql.Marshaler {
+func (ec *executionContext) marshalOQualification2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐQualification(ctx context.Context, sel ast.SelectionSet, v *models.Qualification) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Qualification(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOQualificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx context.Context, v interface{}) (models.QualificationInput, error) {
+func (ec *executionContext) unmarshalOQualificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐQualificationInput(ctx context.Context, v interface{}) (models.QualificationInput, error) {
 	return ec.unmarshalInputQualificationInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOQualificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx context.Context, v interface{}) (*models.QualificationInput, error) {
+func (ec *executionContext) unmarshalOQualificationInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐQualificationInput(ctx context.Context, v interface{}) (*models.QualificationInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOQualificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐQualificationInput(ctx, v)
+	res, err := ec.unmarshalOQualificationInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐQualificationInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalORegistrationStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx context.Context, v interface{}) (models.RegistrationStatus, error) {
+func (ec *executionContext) unmarshalORegistrationStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegistrationStatus(ctx context.Context, v interface{}) (models.RegistrationStatus, error) {
 	var res models.RegistrationStatus
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalORegistrationStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx context.Context, sel ast.SelectionSet, v models.RegistrationStatus) graphql.Marshaler {
+func (ec *executionContext) marshalORegistrationStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegistrationStatus(ctx context.Context, sel ast.SelectionSet, v models.RegistrationStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx context.Context, v interface{}) (*models.RegistrationStatus, error) {
+func (ec *executionContext) unmarshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegistrationStatus(ctx context.Context, v interface{}) (*models.RegistrationStatus, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalORegistrationStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx, v)
+	res, err := ec.unmarshalORegistrationStatus2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegistrationStatus(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegistrationStatus(ctx context.Context, sel ast.SelectionSet, v *models.RegistrationStatus) graphql.Marshaler {
+func (ec *executionContext) marshalORegistrationStatus2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegistrationStatus(ctx context.Context, sel ast.SelectionSet, v *models.RegistrationStatus) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalORegularHoliday2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx context.Context, v interface{}) (models.RegularHoliday, error) {
+func (ec *executionContext) unmarshalORegularHoliday2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx context.Context, v interface{}) (models.RegularHoliday, error) {
 	var res models.RegularHoliday
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalORegularHoliday2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx context.Context, sel ast.SelectionSet, v models.RegularHoliday) graphql.Marshaler {
+func (ec *executionContext) marshalORegularHoliday2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx context.Context, sel ast.SelectionSet, v models.RegularHoliday) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx context.Context, v interface{}) ([]*models.RegularHoliday, error) {
+func (ec *executionContext) unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx context.Context, v interface{}) ([]*models.RegularHoliday, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -16256,7 +16256,7 @@ func (ec *executionContext) unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba11
 	var err error
 	res := make([]*models.RegularHoliday, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, vSlice[i])
+		res[i], err = ec.unmarshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16264,7 +16264,7 @@ func (ec *executionContext) unmarshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba11
 	return res, nil
 }
 
-func (ec *executionContext) marshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx context.Context, sel ast.SelectionSet, v []*models.RegularHoliday) graphql.Marshaler {
+func (ec *executionContext) marshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx context.Context, sel ast.SelectionSet, v []*models.RegularHoliday) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16291,7 +16291,7 @@ func (ec *executionContext) marshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, sel, v[i])
+			ret[i] = ec.marshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16304,31 +16304,31 @@ func (ec *executionContext) marshalORegularHoliday2ᚕᚖgithubᚗcomᚋkoba1108
 	return ret
 }
 
-func (ec *executionContext) unmarshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx context.Context, v interface{}) (*models.RegularHoliday, error) {
+func (ec *executionContext) unmarshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx context.Context, v interface{}) (*models.RegularHoliday, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalORegularHoliday2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx, v)
+	res, err := ec.unmarshalORegularHoliday2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRegularHoliday(ctx context.Context, sel ast.SelectionSet, v *models.RegularHoliday) graphql.Marshaler {
+func (ec *executionContext) marshalORegularHoliday2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRegularHoliday(ctx context.Context, sel ast.SelectionSet, v *models.RegularHoliday) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalORelocation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx context.Context, v interface{}) (models.Relocation, error) {
+func (ec *executionContext) unmarshalORelocation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx context.Context, v interface{}) (models.Relocation, error) {
 	var res models.Relocation
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalORelocation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx context.Context, sel ast.SelectionSet, v models.Relocation) graphql.Marshaler {
+func (ec *executionContext) marshalORelocation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx context.Context, sel ast.SelectionSet, v models.Relocation) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx context.Context, v interface{}) ([]*models.Relocation, error) {
+func (ec *executionContext) unmarshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx context.Context, v interface{}) ([]*models.Relocation, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -16340,7 +16340,7 @@ func (ec *executionContext) unmarshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108�
 	var err error
 	res := make([]*models.Relocation, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx, vSlice[i])
+		res[i], err = ec.unmarshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16348,7 +16348,7 @@ func (ec *executionContext) unmarshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108�
 	return res, nil
 }
 
-func (ec *executionContext) marshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx context.Context, sel ast.SelectionSet, v []*models.Relocation) graphql.Marshaler {
+func (ec *executionContext) marshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx context.Context, sel ast.SelectionSet, v []*models.Relocation) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16375,7 +16375,7 @@ func (ec *executionContext) marshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx, sel, v[i])
+			ret[i] = ec.marshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16388,37 +16388,37 @@ func (ec *executionContext) marshalORelocation2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return ret
 }
 
-func (ec *executionContext) unmarshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx context.Context, v interface{}) (*models.Relocation, error) {
+func (ec *executionContext) unmarshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx context.Context, v interface{}) (*models.Relocation, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalORelocation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx, v)
+	res, err := ec.unmarshalORelocation2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐRelocation(ctx context.Context, sel ast.SelectionSet, v *models.Relocation) graphql.Marshaler {
+func (ec *executionContext) marshalORelocation2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐRelocation(ctx context.Context, sel ast.SelectionSet, v *models.Relocation) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOReply2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReply(ctx context.Context, sel ast.SelectionSet, v models.Reply) graphql.Marshaler {
+func (ec *executionContext) marshalOReply2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReply(ctx context.Context, sel ast.SelectionSet, v models.Reply) graphql.Marshaler {
 	return ec._Reply(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOReply2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReply(ctx context.Context, sel ast.SelectionSet, v *models.Reply) graphql.Marshaler {
+func (ec *executionContext) marshalOReply2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReply(ctx context.Context, sel ast.SelectionSet, v *models.Reply) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Reply(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOReport2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReport(ctx context.Context, sel ast.SelectionSet, v models.Report) graphql.Marshaler {
+func (ec *executionContext) marshalOReport2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReport(ctx context.Context, sel ast.SelectionSet, v models.Report) graphql.Marshaler {
 	return ec._Report(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOReport2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReport(ctx context.Context, sel ast.SelectionSet, v []*models.Report) graphql.Marshaler {
+func (ec *executionContext) marshalOReport2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReport(ctx context.Context, sel ast.SelectionSet, v []*models.Report) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16445,7 +16445,7 @@ func (ec *executionContext) marshalOReport2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOReport2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReport(ctx, sel, v[i])
+			ret[i] = ec.marshalOReport2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReport(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16458,71 +16458,71 @@ func (ec *executionContext) marshalOReport2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 	return ret
 }
 
-func (ec *executionContext) marshalOReport2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReport(ctx context.Context, sel ast.SelectionSet, v *models.Report) graphql.Marshaler {
+func (ec *executionContext) marshalOReport2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReport(ctx context.Context, sel ast.SelectionSet, v *models.Report) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Report(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOReportInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx context.Context, v interface{}) (models.ReportInput, error) {
+func (ec *executionContext) unmarshalOReportInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportInput(ctx context.Context, v interface{}) (models.ReportInput, error) {
 	return ec.unmarshalInputReportInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOReportInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx context.Context, v interface{}) (*models.ReportInput, error) {
+func (ec *executionContext) unmarshalOReportInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportInput(ctx context.Context, v interface{}) (*models.ReportInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOReportInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportInput(ctx, v)
+	res, err := ec.unmarshalOReportInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOReportSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportSearchInput(ctx context.Context, v interface{}) (models.ReportSearchInput, error) {
+func (ec *executionContext) unmarshalOReportSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportSearchInput(ctx context.Context, v interface{}) (models.ReportSearchInput, error) {
 	return ec.unmarshalInputReportSearchInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOReportSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportSearchInput(ctx context.Context, v interface{}) (*models.ReportSearchInput, error) {
+func (ec *executionContext) unmarshalOReportSearchInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportSearchInput(ctx context.Context, v interface{}) (*models.ReportSearchInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOReportSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportSearchInput(ctx, v)
+	res, err := ec.unmarshalOReportSearchInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportSearchInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOReportType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx context.Context, v interface{}) (models.ReportType, error) {
+func (ec *executionContext) unmarshalOReportType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx context.Context, v interface{}) (models.ReportType, error) {
 	var res models.ReportType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOReportType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx context.Context, sel ast.SelectionSet, v models.ReportType) graphql.Marshaler {
+func (ec *executionContext) marshalOReportType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx context.Context, sel ast.SelectionSet, v models.ReportType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx context.Context, v interface{}) (*models.ReportType, error) {
+func (ec *executionContext) unmarshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx context.Context, v interface{}) (*models.ReportType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOReportType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx, v)
+	res, err := ec.unmarshalOReportType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐReportType(ctx context.Context, sel ast.SelectionSet, v *models.ReportType) graphql.Marshaler {
+func (ec *executionContext) marshalOReportType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐReportType(ctx context.Context, sel ast.SelectionSet, v *models.ReportType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOResidenceType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx context.Context, v interface{}) (models.ResidenceType, error) {
+func (ec *executionContext) unmarshalOResidenceType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx context.Context, v interface{}) (models.ResidenceType, error) {
 	var res models.ResidenceType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOResidenceType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx context.Context, sel ast.SelectionSet, v models.ResidenceType) graphql.Marshaler {
+func (ec *executionContext) marshalOResidenceType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx context.Context, sel ast.SelectionSet, v models.ResidenceType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx context.Context, v interface{}) ([]*models.ResidenceType, error) {
+func (ec *executionContext) unmarshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx context.Context, v interface{}) ([]*models.ResidenceType, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -16534,7 +16534,7 @@ func (ec *executionContext) unmarshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba110
 	var err error
 	res := make([]*models.ResidenceType, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16542,7 +16542,7 @@ func (ec *executionContext) unmarshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba110
 	return res, nil
 }
 
-func (ec *executionContext) marshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx context.Context, sel ast.SelectionSet, v []*models.ResidenceType) graphql.Marshaler {
+func (ec *executionContext) marshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx context.Context, sel ast.SelectionSet, v []*models.ResidenceType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16569,7 +16569,7 @@ func (ec *executionContext) marshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx, sel, v[i])
+			ret[i] = ec.marshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16582,54 +16582,54 @@ func (ec *executionContext) marshalOResidenceType2ᚕᚖgithubᚗcomᚋkoba1108�
 	return ret
 }
 
-func (ec *executionContext) unmarshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx context.Context, v interface{}) (*models.ResidenceType, error) {
+func (ec *executionContext) unmarshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx context.Context, v interface{}) (*models.ResidenceType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOResidenceType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx, v)
+	res, err := ec.unmarshalOResidenceType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐResidenceType(ctx context.Context, sel ast.SelectionSet, v *models.ResidenceType) graphql.Marshaler {
+func (ec *executionContext) marshalOResidenceType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐResidenceType(ctx context.Context, sel ast.SelectionSet, v *models.ResidenceType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOSearchOption2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSearchOption(ctx context.Context, v interface{}) (models.SearchOption, error) {
+func (ec *executionContext) unmarshalOSearchOption2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSearchOption(ctx context.Context, v interface{}) (models.SearchOption, error) {
 	return ec.unmarshalInputSearchOption(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOSearchOption2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSearchOption(ctx context.Context, v interface{}) (*models.SearchOption, error) {
+func (ec *executionContext) unmarshalOSearchOption2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSearchOption(ctx context.Context, v interface{}) (*models.SearchOption, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOSearchOption2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSearchOption(ctx, v)
+	res, err := ec.unmarshalOSearchOption2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSearchOption(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOSession2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSession(ctx context.Context, sel ast.SelectionSet, v models.Session) graphql.Marshaler {
+func (ec *executionContext) marshalOSession2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSession(ctx context.Context, sel ast.SelectionSet, v models.Session) graphql.Marshaler {
 	return ec._Session(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSession(ctx context.Context, sel ast.SelectionSet, v *models.Session) graphql.Marshaler {
+func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSession(ctx context.Context, sel ast.SelectionSet, v *models.Session) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Session(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOSibling2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx context.Context, v interface{}) (models.Sibling, error) {
+func (ec *executionContext) unmarshalOSibling2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx context.Context, v interface{}) (models.Sibling, error) {
 	var res models.Sibling
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOSibling2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx context.Context, sel ast.SelectionSet, v models.Sibling) graphql.Marshaler {
+func (ec *executionContext) marshalOSibling2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx context.Context, sel ast.SelectionSet, v models.Sibling) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx context.Context, v interface{}) ([]*models.Sibling, error) {
+func (ec *executionContext) unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx context.Context, v interface{}) ([]*models.Sibling, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -16641,7 +16641,7 @@ func (ec *executionContext) unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 	var err error
 	res := make([]*models.Sibling, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16649,7 +16649,7 @@ func (ec *executionContext) unmarshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 	return res, nil
 }
 
-func (ec *executionContext) marshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx context.Context, sel ast.SelectionSet, v []*models.Sibling) graphql.Marshaler {
+func (ec *executionContext) marshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx context.Context, sel ast.SelectionSet, v []*models.Sibling) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16676,7 +16676,7 @@ func (ec *executionContext) marshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, sel, v[i])
+			ret[i] = ec.marshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16689,31 +16689,31 @@ func (ec *executionContext) marshalOSibling2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 	return ret
 }
 
-func (ec *executionContext) unmarshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx context.Context, v interface{}) (*models.Sibling, error) {
+func (ec *executionContext) unmarshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx context.Context, v interface{}) (*models.Sibling, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOSibling2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx, v)
+	res, err := ec.unmarshalOSibling2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSibling(ctx context.Context, sel ast.SelectionSet, v *models.Sibling) graphql.Marshaler {
+func (ec *executionContext) marshalOSibling2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSibling(ctx context.Context, sel ast.SelectionSet, v *models.Sibling) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOSmoking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx context.Context, v interface{}) (models.Smoking, error) {
+func (ec *executionContext) unmarshalOSmoking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx context.Context, v interface{}) (models.Smoking, error) {
 	var res models.Smoking
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOSmoking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx context.Context, sel ast.SelectionSet, v models.Smoking) graphql.Marshaler {
+func (ec *executionContext) marshalOSmoking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx context.Context, sel ast.SelectionSet, v models.Smoking) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx context.Context, v interface{}) ([]*models.Smoking, error) {
+func (ec *executionContext) unmarshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx context.Context, v interface{}) ([]*models.Smoking, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -16725,7 +16725,7 @@ func (ec *executionContext) unmarshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 	var err error
 	res := make([]*models.Smoking, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16733,7 +16733,7 @@ func (ec *executionContext) unmarshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋga
 	return res, nil
 }
 
-func (ec *executionContext) marshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx context.Context, sel ast.SelectionSet, v []*models.Smoking) graphql.Marshaler {
+func (ec *executionContext) marshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx context.Context, sel ast.SelectionSet, v []*models.Smoking) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16760,7 +16760,7 @@ func (ec *executionContext) marshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx, sel, v[i])
+			ret[i] = ec.marshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16773,15 +16773,15 @@ func (ec *executionContext) marshalOSmoking2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae�
 	return ret
 }
 
-func (ec *executionContext) unmarshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx context.Context, v interface{}) (*models.Smoking, error) {
+func (ec *executionContext) unmarshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx context.Context, v interface{}) (*models.Smoking, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOSmoking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx, v)
+	res, err := ec.unmarshalOSmoking2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐSmoking(ctx context.Context, sel ast.SelectionSet, v *models.Smoking) graphql.Marshaler {
+func (ec *executionContext) marshalOSmoking2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐSmoking(ctx context.Context, sel ast.SelectionSet, v *models.Smoking) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16843,11 +16843,11 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return ec.marshalOString2string(ctx, sel, *v)
 }
 
-func (ec *executionContext) marshalOTag2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTag(ctx context.Context, sel ast.SelectionSet, v models.Tag) graphql.Marshaler {
+func (ec *executionContext) marshalOTag2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTag(ctx context.Context, sel ast.SelectionSet, v models.Tag) graphql.Marshaler {
 	return ec._Tag(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOTag2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTag(ctx context.Context, sel ast.SelectionSet, v []*models.Tag) graphql.Marshaler {
+func (ec *executionContext) marshalOTag2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTag(ctx context.Context, sel ast.SelectionSet, v []*models.Tag) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16874,7 +16874,7 @@ func (ec *executionContext) marshalOTag2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgo
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOTag2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTag(ctx, sel, v[i])
+			ret[i] = ec.marshalOTag2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTag(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -16887,18 +16887,18 @@ func (ec *executionContext) marshalOTag2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgo
 	return ret
 }
 
-func (ec *executionContext) marshalOTag2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTag(ctx context.Context, sel ast.SelectionSet, v *models.Tag) graphql.Marshaler {
+func (ec *executionContext) marshalOTag2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTag(ctx context.Context, sel ast.SelectionSet, v *models.Tag) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Tag(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOTagInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx context.Context, v interface{}) (models.TagInput, error) {
+func (ec *executionContext) unmarshalOTagInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx context.Context, v interface{}) (models.TagInput, error) {
 	return ec.unmarshalInputTagInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx context.Context, v interface{}) ([]*models.TagInput, error) {
+func (ec *executionContext) unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx context.Context, v interface{}) ([]*models.TagInput, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -16910,7 +16910,7 @@ func (ec *executionContext) unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	var err error
 	res := make([]*models.TagInput, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOTagInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOTagInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -16918,56 +16918,56 @@ func (ec *executionContext) unmarshalOTagInput2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return res, nil
 }
 
-func (ec *executionContext) unmarshalOTagInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx context.Context, v interface{}) (*models.TagInput, error) {
+func (ec *executionContext) unmarshalOTagInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx context.Context, v interface{}) (*models.TagInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOTagInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagInput(ctx, v)
+	res, err := ec.unmarshalOTagInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOTagType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagType(ctx context.Context, v interface{}) (models.TagType, error) {
+func (ec *executionContext) unmarshalOTagType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagType(ctx context.Context, v interface{}) (models.TagType, error) {
 	var res models.TagType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOTagType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagType(ctx context.Context, sel ast.SelectionSet, v models.TagType) graphql.Marshaler {
+func (ec *executionContext) marshalOTagType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagType(ctx context.Context, sel ast.SelectionSet, v models.TagType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagType(ctx context.Context, v interface{}) (*models.TagType, error) {
+func (ec *executionContext) unmarshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagType(ctx context.Context, v interface{}) (*models.TagType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOTagType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagType(ctx, v)
+	res, err := ec.unmarshalOTagType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagType(ctx context.Context, sel ast.SelectionSet, v *models.TagType) graphql.Marshaler {
+func (ec *executionContext) marshalOTagType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagType(ctx context.Context, sel ast.SelectionSet, v *models.TagType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOTagValue2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagValue(ctx context.Context, v interface{}) (models.TagValue, error) {
+func (ec *executionContext) unmarshalOTagValue2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagValue(ctx context.Context, v interface{}) (models.TagValue, error) {
 	var res models.TagValue
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOTagValue2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagValue(ctx context.Context, sel ast.SelectionSet, v models.TagValue) graphql.Marshaler {
+func (ec *executionContext) marshalOTagValue2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagValue(ctx context.Context, sel ast.SelectionSet, v models.TagValue) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOTagValue2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagValue(ctx context.Context, v interface{}) (*models.TagValue, error) {
+func (ec *executionContext) unmarshalOTagValue2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagValue(ctx context.Context, v interface{}) (*models.TagValue, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOTagValue2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagValue(ctx, v)
+	res, err := ec.unmarshalOTagValue2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagValue(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOTagValue2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐTagValue(ctx context.Context, sel ast.SelectionSet, v *models.TagValue) graphql.Marshaler {
+func (ec *executionContext) marshalOTagValue2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐTagValue(ctx context.Context, sel ast.SelectionSet, v *models.TagValue) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -16997,11 +16997,11 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 	return ec.marshalOTime2timeᚐTime(ctx, sel, *v)
 }
 
-func (ec *executionContext) marshalOUser2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v models.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v models.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v []*models.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v []*models.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -17028,7 +17028,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -17041,64 +17041,64 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑg
 	return ret
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v *models.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUser(ctx context.Context, sel ast.SelectionSet, v *models.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOUserDetailedProfile2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfile(ctx context.Context, sel ast.SelectionSet, v models.UserDetailedProfile) graphql.Marshaler {
+func (ec *executionContext) marshalOUserDetailedProfile2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfile(ctx context.Context, sel ast.SelectionSet, v models.UserDetailedProfile) graphql.Marshaler {
 	return ec._UserDetailedProfile(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOUserDetailedProfile2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfile(ctx context.Context, sel ast.SelectionSet, v *models.UserDetailedProfile) graphql.Marshaler {
+func (ec *executionContext) marshalOUserDetailedProfile2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfile(ctx context.Context, sel ast.SelectionSet, v *models.UserDetailedProfile) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._UserDetailedProfile(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOUserDetailedProfileInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx context.Context, v interface{}) (models.UserDetailedProfileInput, error) {
+func (ec *executionContext) unmarshalOUserDetailedProfileInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfileInput(ctx context.Context, v interface{}) (models.UserDetailedProfileInput, error) {
 	return ec.unmarshalInputUserDetailedProfileInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx context.Context, v interface{}) (*models.UserDetailedProfileInput, error) {
+func (ec *executionContext) unmarshalOUserDetailedProfileInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfileInput(ctx context.Context, v interface{}) (*models.UserDetailedProfileInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOUserDetailedProfileInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserDetailedProfileInput(ctx, v)
+	res, err := ec.unmarshalOUserDetailedProfileInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserDetailedProfileInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) unmarshalOUserInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx context.Context, v interface{}) (models.UserInput, error) {
+func (ec *executionContext) unmarshalOUserInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserInput(ctx context.Context, v interface{}) (models.UserInput, error) {
 	return ec.unmarshalInputUserInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx context.Context, v interface{}) (*models.UserInput, error) {
+func (ec *executionContext) unmarshalOUserInput2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserInput(ctx context.Context, v interface{}) (*models.UserInput, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOUserInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserInput(ctx, v)
+	res, err := ec.unmarshalOUserInput2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserInput(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOUserPhoto2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhoto(ctx context.Context, sel ast.SelectionSet, v models.UserPhoto) graphql.Marshaler {
+func (ec *executionContext) marshalOUserPhoto2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhoto(ctx context.Context, sel ast.SelectionSet, v models.UserPhoto) graphql.Marshaler {
 	return ec._UserPhoto(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhoto(ctx context.Context, sel ast.SelectionSet, v *models.UserPhoto) graphql.Marshaler {
+func (ec *executionContext) marshalOUserPhoto2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhoto(ctx context.Context, sel ast.SelectionSet, v *models.UserPhoto) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._UserPhoto(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOUserPhotos2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhotos(ctx context.Context, sel ast.SelectionSet, v models.UserPhotos) graphql.Marshaler {
+func (ec *executionContext) marshalOUserPhotos2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhotos(ctx context.Context, sel ast.SelectionSet, v models.UserPhotos) graphql.Marshaler {
 	return ec._UserPhotos(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOUserPhotos2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhotos(ctx context.Context, sel ast.SelectionSet, v []*models.UserPhotos) graphql.Marshaler {
+func (ec *executionContext) marshalOUserPhotos2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhotos(ctx context.Context, sel ast.SelectionSet, v []*models.UserPhotos) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -17125,7 +17125,7 @@ func (ec *executionContext) marshalOUserPhotos2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOUserPhotos2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhotos(ctx, sel, v[i])
+			ret[i] = ec.marshalOUserPhotos2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhotos(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -17138,82 +17138,82 @@ func (ec *executionContext) marshalOUserPhotos2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return ret
 }
 
-func (ec *executionContext) marshalOUserPhotos2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserPhotos(ctx context.Context, sel ast.SelectionSet, v *models.UserPhotos) graphql.Marshaler {
+func (ec *executionContext) marshalOUserPhotos2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserPhotos(ctx context.Context, sel ast.SelectionSet, v *models.UserPhotos) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._UserPhotos(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOUserSortKey2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserSortKey(ctx context.Context, v interface{}) (models.UserSortKey, error) {
+func (ec *executionContext) unmarshalOUserSortKey2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserSortKey(ctx context.Context, v interface{}) (models.UserSortKey, error) {
 	var res models.UserSortKey
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOUserSortKey2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserSortKey(ctx context.Context, sel ast.SelectionSet, v models.UserSortKey) graphql.Marshaler {
+func (ec *executionContext) marshalOUserSortKey2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserSortKey(ctx context.Context, sel ast.SelectionSet, v models.UserSortKey) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOUserSortKey2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserSortKey(ctx context.Context, v interface{}) (*models.UserSortKey, error) {
+func (ec *executionContext) unmarshalOUserSortKey2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserSortKey(ctx context.Context, v interface{}) (*models.UserSortKey, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOUserSortKey2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserSortKey(ctx, v)
+	res, err := ec.unmarshalOUserSortKey2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserSortKey(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOUserSortKey2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserSortKey(ctx context.Context, sel ast.SelectionSet, v *models.UserSortKey) graphql.Marshaler {
+func (ec *executionContext) marshalOUserSortKey2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserSortKey(ctx context.Context, sel ast.SelectionSet, v *models.UserSortKey) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOUserType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx context.Context, v interface{}) (models.UserType, error) {
+func (ec *executionContext) unmarshalOUserType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx context.Context, v interface{}) (models.UserType, error) {
 	var res models.UserType
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOUserType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx context.Context, sel ast.SelectionSet, v models.UserType) graphql.Marshaler {
+func (ec *executionContext) marshalOUserType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx context.Context, sel ast.SelectionSet, v models.UserType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx context.Context, v interface{}) (*models.UserType, error) {
+func (ec *executionContext) unmarshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx context.Context, v interface{}) (*models.UserType, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOUserType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx, v)
+	res, err := ec.unmarshalOUserType2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUserType(ctx context.Context, sel ast.SelectionSet, v *models.UserType) graphql.Marshaler {
+func (ec *executionContext) marshalOUserType2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUserType(ctx context.Context, sel ast.SelectionSet, v *models.UserType) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) marshalOUsersResponse2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUsersResponse(ctx context.Context, sel ast.SelectionSet, v models.UsersResponse) graphql.Marshaler {
+func (ec *executionContext) marshalOUsersResponse2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUsersResponse(ctx context.Context, sel ast.SelectionSet, v models.UsersResponse) graphql.Marshaler {
 	return ec._UsersResponse(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐUsersResponse(ctx context.Context, sel ast.SelectionSet, v *models.UsersResponse) graphql.Marshaler {
+func (ec *executionContext) marshalOUsersResponse2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐUsersResponse(ctx context.Context, sel ast.SelectionSet, v *models.UsersResponse) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._UsersResponse(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOWantKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx context.Context, v interface{}) (models.WantKids, error) {
+func (ec *executionContext) unmarshalOWantKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx context.Context, v interface{}) (models.WantKids, error) {
 	var res models.WantKids
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOWantKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx context.Context, sel ast.SelectionSet, v models.WantKids) graphql.Marshaler {
+func (ec *executionContext) marshalOWantKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx context.Context, sel ast.SelectionSet, v models.WantKids) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx context.Context, v interface{}) ([]*models.WantKids, error) {
+func (ec *executionContext) unmarshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx context.Context, v interface{}) ([]*models.WantKids, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -17225,7 +17225,7 @@ func (ec *executionContext) unmarshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	var err error
 	res := make([]*models.WantKids, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -17233,7 +17233,7 @@ func (ec *executionContext) unmarshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋg
 	return res, nil
 }
 
-func (ec *executionContext) marshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx context.Context, sel ast.SelectionSet, v []*models.WantKids) graphql.Marshaler {
+func (ec *executionContext) marshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx context.Context, sel ast.SelectionSet, v []*models.WantKids) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -17260,7 +17260,7 @@ func (ec *executionContext) marshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx, sel, v[i])
+			ret[i] = ec.marshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -17273,31 +17273,31 @@ func (ec *executionContext) marshalOWantKids2ᚕᚖgithubᚗcomᚋkoba1108ᚋgae
 	return ret
 }
 
-func (ec *executionContext) unmarshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx context.Context, v interface{}) (*models.WantKids, error) {
+func (ec *executionContext) unmarshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx context.Context, v interface{}) (*models.WantKids, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOWantKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx, v)
+	res, err := ec.unmarshalOWantKids2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWantKids(ctx context.Context, sel ast.SelectionSet, v *models.WantKids) graphql.Marshaler {
+func (ec *executionContext) marshalOWantKids2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWantKids(ctx context.Context, sel ast.SelectionSet, v *models.WantKids) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkingForm2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx context.Context, v interface{}) (models.WorkingForm, error) {
+func (ec *executionContext) unmarshalOWorkingForm2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx context.Context, v interface{}) (models.WorkingForm, error) {
 	var res models.WorkingForm
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalOWorkingForm2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx context.Context, sel ast.SelectionSet, v models.WorkingForm) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkingForm2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx context.Context, sel ast.SelectionSet, v models.WorkingForm) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx context.Context, v interface{}) ([]*models.WorkingForm, error) {
+func (ec *executionContext) unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx context.Context, v interface{}) ([]*models.WorkingForm, error) {
 	var vSlice []interface{}
 	if v != nil {
 		if tmp1, ok := v.([]interface{}); ok {
@@ -17309,7 +17309,7 @@ func (ec *executionContext) unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108�
 	var err error
 	res := make([]*models.WorkingForm, len(vSlice))
 	for i := range vSlice {
-		res[i], err = ec.unmarshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, vSlice[i])
+		res[i], err = ec.unmarshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -17317,7 +17317,7 @@ func (ec *executionContext) unmarshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108�
 	return res, nil
 }
 
-func (ec *executionContext) marshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx context.Context, sel ast.SelectionSet, v []*models.WorkingForm) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx context.Context, sel ast.SelectionSet, v []*models.WorkingForm) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -17344,7 +17344,7 @@ func (ec *executionContext) marshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, sel, v[i])
+			ret[i] = ec.marshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -17357,15 +17357,15 @@ func (ec *executionContext) marshalOWorkingForm2ᚕᚖgithubᚗcomᚋkoba1108ᚋ
 	return ret
 }
 
-func (ec *executionContext) unmarshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx context.Context, v interface{}) (*models.WorkingForm, error) {
+func (ec *executionContext) unmarshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx context.Context, v interface{}) (*models.WorkingForm, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOWorkingForm2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx, v)
+	res, err := ec.unmarshalOWorkingForm2githubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋgqlᚋmodelsᚐWorkingForm(ctx context.Context, sel ast.SelectionSet, v *models.WorkingForm) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkingForm2ᚖgithubᚗcomᚋkoba1108ᚋgaeᚑgoᚑgraphqlᚑserverᚋinternalᚋgraphqlᚑserverᚋgqlgenᚋmodelsᚐWorkingForm(ctx context.Context, sel ast.SelectionSet, v *models.WorkingForm) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
