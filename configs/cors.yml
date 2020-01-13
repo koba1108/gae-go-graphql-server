@@ -1,0 +1,25 @@
+allow:
+  methods: [GET POST OPTIONS]
+  headers:
+    - "Authorization"
+    - "Content-Type"
+    - "Content-Length"
+    - "Accept-Encoding"
+  protocols:
+    - "http://"
+    - "https://"
+    - "ws://"
+  domains:
+    - "127.0.0.1"
+    - "127.0.0.1:8000"
+    - "127.0.0.1:8080"
+    - "localhost"
+    - "localhost:3000"
+    - "localhost:8000"
+    - "localhost:8080"
+    - "nacodo-app-dev.appspot.com"
+    - "nacodo-app-230107.appspot.com"
+    - "naco-do.com"
+    - "admin-dot-nacodo-app-dev.appspot.com"
+    - "admin-dot-nacodo-app-230107.appspot.com"
+    - "admin-v3-dot-nacodo-app-dev.appspot.com"

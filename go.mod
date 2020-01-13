@@ -9,6 +9,6 @@ require (
 	github.com/gin-contrib/cors v1.3.0
 	github.com/gin-gonic/gin v1.5.0
 	github.com/vektah/gqlparser v1.2.0
-	golang.org/x/net v0.0.0-20190503192946-f4e77d36d62c
 	google.golang.org/api v0.15.0
+	gopkg.in/yaml.v3 v3.0.0-20191120175047-4206685974f2
 )

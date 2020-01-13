@@ -13,7 +13,8 @@ func init() {
 }
 
 func main() {
-	r := gin.Default()
+	r := getGin()
+	setCORSMiddleware(r)
 	setContextMiddleware(r)
 	setUserGql(r)
 	setAdminGql(r)
@@ -23,8 +24,19 @@ func main() {
 	_ = r.Run()
 }
 
+func getGin() *gin.Engine {
+	r := gin.Default()
+	r.RedirectTrailingSlash = false
+	r.HandleMethodNotAllowed = true
+	return r
+}
+
+func setCORSMiddleware(r *gin.Engine) {
+	r.Use(middleware.CORS())
+}
+
+// @see https://gqlgen.com/recipes/gin/
 func setContextMiddleware(r *gin.Engine) {
-	// @see https://gqlgen.com/recipes/gin/
 	r.Use(middleware.GinContextToContext())
 }
 
