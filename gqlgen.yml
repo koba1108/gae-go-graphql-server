@@ -6,7 +6,7 @@
 schema:
   - internal/graphql-server/gqlgen/schemas/*.graphql
 exec:
-  package: gql
+  package: gqlgen
   filename: internal/graphql-server/gqlgen/generated.go
 model:
   filename: internal/graphql-server/gqlgen/models/generated.go
